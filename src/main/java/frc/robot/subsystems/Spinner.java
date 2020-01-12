@@ -7,15 +7,25 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ColorMatchResult;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.Library;
+import frc.robot.Constants.SpinnerConstants;
+import frc.robot.Constants.SpinnerConstants.COLOR;
 
 /**
  * Add your docs here.
@@ -23,6 +33,11 @@ import edu.wpi.first.wpilibj.util.Color;
 public class Spinner extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
+  private final CANSparkMax spinMotor = new CANSparkMax(SpinnerConstants.kSpinnerMotor, MotorType.kBrushless);
+
+  private final CANPIDController m_spinPIDController = spinMotor.getPIDController();
+
+  private final CANEncoder m_spinEncoder = spinMotor.getEncoder();
   /**
    * Change the I2C port below to match the connection of your color sensor
    */
@@ -34,13 +49,111 @@ public class Spinner extends SubsystemBase {
    */
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
 
+  /**
+   * A Rev Color Match object is used to register and detect known colors. This
+   * can be calibrated ahead of time or during operation.
+   * 
+   * This object uses a simple euclidian distance to estimate the closest match
+   * with given confidence range.
+   */
+  private final ColorMatch m_colorMatcher = new ColorMatch();
+
+  /**
+   * Array of counter variables for each color defineded in COLOR
+   */
+  private Map<COLOR, Integer> colorCounter = new HashMap<>();
+  private double setPoint = 0.0;
+  private COLOR oldColor = COLOR.UNKNOWN;
+
   public Spinner() {
+    // set PID coefficients
+    m_spinPIDController.setP(SpinnerConstants.kP);
+    m_spinPIDController.setI(SpinnerConstants.kI);
+    m_spinPIDController.setD(SpinnerConstants.kD);
+    m_spinPIDController.setIZone(SpinnerConstants.kIz);
+    m_spinPIDController.setFF(SpinnerConstants.kFF);
+    m_spinPIDController.setOutputRange(SpinnerConstants.kMinOutput, SpinnerConstants.kMaxOutput);
 
+    m_colorMatcher.addColorMatch(SpinnerConstants.kBlueTarget);
+    m_colorMatcher.addColorMatch(SpinnerConstants.kGreenTarget);
+    m_colorMatcher.addColorMatch(SpinnerConstants.kRedTarget);
+    m_colorMatcher.addColorMatch(SpinnerConstants.kYellowTarget);
+
+    initColorCounter();
+    setSetPoint(0.0);
   }
 
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+  public void Periodic() {
+    getColor();
+    SmartDashboard.putNumber("SetPoint", setPoint);
+    SmartDashboard.putNumber("Spin RPMs", m_spinEncoder.getVelocity());
   }
+
+  public void setSetPoint(double rpm) {
+    double setPoint = Library.Clip(rpm, 0.0, SpinnerConstants.kMaxRPM);
+    this.setPoint = setPoint;
+    m_spinPIDController.setReference(setPoint, ControlType.kVelocity);
+  }
+
+  public COLOR getColor() {
+    final Color detectedColor = m_colorSensor.getColor();
+    final ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
+    COLOR colorString = COLOR.UNKNOWN;
+
+    if (match.color == SpinnerConstants.kBlueTarget) {
+      colorString = COLOR.BLUE;
+    } else if (match.color == SpinnerConstants.kRedTarget) {
+      colorString = COLOR.RED;
+    } else if (match.color == SpinnerConstants.kGreenTarget) {
+      colorString = COLOR.GREEN;
+    } else if (match.color == SpinnerConstants.kYellowTarget) {
+      colorString = COLOR.YELLOW;
+    }
+
+    /**
+     * Open Smart Dashboard or Shuffleboard to see the color detected by the sensor.
+     */
+    SmartDashboard.putNumber("Red", detectedColor.red);
+    SmartDashboard.putNumber("Green", detectedColor.green);
+    SmartDashboard.putNumber("Blue", detectedColor.blue);
+    SmartDashboard.putNumber("Confidence", match.confidence);
+    SmartDashboard.putString("Detected Color", colorString.toString());
+
+    return colorString;
+  }
+
+  public int countColor(final boolean init) {
+    if (init)
+      initColorCounter();
+
+    COLOR color = getColor();
+    if (color != oldColor) {
+      int i = colorCounter.get(color);
+      colorCounter.put(color, i++);
+    }
+
+    return countColor();
+  }
+
+  public void initColorCounter() {
+    for (final COLOR color : COLOR.values()) {
+      colorCounter.put(color, 0);
+    }
+  }
+
+  public int countColor() {
+    int sum = 0;
+    int num = 0;
+    for (final COLOR color : COLOR.values()) {
+      num = colorCounter.get(color);
+      SmartDashboard.putNumber(color.toString(), num);
+      sum += num;
+    }
+    return sum;
+  }
+
+  // public @Override public void initDefaultCommand() {
+  // Set the default command for a subsystem here.
+  // setDefaultCommand(new MySpecialCommand());
+  // }
 }
