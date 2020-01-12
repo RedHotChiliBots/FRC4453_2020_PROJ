@@ -34,20 +34,12 @@ public final class Constants {
 		public static final int kRightFollowerMotor = 3;
 
 		public static final double kMaxSpeedFPS = 10.0; // feet per second
-<<<<<<< HEAD
 		public static final double kMaxSpeedMPS = kMaxSpeedFPS * UnitsConstants.kF2M; // meters per second
-=======
-		public static final double kMaxSpeedMPS = kMaxSpeedFPS * UnitsConstants.kF2M // meters per second
->>>>>>> 62837b11f543b1a137b4e99fc93c6fe2036a214f
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
 		public static final double kTrackWidth = 1.5 * UnitsConstants.kF2M * 2; // meters
 		public static final double kWheelDiameter = 6.0 * UnitsConstants.kF2M;
-<<<<<<< HEAD
 		public static final double kWheelRadius = kWheelDiameter / 2.0;
-=======
-		public static final double kWheelRadius = kWheelDia / 2.0;
->>>>>>> 62837b11f543b1a137b4e99fc93c6fe2036a214f
 		public static final int kEncoderResolution = 4096;
 
 		public static final double kP = 1;

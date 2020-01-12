@@ -16,19 +16,12 @@ import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.wpilibj.SpeedController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.controller.PIDController;
-<<<<<<< HEAD
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-=======
->>>>>>> 62837b11f543b1a137b4e99fc93c6fe2036a214f
 
 /**
  * Add your docs here.
  */
-<<<<<<< HEAD
 public class Shooter extends SubsystemBase {
-=======
-public class Shooter {
->>>>>>> 62837b11f543b1a137b4e99fc93c6fe2036a214f
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
@@ -48,13 +41,10 @@ public class Shooter {
   private final PIDController PIDController = new PIDController(ShooterConstants.kP, ShooterConstants.kI,
       ShooterConstants.kD);
 
-<<<<<<< HEAD
   public Shooter() {
 
   }
 
-=======
->>>>>>> 62837b11f543b1a137b4e99fc93c6fe2036a214f
   public void shooterShoot() {
 
   }
@@ -74,8 +64,4 @@ public class Shooter {
   public void moveToTilt() {
 
   }
-<<<<<<< HEAD
-
-=======
->>>>>>> 62837b11f543b1a137b4e99fc93c6fe2036a214f
 }
