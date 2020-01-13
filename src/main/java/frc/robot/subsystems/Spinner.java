@@ -23,10 +23,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.Library;
-import frc.robot.Constants.SpinnerConstants;
-import frc.robot.Constants.SpinnerConstants.COLOR;
 
+import frc.robot.Library;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.Constants.SpinnerConstants.COLOR;
 
@@ -135,7 +133,7 @@ public class Spinner extends SubsystemBase {
       colorCounter.put(color, i++);
     }
 
-    return countColor();
+    return sumColor();
   }
 
   public void initColorCounter() {
@@ -144,7 +142,7 @@ public class Spinner extends SubsystemBase {
     }
   }
 
-  public int countColor() {
+  public int sumColor() {
     int sum = 0;
     int num = 0;
     for (final COLOR color : COLOR.values()) {
