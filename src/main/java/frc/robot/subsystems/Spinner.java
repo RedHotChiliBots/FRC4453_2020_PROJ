@@ -27,9 +27,6 @@ import frc.robot.Library;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.Constants.SpinnerConstants.COLOR;
 
-import frc.robot.Constants.SpinnerConstants;
-import frc.robot.Constants.SpinnerConstants.COLOR;
-
 /**
  * Add your docs here.
  */
@@ -111,6 +108,8 @@ public class Spinner extends SubsystemBase {
       colorString = COLOR.GREEN;
     } else if (match.color == SpinnerConstants.kYellowTarget) {
       colorString = COLOR.YELLOW;
+    } else {
+      colorString = COLOR.UNKNOWN;
     }
 
     /**
@@ -148,9 +147,11 @@ public class Spinner extends SubsystemBase {
     int sum = 0;
     int num = 0;
     for (final COLOR color : COLOR.values()) {
-      num = colorCounter.get(color);
-      SmartDashboard.putNumber(color.toString(), num);
-      sum += num;
+      if (color != COLOR.UNKNOWN) {
+        num = colorCounter.get(color);
+        SmartDashboard.putNumber(color.toString(), num);
+        sum += num;
+      }
     }
     return sum;
   }
