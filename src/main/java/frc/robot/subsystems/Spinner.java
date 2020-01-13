@@ -27,6 +27,9 @@ import frc.robot.Library;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.Constants.SpinnerConstants.COLOR;
 
+import frc.robot.Constants.SpinnerConstants;
+import frc.robot.Constants.SpinnerConstants.COLOR;
+
 /**
  * Add your docs here.
  */
