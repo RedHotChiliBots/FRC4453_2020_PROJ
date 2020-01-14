@@ -11,8 +11,13 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
+
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.SpinnerConstants;
 import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spinner;
 
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.ExampleCommand;
@@ -27,12 +32,15 @@ import frc.robot.commands.ExampleCommand;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Chassis chassis = new Chassis();
+  private final Spinner spinner = new Spinner();
+  private final Shooter shooter = new Shooter();
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-  // The driver's controller
-  XboxController m_controller = new XboxController(OIConstants.kDriverControllerPort);
+  // The driver and operator controllers
+  XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -46,8 +54,9 @@ public class RobotContainer {
     // A split-stick arcade command, with forward/backward controlled by the left
     // hand, and turning controlled by the right.
     chassis.setDefaultCommand(new RunCommand(
-        () -> chassis.drive(m_controller.getY(GenericHID.Hand.kLeft), m_controller.getX(GenericHID.Hand.kRight)),
-        chassis));
+        () -> chassis.drive(m_driver.getY(GenericHID.Hand.kLeft), m_driver.getX(GenericHID.Hand.kRight)), chassis));
+
+    spinner.setDefaultCommand(new RunCommand(() -> spinner.setSetPoint(SpinnerConstants.kStopRPMs), spinner));
   }
 
   /**
@@ -57,7 +66,7 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
+    // Button stopOnColor = new Button()
   }
 
   /**
