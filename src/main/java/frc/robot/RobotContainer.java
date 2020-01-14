@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.XboxController.Button;
 
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpinnerConstants;
@@ -21,6 +22,8 @@ import frc.robot.subsystems.Spinner;
 
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.SpinnerCountRevs;
+import frc.robot.commands.SpinnerStopOnColor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -66,7 +69,21 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Button stopOnColor = new Button()
+    // Grab the hatch when the 'A' button is pressed.
+    new JoystickButton(m_driver, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));
+    new JoystickButton(m_driver, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
+
+    // new JoystickButton(m_driver, Button.kA.value)
+    // .whenPressed(new InstantCommand(m_hatchSubsystem::grabHatch,
+    // m_hatchSubsystem));
+    // Release the hatch when the 'B' button is pressed.
+    // new JoystickButton(m_driver, Button.kB.value)
+    // .whenPressed(new InstantCommand(m_hatchSubsystem::releaseHatch,
+    // m_hatchSubsystem));
+    // While holding the shoulder button, drive at half speed
+    // new JoystickButton(m_driver, Button.kBumperRight.value)
+    // .whenPressed(() -> m_robotDrive.setMaxOutput(0.5))
+    // .whenReleased(() -> m_robotDrive.setMaxOutput(1));
   }
 
   /**
