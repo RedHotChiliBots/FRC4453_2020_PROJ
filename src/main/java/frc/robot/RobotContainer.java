@@ -70,8 +70,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Grab the hatch when the 'A' button is pressed.
-    new JoystickButton(m_driver, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));
-    new JoystickButton(m_driver, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
+    new JoystickButton(m_operator, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));
+    new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
 
     // new JoystickButton(m_driver, Button.kA.value)
     // .whenPressed(new InstantCommand(m_hatchSubsystem::grabHatch,
