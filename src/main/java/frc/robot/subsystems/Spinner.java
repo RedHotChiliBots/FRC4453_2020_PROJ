@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+
 import frc.robot.Library;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.Constants.SpinnerConstants.COLOR;
@@ -62,6 +63,7 @@ public class Spinner extends SubsystemBase {
    * Array of counter variables for each color defineded in COLOR
    */
   private Map<COLOR, Integer> colorCounter = new HashMap<>();
+  private Map<String, COLOR> stopOnColor = new HashMap<>();
   private double setPoint = 0.0;
   private COLOR oldColor = COLOR.UNKNOWN;
 
@@ -79,6 +81,11 @@ public class Spinner extends SubsystemBase {
     m_colorMatcher.addColorMatch(SpinnerConstants.kRedTarget);
     m_colorMatcher.addColorMatch(SpinnerConstants.kYellowTarget);
 
+    stopOnColor.put("G", COLOR.YELLOW);
+    stopOnColor.put("B", COLOR.RED);
+    stopOnColor.put("Y", COLOR.GREEN);
+    stopOnColor.put("R", COLOR.BLUE);
+
     initColorCounter();
     setSetPoint(0.0);
   }
@@ -93,6 +100,10 @@ public class Spinner extends SubsystemBase {
     double setPoint = Library.Clip(rpm, 0.0, SpinnerConstants.kMaxRPM);
     this.setPoint = setPoint;
     m_spinPIDController.setReference(setPoint, ControlType.kVelocity);
+  }
+
+  public COLOR getStopOnColor(char color) {
+    return stopOnColor.get(color);
   }
 
   public COLOR getColor() {
@@ -134,7 +145,7 @@ public class Spinner extends SubsystemBase {
       colorCounter.put(color, i++);
     }
 
-    return countColor();
+    return sumColor();
   }
 
   public void initColorCounter() {
@@ -143,7 +154,7 @@ public class Spinner extends SubsystemBase {
     }
   }
 
-  public int countColor() {
+  public int sumColor() {
     int sum = 0;
     int num = 0;
     for (final COLOR color : COLOR.values()) {

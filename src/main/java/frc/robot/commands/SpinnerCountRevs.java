@@ -8,13 +8,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.SpinnerConstants;
 import frc.robot.subsystems.Spinner;
 
-public class SpinnerStow extends CommandBase {
+public class SpinnerCountRevs extends CommandBase {
 
   private final Spinner m_spinner;
 
-  public SpinnerStow(Spinner subsystem) {
+  public SpinnerCountRevs(Spinner subsystem) {
     m_spinner = subsystem;
     addRequirements(subsystem);
     // Use requires() here to declare subsystem dependencies
@@ -24,22 +25,25 @@ public class SpinnerStow extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    m_spinner.setSetPoint(0.0);
+    m_spinner.countColor(true);
+    m_spinner.setSetPoint(SpinnerConstants.kCountRevRPMs);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
+    m_spinner.countColor(false);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return true;
+    return m_spinner.sumColor() >= 25;
   }
 
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
+    m_spinner.setSetPoint(SpinnerConstants.kStopRPMs);
   }
 }

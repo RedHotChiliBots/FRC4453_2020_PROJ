@@ -59,6 +59,10 @@ public final class Constants {
 		public static final double kP = 1;
 		public static final double kI = 0;
 		public static final double kD = 0;
+
+		public static final double shootSpeed = 1.0;
+
+		public static final double shooterShootTime = 4;
 	}
 
 	public final static class SpinnerConstants {
@@ -71,10 +75,14 @@ public final class Constants {
 		public static final double kFF = 0.0;
 		public static final double kMaxOutput = 1.0;
 		public static final double kMinOutput = 1.0;
-		public static final double kMaxRPM = 5700;
+		public static final double kMaxRPM = 5700.0;
+
+		public static final double kStopOnColorRPMs = 1000.0;
+		public static final double kCountRevRPMs = 4000.0;
+		public static final double kStopRPMs = 4000.0;
 
 		public static enum COLOR {
-			BLUE, RED, GREEN, YELLOW, UNKNOWN;
+			GREEN, BLUE, YELLOW, RED, UNKNOWN;
 		}
 
 		/**
