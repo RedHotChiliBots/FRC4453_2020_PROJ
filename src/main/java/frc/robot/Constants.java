@@ -32,10 +32,10 @@ public final class Constants {
 	}
 
 	public static final class ChassisConstants {
-		public static final int kLeftMasterMotor = 0;
-		public static final int kLeftFollowerMotor = 1;
-		public static final int kRightMasterMotor = 2;
-		public static final int kRightFollowerMotor = 3;
+		public static final int kLeftMasterMotor = 4;
+		public static final int kLeftFollowerMotor = 3;
+		public static final int kRightMasterMotor = 1;
+		public static final int kRightFollowerMotor = 2;
 
 		public static final double kMaxSpeedFPS = 10.0; // feet per second
 		public static final double kMaxSpeedMPS = kMaxSpeedFPS * UnitsConstants.kF2M; // meters per second
