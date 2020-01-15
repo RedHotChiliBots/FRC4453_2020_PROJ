@@ -135,12 +135,18 @@ public class Spinner extends SubsystemBase {
     return colorString;
   }
 
+  /**
+   * This method counts the colors
+   * 
+   * @return int This returns sum of all the color counters.
+   */
   public int countColor(final boolean init) {
     if (init)
       initColorCounter();
 
     COLOR color = getColor();
     if (color != oldColor) {
+      oldColor = color;
       int i = colorCounter.get(color);
       colorCounter.put(color, i++);
     }
@@ -148,12 +154,24 @@ public class Spinner extends SubsystemBase {
     return sumColor();
   }
 
+  /**
+   * This method initializes the color counters to zero.
+   * 
+   * @return Nothing.
+   */
   public void initColorCounter() {
     for (final COLOR color : COLOR.values()) {
       colorCounter.put(color, 0);
     }
   }
 
+  /**
+   * This method adds all the individual color counters and used to count the
+   * number of revolutions made by the control panel. There are eight color panels
+   * on the control panel hence counts counts per revolution.
+   * 
+   * @return int This returns sum of all the color counters.
+   */
   public int sumColor() {
     int sum = 0;
     int num = 0;
