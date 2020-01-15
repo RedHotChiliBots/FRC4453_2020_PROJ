@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -43,8 +44,8 @@ public class Chassis extends SubsystemBase {
 			MotorType.kBrushless);
 
 	// private final Encoder m_leftEncoder = new Encoder(0, 1);
-	private final CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
-	private final CANEncoder m_rightEncoder = new CANEncoder(rightMaster);
+	public CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
+	public final CANEncoder m_rightEncoder = new CANEncoder(rightMaster);
 	// private final Encoder m_rightEncoder = new Encoder(2, 3);
 
 	private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
@@ -66,12 +67,19 @@ public class Chassis extends SubsystemBase {
 
 	private final DifferentialDriveOdometry m_odometry;
 
+	private double tgtPosition = 0.0;
+	private Chassis subsystem;
+
 	/**
 	 * Constructs a differential drive object. Sets the encoder distance per pulse
 	 * and resets the gyro.
 	 */
-	public Chassis() {
+	public Chassis(Chassis subsystem) {
+		this.subsystem = subsystem;
+		SmartDashboard.putData(subsystem);
+
 		ahrs.reset();
+		ahrs.zeroYaw();
 
 		// Set the distance per pulse for the drive encoders. We can simply use the
 		// distance traveled for one rotation of the wheel divided by the encoder
@@ -88,6 +96,18 @@ public class Chassis extends SubsystemBase {
 		// m_rightEncoder.reset();
 
 		m_odometry = new DifferentialDriveOdometry(getAngle());
+	}
+
+	public void periodic() {
+		SmartDashboard.putNumber("LM Current", leftMaster.getOutputCurrent());
+		SmartDashboard.putNumber("RM Current", rightMaster.getOutputCurrent());
+		SmartDashboard.putNumber("LM Temp", leftMaster.getMotorTemperature() * (9.0 / 5.0)) + 32);
+		SmartDashboard.putNumber("RM Temp", rightMaster.getMotorTemperature() * (9.0 / 5.0)) + 32);
+
+		SmartDashboard.putNumber("LM Position", m_leftEncoder.getPosition());
+		SmartDashboard.putNumber("LM Velocity", m_leftEncoder.getVelocity());
+		SmartDashboard.putNumber("RM Position", m_rightEncoder.getPosition());
+		SmartDashboard.putNumber("RM Velocity", m_rightEncoder.getVelocity());
 	}
 
 	/**
@@ -130,5 +150,13 @@ public class Chassis extends SubsystemBase {
 	public void updateOdometry() {
 		m_odometry.update(getAngle(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 	}
+
+	// public void setLMTgtPosition(double pos) {
+	// tgtPosition = pos;
+	// // pid.setReference(pos * REV_PER_INCH_MOTOR, ControlType.kSmartMotion,
+	// // RobotMap.kSlot_Position);
+	// pid.setReference(pos, ControlType.kSmartMotion, RobotMap.kSlot_Position);
+	// m_leftPIDController.setRefer
+	// }
 
 }

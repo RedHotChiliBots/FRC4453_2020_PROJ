@@ -10,7 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ChassisConstants;
 import frc.robot.subsystems.Chassis;
 
@@ -37,5 +37,11 @@ public class Robot extends TimedRobot {
 		final var rot = -m_controller.getX(GenericHID.Hand.kRight) * ChassisConstants.kMaxAngularSpeed;
 
 		m_drive.drive(xSpeed, rot);
+
+		SmartDashboard.putData(chassis);
+
+		// SmartDashboard.putNumber("Lift Target", Robot.lift.getTgtPosition());
+		// SmartDashboard.putNumber("Lift Current", Robot.lift.getMotorCurrent());
+		// SmartDashboard.putNumber("Lift Temp", Robot.lift.getMotorTemp());
 	}
 }

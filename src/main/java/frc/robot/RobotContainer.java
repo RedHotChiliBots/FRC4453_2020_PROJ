@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController.Button;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.subsystems.Chassis;
