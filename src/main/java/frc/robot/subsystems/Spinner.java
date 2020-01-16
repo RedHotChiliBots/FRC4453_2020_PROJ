@@ -136,11 +136,12 @@ public class Spinner extends SubsystemBase {
   }
 
   /**
-   * This method counts the colors
+   * This method counts each color the first time it is seen as the control panel
+   * rotates.
    * 
-   * @return int This returns sum of all the color counters.
+   * @return Nothing.
    */
-  public int countColor(final boolean init) {
+  public void countColor(final boolean init) {
     if (init)
       initColorCounter();
 
@@ -150,8 +151,6 @@ public class Spinner extends SubsystemBase {
       int i = colorCounter.get(color);
       colorCounter.put(color, i++);
     }
-
-    return sumColor();
   }
 
   /**

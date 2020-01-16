@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.util.Color;
 public final class Constants {
 	public static final class UnitsConstants {
 		public static final double kF2M = 0.3048;
+		public static final double kC2F = (9.0 / 5.0) + 32.0;
 	}
 
 	public static final class OIConstants {

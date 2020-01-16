@@ -28,6 +28,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Constants.ChassisConstants;
+import frc.robot.Constants.UnitsConstants;
 
 /**
  * Represents a differential drive style drivetrain.
@@ -67,19 +68,18 @@ public class Chassis extends SubsystemBase {
 
 	private final DifferentialDriveOdometry m_odometry;
 
-	private double tgtPosition = 0.0;
-	private Chassis subsystem;
-
 	/**
 	 * Constructs a differential drive object. Sets the encoder distance per pulse
 	 * and resets the gyro.
 	 */
-	public Chassis(Chassis subsystem) {
-		this.subsystem = subsystem;
-		SmartDashboard.putData(subsystem);
+	public Chassis() {
+		super();
 
 		ahrs.reset();
 		ahrs.zeroYaw();
+
+		m_leftPIDController.reset();
+		m_rightPIDController.reset();
 
 		// Set the distance per pulse for the drive encoders. We can simply use the
 		// distance traveled for one rotation of the wheel divided by the encoder
@@ -99,15 +99,24 @@ public class Chassis extends SubsystemBase {
 	}
 
 	public void periodic() {
+		// SmartDashboard.putData("Left Encoder", leftMaster);
+
+		SmartDashboard.putData(m_leftPIDController);
+		SmartDashboard.putData(m_rightPIDController);
+
 		SmartDashboard.putNumber("LM Current", leftMaster.getOutputCurrent());
 		SmartDashboard.putNumber("RM Current", rightMaster.getOutputCurrent());
-		SmartDashboard.putNumber("LM Temp", leftMaster.getMotorTemperature() * (9.0 / 5.0)) + 32);
-		SmartDashboard.putNumber("RM Temp", rightMaster.getMotorTemperature() * (9.0 / 5.0)) + 32);
+		SmartDashboard.putNumber("LM Temp", leftMaster.getMotorTemperature() * UnitsConstants.kC2F);
+		SmartDashboard.putNumber("RM Temp", rightMaster.getMotorTemperature() * UnitsConstants.kC2F);
 
 		SmartDashboard.putNumber("LM Position", m_leftEncoder.getPosition());
 		SmartDashboard.putNumber("LM Velocity", m_leftEncoder.getVelocity());
 		SmartDashboard.putNumber("RM Position", m_rightEncoder.getPosition());
 		SmartDashboard.putNumber("RM Velocity", m_rightEncoder.getVelocity());
+	}
+
+	public void driveTeleop(double left, double right) {
+
 	}
 
 	/**

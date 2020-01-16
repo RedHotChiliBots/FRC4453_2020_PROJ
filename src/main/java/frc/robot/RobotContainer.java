@@ -23,9 +23,13 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spinner;
 
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.ChassisDriveTeleop;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ShooterMoveToAngle;
+import frc.robot.commands.ShooterShoot;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStopOnColor;
+import frc.robot.commands.SpinnerStow;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -43,6 +47,15 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
+  private final ChassisDriveTeleop m_chassisDriveTeleop = new ChassisDriveTeleop(chassis);
+
+  private final SpinnerStow m_spinnerStow = new SpinnerStow(spinner);
+  private final SpinnerStopOnColor m_spinnerStopOnColor = new SpinnerStopOnColor(spinner);
+  private final SpinnerCountRevs m_spinnerCountRevs = new SpinnerCountRevs(spinner);
+
+  private final ShooterMoveToAngle m_shooterMoveToAngle = new ShooterMoveToAngle(shooter);
+  private final ShooterShoot m_shooterShoot = new ShooterShoot(shooter);
+
   // The driver and operator controllers
   XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
@@ -51,17 +64,19 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
-
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
     // A split-stick arcade command, with forward/backward controlled by the left
     // hand, and turning controlled by the right.
-    chassis.setDefaultCommand(new RunCommand(
-        () -> chassis.drive(m_driver.getY(GenericHID.Hand.kLeft), m_driver.getX(GenericHID.Hand.kRight)), chassis));
+    // chassis.setDefaultCommand(new RunCommand(
+    // () -> chassis.drive(m_driver.getY(GenericHID.Hand.kLeft),
+    // m_driver.getX(GenericHID.Hand.kRight)), chassis));
 
-    spinner.setDefaultCommand(new RunCommand(() -> spinner.setSetPoint(SpinnerConstants.kStopRPMs), spinner));
+    chassis.setDefaultCommand(m_chassisDriveTeleop);
+    spinner.setDefaultCommand(m_spinnerStow);
+
+    // Configure the button bindings
+    configureButtonBindings();
   }
 
   /**
@@ -71,7 +86,12 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Grab the hatch when the 'A' button is pressed.
+    // Add subsystems to dashboard
+    SmartDashboard.putData(chassis);
+    SmartDashboard.putData(spinner);
+    SmartDashboard.putData(shooter);
+
+    // Define Operator controls
     new JoystickButton(m_operator, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));
     new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
 
