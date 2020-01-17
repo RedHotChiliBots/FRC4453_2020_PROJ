@@ -7,18 +7,22 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.GenericHID;
 // import edu.wpi.first.wpilibj.AnalogGyro;
 // import edu.wpi.first.wpilibj.Encoder;
 // import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -29,6 +33,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Constants.ChassisConstants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.UnitsConstants;
 
 /**
@@ -63,10 +68,22 @@ public class Chassis extends SubsystemBase {
 	// private final PIDController m_rightPIDController = new PIDController(1, 0,
 	// 0);
 
+	// Compressor c = new Compressor(0);
+
+	// c.setClosedLoopControl(true);
+	// c.setClosedLoopControl(false);
+
+	// boolean enabled = c.enabled();
+	// boolean pressureSwitch = c.getPressureSwitchValue();
+	// double current = c.getCompressorCurrent();
+
 	private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
 			ChassisConstants.kTrackWidth);
 
 	private final DifferentialDriveOdometry m_odometry;
+
+	XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
+	XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
 
 	/**
 	 * Constructs a differential drive object. Sets the encoder distance per pulse
@@ -74,6 +91,7 @@ public class Chassis extends SubsystemBase {
 	 */
 	public Chassis() {
 		super();
+		System.out.println("Chassis starting ...");
 
 		ahrs.reset();
 		ahrs.zeroYaw();
@@ -108,6 +126,11 @@ public class Chassis extends SubsystemBase {
 	}
 
 	public void periodic() {
+		// SmartDashboard.putData("Left Encoder", leftMaster);
+
+		SmartDashboard.putNumber("Left Y", -m_driver.getY(GenericHID.Hand.kLeft));
+		SmartDashboard.putNumber("Right Y", -m_driver.getY(GenericHID.Hand.kRight));
+
 		SmartDashboard.putNumber("LM Current", leftMaster.getOutputCurrent());
 		SmartDashboard.putNumber("RM Current", rightMaster.getOutputCurrent());
 		SmartDashboard.putNumber("LM Temp", leftMaster.getMotorTemperature() * UnitsConstants.kC2F);
@@ -117,10 +140,18 @@ public class Chassis extends SubsystemBase {
 		SmartDashboard.putNumber("LM Velocity", m_leftEncoder.getVelocity());
 		SmartDashboard.putNumber("RM Position", m_rightEncoder.getPosition());
 		SmartDashboard.putNumber("RM Velocity", m_rightEncoder.getVelocity());
+
+		// Shuffleboard.getTab("Tab3").add("L Encoder Position",
+		// m_leftEncoder.getPosition());
+		// Shuffleboard.getTab("Tab3").add("R Encoder Position",
+		// m_rightEncoder.getPosition());
 	}
 
 	public void driveTeleop(double left, double right) {
-
+		m_leftGroup.set(left);
+		m_rightGroup.set(right);
+		SmartDashboard.putNumber("Teleop Left Y", left);
+		SmartDashboard.putNumber("Teleop Right Y", right); 
 	}
 
 	/**

@@ -95,4 +95,9 @@ public final class Constants {
 		public static final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
 		public static final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 	}
+
+	public static final class ClimberConstants {
+		public static final int kClimberSolenoidForwardChannel = 1;
+		public static final int kClimberSolenoidReverseChannel = 2;
+	}
 }

@@ -21,7 +21,6 @@ import com.revrobotics.ColorMatch;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
@@ -64,11 +63,13 @@ public class Spinner extends SubsystemBase {
    * Array of counter variables for each color defineded in COLOR
    */
   private Map<COLOR, Integer> colorCounter = new HashMap<>();
-  private Map<String, COLOR> stopOnColor = new HashMap<>();
+  private Map<Character, COLOR> stopOnColor = new HashMap<>();
   private double setPoint = 0.0;
   private COLOR oldColor = COLOR.UNKNOWN;
 
   public Spinner() {
+    System.out.println("Spinner starting ...");
+
     // set PID coefficients
     m_spinPIDController.setP(SpinnerConstants.kP);
     m_spinPIDController.setI(SpinnerConstants.kI);
@@ -82,10 +83,10 @@ public class Spinner extends SubsystemBase {
     m_colorMatcher.addColorMatch(SpinnerConstants.kRedTarget);
     m_colorMatcher.addColorMatch(SpinnerConstants.kYellowTarget);
 
-    stopOnColor.put("G", COLOR.YELLOW);
-    stopOnColor.put("B", COLOR.RED);
-    stopOnColor.put("Y", COLOR.GREEN);
-    stopOnColor.put("R", COLOR.BLUE);
+    stopOnColor.put('G', COLOR.YELLOW);
+    stopOnColor.put('B', COLOR.RED);
+    stopOnColor.put('Y', COLOR.GREEN);
+    stopOnColor.put('R', COLOR.BLUE);
 
     initColorCounter();
     setSetPoint(0.0);
