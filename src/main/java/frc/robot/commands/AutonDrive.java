@@ -8,15 +8,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Spinner;
 
-public class SpinnerStow extends CommandBase {
+public class AutonDrive extends CommandBase {
 
-  private final Spinner m_subsystem;
+  private final Chassis m_chassis;
+  private final Spinner m_spinner;
 
-  public SpinnerStow(Spinner subsystem) {
-    m_subsystem = subsystem;
-    addRequirements(subsystem);
+  public AutonDrive(Chassis chassis, Spinner spinner) {
+    m_chassis = chassis;
+    m_spinner = spinner;
+    addRequirements(chassis, spinner);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -24,7 +27,6 @@ public class SpinnerStow extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    m_subsystem.setSetPoint(0.0);
   }
 
   // Called repeatedly when this Command is scheduled to run

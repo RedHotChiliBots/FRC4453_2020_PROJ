@@ -7,23 +7,23 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController.Button;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpinnerConstants;
+
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spinner;
-
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.AutonDrive;
 import frc.robot.commands.ShooterMoveToAngle;
 import frc.robot.commands.ShooterShoot;
 import frc.robot.commands.SpinnerCountRevs;
@@ -43,13 +43,9 @@ public class RobotContainer {
   private final Spinner spinner = new Spinner();
   // private final Shooter shooter = new Shooter();
 
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
   private final SpinnerStow m_spinnerStow = new SpinnerStow(spinner);
   private final SpinnerStopOnColor m_spinnerStopOnColor = new SpinnerStopOnColor(spinner);
   private final SpinnerCountRevs m_spinnerCountRevs = new SpinnerCountRevs(spinner);
-
   // private final ShooterMoveToAngle m_shooterMoveToAngle = new
   // ShooterMoveToAngle(shooter);
   // private final ShooterShoot m_shooterShoot = new ShooterShoot(shooter);
@@ -57,6 +53,8 @@ public class RobotContainer {
   // The driver and operator controllers
   XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
+
+  private final CommandBase m_autoCommand = new AutonDrive(chassis, spinner);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -68,8 +66,8 @@ public class RobotContainer {
     // hand, and turning controlled by the right.
 
     chassis.setDefaultCommand(
-        new RunCommand(() -> chassis.driveTeleop(-m_driver.getY(GenericHID.Hand.kLeft) * ChassisConstants.kMaxSpeedMPS,
-            -m_driver.getY(GenericHID.Hand.kRight) * ChassisConstants.kMaxSpeedMPS), chassis));
+        new RunCommand(() -> chassis.driveTeleop(-m_driver.getY(Hand.kLeft) * ChassisConstants.kMaxSpeedMPS,
+            -m_driver.getY(Hand.kRight) * ChassisConstants.kMaxSpeedMPS), chassis));
 
     spinner.setDefaultCommand(new RunCommand(() -> spinner.setSetPoint(SpinnerConstants.kStopRPMs), spinner));
 

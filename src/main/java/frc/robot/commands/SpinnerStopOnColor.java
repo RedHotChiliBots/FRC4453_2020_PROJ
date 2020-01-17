@@ -15,12 +15,12 @@ import frc.robot.subsystems.Spinner;
 
 public class SpinnerStopOnColor extends CommandBase {
 
-  private Spinner m_spinner;
+  private Spinner m_subsystem;
   private COLOR color;
   char gameColor;
 
   public SpinnerStopOnColor(Spinner subsystem) {
-    m_spinner = subsystem;
+    m_subsystem = subsystem;
     addRequirements(subsystem);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -30,25 +30,25 @@ public class SpinnerStopOnColor extends CommandBase {
   @Override
   public void initialize() {
     gameColor = DriverStation.getInstance().getGameSpecificMessage().charAt(0);
-    m_spinner.setSetPoint(SpinnerConstants.kStopOnColorRPMs);
+    m_subsystem.setSetPoint(SpinnerConstants.kStopOnColorRPMs);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    color = m_spinner.getColor();
+    color = m_subsystem.getColor();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return m_spinner.getStopOnColor(gameColor) == color;
+    return m_subsystem.getStopOnColor(gameColor) == color;
   }
 
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    m_spinner.setSetPoint(SpinnerConstants.kStopRPMs);
+    m_subsystem.setSetPoint(SpinnerConstants.kStopRPMs);
 
   }
 }
