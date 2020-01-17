@@ -7,23 +7,23 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpinnerConstants;
-
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spinner;
-import frc.robot.commands.AutonDrive;
+
+// import frc.robot.subsystems.ExampleSubsystem;
+// import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ShooterMoveToAngle;
 import frc.robot.commands.ShooterShoot;
 import frc.robot.commands.SpinnerCountRevs;
@@ -41,11 +41,18 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Chassis chassis = new Chassis();
   private final Spinner spinner = new Spinner();
-  // private final Shooter shooter = new Shooter();
+  private final Shooter shooter = new Shooter();
+
+  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  // private final ExampleCommand m_autoCommand = new
+  // ExampleCommand(m_exampleSubsystem);
 
   private final SpinnerStow m_spinnerStow = new SpinnerStow(spinner);
   private final SpinnerStopOnColor m_spinnerStopOnColor = new SpinnerStopOnColor(spinner);
   private final SpinnerCountRevs m_spinnerCountRevs = new SpinnerCountRevs(spinner);
+
+  private final ShooterShoot m_shooterShoot = new ShooterShoot(shooter);
+
   // private final ShooterMoveToAngle m_shooterMoveToAngle = new
   // ShooterMoveToAngle(shooter);
   // private final ShooterShoot m_shooterShoot = new ShooterShoot(shooter);
@@ -54,20 +61,19 @@ public class RobotContainer {
   XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
 
-  private final CommandBase m_autoCommand = new AutonDrive(chassis, spinner);
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
     // A split-stick arcade command, with forward/backward controlled by the left
     // hand, and turning controlled by the right.
 
-    chassis.setDefaultCommand(
-        new RunCommand(() -> chassis.driveTeleop(-m_driver.getY(Hand.kLeft) * ChassisConstants.kMaxSpeedMPS,
-            -m_driver.getY(Hand.kRight) * ChassisConstants.kMaxSpeedMPS), chassis));
+    chassis.setDefaultCommand(new RunCommand(
+        () -> chassis.driveTeleop(-m_driver.getY(GenericHID.Hand.kLeft), -m_driver.getY(GenericHID.Hand.kRight)),
+        chassis));
 
     spinner.setDefaultCommand(new RunCommand(() -> spinner.setSetPoint(SpinnerConstants.kStopRPMs), spinner));
 
@@ -92,6 +98,8 @@ public class RobotContainer {
     new JoystickButton(m_operator, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));
     new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
 
+    new JoystickButton(m_operator, Button.kY.value).whenHeld(new ShooterShoot(shooter));
+
     // new JoystickButton(m_driver, Button.kA.value)
     // .whenPressed(new InstantCommand(m_hatchSubsystem::grabHatch,
     // m_hatchSubsystem));
@@ -110,8 +118,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
-  }
+  // public Command getAutonomousCommand() {
+  // // An ExampleCommand will run in autonomous
+  // return m_autoCommand;
+  // }
 }

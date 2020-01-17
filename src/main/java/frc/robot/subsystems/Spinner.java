@@ -69,6 +69,8 @@ public class Spinner extends SubsystemBase {
   private COLOR oldColor = COLOR.UNKNOWN;
 
   public Spinner() {
+    System.out.println("Spinner starting ...");
+
     // set PID coefficients
     m_spinPIDController.setP(SpinnerConstants.kP);
     m_spinPIDController.setI(SpinnerConstants.kI);
