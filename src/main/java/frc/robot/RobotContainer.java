@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController.Button;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.subsystems.Chassis;
@@ -23,7 +23,6 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spinner;
 
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.commands.ChassisDriveTeleop;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ShooterMoveToAngle;
 import frc.robot.commands.ShooterShoot;
@@ -42,19 +41,18 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Chassis chassis = new Chassis();
   private final Spinner spinner = new Spinner();
-  private final Shooter shooter = new Shooter();
+  // private final Shooter shooter = new Shooter();
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
-  private final ChassisDriveTeleop m_chassisDriveTeleop = new ChassisDriveTeleop(chassis);
 
   private final SpinnerStow m_spinnerStow = new SpinnerStow(spinner);
   private final SpinnerStopOnColor m_spinnerStopOnColor = new SpinnerStopOnColor(spinner);
   private final SpinnerCountRevs m_spinnerCountRevs = new SpinnerCountRevs(spinner);
 
-  private final ShooterMoveToAngle m_shooterMoveToAngle = new ShooterMoveToAngle(shooter);
-  private final ShooterShoot m_shooterShoot = new ShooterShoot(shooter);
+  // private final ShooterMoveToAngle m_shooterMoveToAngle = new
+  // ShooterMoveToAngle(shooter);
+  // private final ShooterShoot m_shooterShoot = new ShooterShoot(shooter);
 
   // The driver and operator controllers
   XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
@@ -68,12 +66,17 @@ public class RobotContainer {
     // Set the default drive command to split-stick arcade drive
     // A split-stick arcade command, with forward/backward controlled by the left
     // hand, and turning controlled by the right.
-    // chassis.setDefaultCommand(new RunCommand(
-    // () -> chassis.drive(m_driver.getY(GenericHID.Hand.kLeft),
-    // m_driver.getX(GenericHID.Hand.kRight)), chassis));
 
-    chassis.setDefaultCommand(m_chassisDriveTeleop);
-    spinner.setDefaultCommand(m_spinnerStow);
+    chassis.setDefaultCommand(
+        new RunCommand(() -> chassis.driveTeleop(-m_driver.getY(GenericHID.Hand.kLeft) * ChassisConstants.kMaxSpeedMPS,
+            -m_driver.getY(GenericHID.Hand.kRight) * ChassisConstants.kMaxSpeedMPS), chassis));
+
+    spinner.setDefaultCommand(new RunCommand(() -> spinner.setSetPoint(SpinnerConstants.kStopRPMs), spinner));
+
+    // Add subsystems to dashboard
+    SmartDashboard.putData("Chassis", chassis);
+    SmartDashboard.putData("Spinner", spinner);
+    // SmartDashboard.putData(shooter);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -86,10 +89,6 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Add subsystems to dashboard
-    SmartDashboard.putData(chassis);
-    SmartDashboard.putData(spinner);
-    SmartDashboard.putData(shooter);
 
     // Define Operator controls
     new JoystickButton(m_operator, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));

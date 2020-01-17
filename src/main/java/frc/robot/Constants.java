@@ -80,7 +80,7 @@ public final class Constants {
 
 		public static final double kStopOnColorRPMs = 1000.0;
 		public static final double kCountRevRPMs = 4000.0;
-		public static final double kStopRPMs = 4000.0;
+		public static final double kStopRPMs = 0.0;
 
 		public static enum COLOR {
 			GREEN, BLUE, YELLOW, RED, UNKNOWN;

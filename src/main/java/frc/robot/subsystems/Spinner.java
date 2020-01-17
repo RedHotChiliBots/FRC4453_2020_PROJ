@@ -21,6 +21,7 @@ import com.revrobotics.ColorMatch;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
@@ -36,7 +37,7 @@ public class Spinner extends SubsystemBase {
   // here. Call these from Commands.
   private final CANSparkMax spinMotor = new CANSparkMax(SpinnerConstants.kSpinnerMotor, MotorType.kBrushless);
 
-  private final CANPIDController m_spinPIDController = spinMotor.getPIDController();
+  private final CANPIDController m_spinPIDController = new CANPIDController(spinMotor);
 
   private final CANEncoder m_spinEncoder = spinMotor.getEncoder();
   /**
@@ -88,6 +89,9 @@ public class Spinner extends SubsystemBase {
 
     initColorCounter();
     setSetPoint(0.0);
+
+    // SmartDashboard.putData("Spin PID", spinMotor);
+    // SmartDashboard.putData("Color Sensor", m_colorSensor);
   }
 
   public void Periodic() {

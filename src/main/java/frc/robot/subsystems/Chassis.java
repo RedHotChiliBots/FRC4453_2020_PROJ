@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -45,7 +46,7 @@ public class Chassis extends SubsystemBase {
 			MotorType.kBrushless);
 
 	// private final Encoder m_leftEncoder = new Encoder(0, 1);
-	public CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
+	public final CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
 	public final CANEncoder m_rightEncoder = new CANEncoder(rightMaster);
 	// private final Encoder m_rightEncoder = new Encoder(2, 3);
 
@@ -56,10 +57,9 @@ public class Chassis extends SubsystemBase {
 	private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
 	// private final AnalogGyro m_gyro = new AnalogGyro(0);
 
-	private final PIDController m_rightPIDController = new PIDController(ChassisConstants.kP, ChassisConstants.kI,
-			ChassisConstants.kD);
-	private final PIDController m_leftPIDController = new PIDController(ChassisConstants.kP, ChassisConstants.kI,
-			ChassisConstants.kD);
+	private final CANPIDController m_leftPIDController = new CANPIDController(leftMaster);
+	private final CANPIDController m_rightPIDController = new CANPIDController(rightMaster);
+
 	// private final PIDController m_rightPIDController = new PIDController(1, 0,
 	// 0);
 
@@ -78,8 +78,8 @@ public class Chassis extends SubsystemBase {
 		ahrs.reset();
 		ahrs.zeroYaw();
 
-		m_leftPIDController.reset();
-		m_rightPIDController.reset();
+		// m_leftPIDController.reset();
+		// m_rightPIDController.reset();
 
 		// Set the distance per pulse for the drive encoders. We can simply use the
 		// distance traveled for one rotation of the wheel divided by the encoder
@@ -96,13 +96,19 @@ public class Chassis extends SubsystemBase {
 		// m_rightEncoder.reset();
 
 		m_odometry = new DifferentialDriveOdometry(getAngle());
+
+		SmartDashboard.putData("AHRS Angle", ahrs);
+		// SmartDashboard.putData("Left PID", m_leftPIDController);
+		// SmartDashboard.putData("Right PID", m_rightPIDController);
+		// SmartDashboard.putData("Left Master", m_leftEncoder);
+		// SmartDashboard.putData("Right Master", m_rightMaster);
+		SmartDashboard.putData("Left Group", m_leftGroup);
+		SmartDashboard.putData("Right Group", m_rightGroup);
+
 	}
 
 	public void periodic() {
 		// SmartDashboard.putData("Left Encoder", leftMaster);
-
-		SmartDashboard.putData(m_leftPIDController);
-		SmartDashboard.putData(m_rightPIDController);
 
 		SmartDashboard.putNumber("LM Current", leftMaster.getOutputCurrent());
 		SmartDashboard.putNumber("RM Current", rightMaster.getOutputCurrent());
@@ -135,10 +141,14 @@ public class Chassis extends SubsystemBase {
 	 * @param speeds The desired wheel speeds.
 	 */
 	public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-		double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getVelocity(), speeds.leftMetersPerSecond);
-		double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getVelocity(), speeds.rightMetersPerSecond);
-		m_leftGroup.set(leftOutput);
-		m_rightGroup.set(rightOutput);
+		// double leftOutput =
+		// m_leftPIDController.calculate(m_leftEncoder.getVelocity(),
+		// speeds.leftMetersPerSecond);
+		// double rightOutput =
+		// m_rightPIDController.calculate(m_rightEncoder.getVelocity(),
+		// speeds.rightMetersPerSecond);
+		// m_leftGroup.set(leftOutput);
+		// m_rightGroup.set(rightOutput);
 	}
 
 	/**

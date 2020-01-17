@@ -7,13 +7,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.ChassisConstants;
-import frc.robot.subsystems.Chassis;
 
 public class Robot extends TimedRobot {
 
@@ -104,18 +100,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		// Get the x speed. We are inverting this because Xbox controllers return
-		// negative values when we push forward.
-		final var xSpeed = -m_controller.getY(GenericHID.Hand.kLeft) * ChassisConstants.kMaxSpeedMPS;
-
-		// Get the rate of angular rotation. We are inverting this because we want a
-		// positive value when we pull to the left (remember, CCW is positive in
-		// mathematics). Xbox controllers return positive values when you pull to
-		// the right by default.
-		final var rot = -m_controller.getX(GenericHID.Hand.kRight) * ChassisConstants.kMaxAngularSpeed;
-
-		m_drive.drive(xSpeed, rot);
-
 		// SmartDashboard.putNumber("Lift Target", Robot.lift.getTgtPosition());
 		// SmartDashboard.putNumber("Lift Current", Robot.lift.getMotorCurrent());
 		// SmartDashboard.putNumber("Lift Temp", Robot.lift.getMotorTemp());
