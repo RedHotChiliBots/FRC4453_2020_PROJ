@@ -151,7 +151,7 @@ public class Chassis extends SubsystemBase {
 		m_leftGroup.set(left);
 		m_rightGroup.set(right);
 		SmartDashboard.putNumber("Teleop Left Y", left);
-		SmartDashboard.putNumber("Teleop Right Y", right); 
+		SmartDashboard.putNumber("Teleop Right Y", right);
 	}
 
 	/**
