@@ -17,12 +17,14 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -54,18 +56,20 @@ public class Chassis extends SubsystemBase {
 	private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
 	private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
 
+	private final DifferentialDrive m_tankDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
+
 	// private final Encoder m_leftEncoder = new Encoder(0, 1);
 	public final CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
 	public final CANEncoder m_rightEncoder = new CANEncoder(rightMaster);
 	// private final Encoder m_rightEncoder = new Encoder(2, 3);
 
-	/* Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB */
-	private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
-	// private final AnalogGyro m_gyro = new AnalogGyro(0);
-
 	private final CANPIDController m_leftPIDController = new CANPIDController(leftMaster);
 	private final CANPIDController m_rightPIDController = new CANPIDController(rightMaster);
 
+	/* Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB */
+	private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
+
+	// private final AnalogGyro m_gyro = new AnalogGyro(0);
 	// private final PIDController m_rightPIDController = new PIDController(1, 0,
 	// 0);
 
@@ -113,13 +117,23 @@ public class Chassis extends SubsystemBase {
 
 		m_odometry = new DifferentialDriveOdometry(getAngle());
 
-		SmartDashboard.putData("AHRS Angle", ahrs);
+		// SmartDashboard.putData("AHRS Angle", ahrs);
 		// SmartDashboard.putData("Left PID", m_leftPIDController);
 		// SmartDashboard.putData("Right PID", m_rightPIDController);
 		// SmartDashboard.putData("Left Master", m_leftEncoder);
 		// SmartDashboard.putData("Right Master", m_rightMaster);
-		SmartDashboard.putData("Left Group", m_leftGroup);
-		SmartDashboard.putData("Right Group", m_rightGroup);
+		// SmartDashboard.putData("Left Group", m_leftGroup);
+		// SmartDashboard.putData("Right Group", m_rightGroup);
+
+		ShuffleboardTab chassisTab = Shuffleboard.getTab("Chassis");
+		chassisTab.add("AHRS Angle", ahrs);
+		chassisTab.add("Tank Drive", m_tankDrive);
+		chassisTab.add("Left Group", m_leftGroup);
+		chassisTab.add("Right Group", m_rightGroup);
+		chassisTab.add("Left PID", m_leftPIDController);
+		chassisTab.add("Right PID", m_rightPIDController);
+		chassisTab.add("Left Encoder", m_leftEncoder);
+		chassisTab.add("Right Encoder", m_rightEncoder);
 	}
 
 	public void periodic() {
