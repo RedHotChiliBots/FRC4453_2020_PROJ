@@ -9,26 +9,31 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController.Button;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spinner;
 
-// import frc.robot.subsystems.ExampleSubsystem;
-// import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ShooterMoveToAngle;
 import frc.robot.commands.ShooterShoot;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStopOnColor;
 import frc.robot.commands.SpinnerStow;
+import frc.robot.commands.AutonDrive;
+import frc.robot.commands.DriveTeleop;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -38,26 +43,26 @@ import frc.robot.commands.SpinnerStow;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  // Define SubSystems
   private final Chassis chassis = new Chassis();
   private final Spinner spinner = new Spinner();
   private final Shooter shooter = new Shooter();
+  private final Climber climber = new Climber();
 
-  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  // private final ExampleCommand m_autoCommand = new
-  // ExampleCommand(m_exampleSubsystem);
-
+  // Define Commands
   private final SpinnerStow m_spinnerStow = new SpinnerStow(spinner);
   private final SpinnerStopOnColor m_spinnerStopOnColor = new SpinnerStopOnColor(spinner);
   private final SpinnerCountRevs m_spinnerCountRevs = new SpinnerCountRevs(spinner);
 
   private final ShooterShoot m_shooterShoot = new ShooterShoot(shooter);
+  private final ShooterMoveToAngle m_shooterMoveToAngle = new ShooterMoveToAngle(shooter);
 
-  // private final ShooterMoveToAngle m_shooterMoveToAngle = new
-  // ShooterMoveToAngle(shooter);
-  // private final ShooterShoot m_shooterShoot = new ShooterShoot(shooter);
+  private final AutonDrive m_auton = new AutonDrive(chassis, spinner);
 
-  // The driver and operator controllers
+  // Define chooser for autonomous commands
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+  // Define the driver and operator controllers
   XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
 
@@ -65,25 +70,28 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
-    // Configure default commands
-    // Set the default drive command to split-stick arcade drive
-    // A split-stick arcade command, with forward/backward controlled by the left
-    // hand, and turning controlled by the right.
-
-    chassis.setDefaultCommand(new RunCommand(
-        () -> chassis.driveTeleop(-m_driver.getY(GenericHID.Hand.kLeft), -m_driver.getY(GenericHID.Hand.kRight)),
-        chassis));
-
-    spinner.setDefaultCommand(new RunCommand(() -> spinner.setSetPoint(SpinnerConstants.kStopRPMs), spinner));
+    // Configure the button bindings
+    configureButtonBindings();
 
     // Add subsystems to dashboard
     SmartDashboard.putData("Chassis", chassis);
     SmartDashboard.putData("Spinner", spinner);
-    // SmartDashboard.putData(shooter);
+    SmartDashboard.putData("Shooter", shooter);
+    SmartDashboard.putData("Shooter", climber);
 
-    // Configure the button bindings
-    configureButtonBindings();
+    // Configure default commands
+    chassis.setDefaultCommand(new DriveTeleop(chassis, () -> -m_driver.getY(GenericHID.Hand.kLeft),
+        () -> -m_driver.getY(GenericHID.Hand.kRight)));
+
+    spinner.setDefaultCommand(new SpinnerStow(spinner));
+
+    // spinner.setDefaultCommand(new RunCommand(() ->
+    // spinner.setSetPoint(SpinnerConstants.kStopRPMs), spinner));
+
+    // A chooser for autonomous commands
+    m_chooser.addOption("Auton", m_auton);
+
+    SmartDashboard.putData("Auton Chooser", m_chooser);
   }
 
   /**
@@ -118,8 +126,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  // // An ExampleCommand will run in autonomous
-  // return m_autoCommand;
-  // }
+  public Command getAutonomousCommand() {
+    // An ExampleCommand will run in autonomous
+    return m_chooser.getSelected();
+  }
 }

@@ -45,18 +45,19 @@ public class Chassis extends SubsystemBase {
 	private final SpeedController m_leftMaster = leftMaster;
 	private final SpeedController m_leftFollower = new CANSparkMax(ChassisConstants.kLeftFollowerMotor,
 			MotorType.kBrushless);
+
 	private final CANSparkMax rightMaster = new CANSparkMax(ChassisConstants.kRightMasterMotor, MotorType.kBrushless);
 	private final SpeedController m_rightMaster = rightMaster;
 	private final SpeedController m_rightFollower = new CANSparkMax(ChassisConstants.kRightFollowerMotor,
 			MotorType.kBrushless);
 
+	private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
+	private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
+
 	// private final Encoder m_leftEncoder = new Encoder(0, 1);
 	public final CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
 	public final CANEncoder m_rightEncoder = new CANEncoder(rightMaster);
 	// private final Encoder m_rightEncoder = new Encoder(2, 3);
-
-	private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
-	private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
 
 	/* Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB */
 	private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
@@ -81,9 +82,6 @@ public class Chassis extends SubsystemBase {
 			ChassisConstants.kTrackWidth);
 
 	private final DifferentialDriveOdometry m_odometry;
-
-	XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
-	XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
 
 	/**
 	 * Constructs a differential drive object. Sets the encoder distance per pulse
@@ -122,14 +120,10 @@ public class Chassis extends SubsystemBase {
 		// SmartDashboard.putData("Right Master", m_rightMaster);
 		SmartDashboard.putData("Left Group", m_leftGroup);
 		SmartDashboard.putData("Right Group", m_rightGroup);
-
 	}
 
 	public void periodic() {
 		// SmartDashboard.putData("Left Encoder", leftMaster);
-
-		SmartDashboard.putNumber("Left Y", -m_driver.getY(GenericHID.Hand.kLeft));
-		SmartDashboard.putNumber("Right Y", -m_driver.getY(GenericHID.Hand.kRight));
 
 		SmartDashboard.putNumber("LM Current", leftMaster.getOutputCurrent());
 		SmartDashboard.putNumber("RM Current", rightMaster.getOutputCurrent());
