@@ -17,6 +17,8 @@ import com.revrobotics.CANEncoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.networktables.NetworkTable;
@@ -29,15 +31,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * Add your docs here.
  */
+
 public class Climber extends SubsystemBase {
-	
-	// DoubleSolenoid climberSolenoid = new DoubleSolenoid(constants.ClimberConstants.kClimberSolenoidForwardChannel, constants.ClimberConstants.kClimberSolenoidReverseChannel);
+
+	// DoubleSolenoid climberSolenoid = new
+	// DoubleSolenoid(constants.ClimberConstants.kClimberSolenoidForwardChannel,
+	// constants.ClimberConstants.kClimberSolenoidReverseChannel);
 
 	// climberSolenoid.set(kOff);
 	// climberSolenoid.set(kForward);
 	// climberSolenoid.set(kReverse);
-	
-	public Climber(){
 
+	ShuffleboardTab climberTab;
+
+	public Climber() {
+		System.out.println("+++++ Climber Constructor starting ...");
+		climberTab = Shuffleboard.getTab("Climber");
+
+		// climberTab.add("AHRS Angle", ahrs);
+		System.out.println("----- Climber Constructor finished ...");
 	}
 }

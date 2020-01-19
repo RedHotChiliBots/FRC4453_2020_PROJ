@@ -29,7 +29,7 @@ public class ShooterShoot extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    Shooter.shoot();
+    m_shooter.shoot();
   }
 
   // Make this return true when this Command no longer needs to run execute()

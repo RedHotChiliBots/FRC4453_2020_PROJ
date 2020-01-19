@@ -87,19 +87,25 @@ public class Chassis extends SubsystemBase {
 
 	private final DifferentialDriveOdometry m_odometry;
 
+	ShuffleboardTab chassisTab;
+
 	/**
 	 * Constructs a differential drive object. Sets the encoder distance per pulse
 	 * and resets the gyro.
 	 */
 	public Chassis() {
 		super();
-		System.out.println("Chassis starting ...");
+		System.out.println("+++++ Chassis Constructor starting ...");
+		chassisTab = Shuffleboard.getTab("Chassis");
 
 		ahrs.reset();
 		ahrs.zeroYaw();
 
 		// m_leftPIDController.reset();
 		// m_rightPIDController.reset();
+
+		m_leftGroup.setInverted(true);
+		m_rightGroup.setInverted(true);
 
 		// Set the distance per pulse for the drive encoders. We can simply use the
 		// distance traveled for one rotation of the wheel divided by the encoder
@@ -125,15 +131,15 @@ public class Chassis extends SubsystemBase {
 		// SmartDashboard.putData("Left Group", m_leftGroup);
 		// SmartDashboard.putData("Right Group", m_rightGroup);
 
-		ShuffleboardTab chassisTab = Shuffleboard.getTab("Chassis");
 		chassisTab.add("AHRS Angle", ahrs);
 		chassisTab.add("Tank Drive", m_tankDrive);
 		chassisTab.add("Left Group", m_leftGroup);
 		chassisTab.add("Right Group", m_rightGroup);
-		chassisTab.add("Left PID", m_leftPIDController);
-		chassisTab.add("Right PID", m_rightPIDController);
-		chassisTab.add("Left Encoder", m_leftEncoder);
-		chassisTab.add("Right Encoder", m_rightEncoder);
+		// chassisTab.add("Left PID", m_leftPIDController);
+		// chassisTab.add("Right PID", m_rightPIDController);
+		// chassisTab.add("Left Encoder", m_leftEncoder);
+		// chassisTab.add("Right Encoder", m_rightEncoder);
+		System.out.println("----- Chassis Constructor finished ...");
 	}
 
 	public void periodic() {
@@ -156,10 +162,9 @@ public class Chassis extends SubsystemBase {
 	}
 
 	public void driveTeleop(double left, double right) {
-		m_leftGroup.set(left);
-		m_rightGroup.set(right);
-		SmartDashboard.putNumber("Teleop Left Y", left);
-		SmartDashboard.putNumber("Teleop Right Y", right);
+		m_tankDrive.tankDrive(left, right, true);
+		// chassisTab.add("Teleop Left Y", left);
+		// chassisTab.add("Teleop Right Y", right);
 	}
 
 	/**

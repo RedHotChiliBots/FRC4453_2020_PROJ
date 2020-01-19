@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -75,24 +76,23 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Add subsystems to dashboard
-    SmartDashboard.putData("Chassis", chassis);
     ShuffleboardTab chassisTab = Shuffleboard.getTab("Chassis");
     chassisTab.add("Chassis", chassis);
-    SmartDashboard.putData("Shooter", shooter);
+
     ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
-    chassisTab.add("Shooter", shooter);
-    SmartDashboard.putData("Shooter", climber);
-    ShuffleboardTab climberTab = Shuffleboard.getTab("CLimber");
-    chassisTab.add("Climber", climber);
+    shooterTab.add("Shooter", shooter);
+
+    ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
+    climberTab.add("Climber", climber);
+
+    ShuffleboardTab spinnerTab = Shuffleboard.getTab("Spinner");
+    spinnerTab.add("Spinner", spinner);
 
     // Configure default commands
-    chassis.setDefaultCommand(new DriveTeleop(chassis, () -> -m_driver.getY(GenericHID.Hand.kLeft),
-        () -> -m_driver.getY(GenericHID.Hand.kRight)));
+    chassis.setDefaultCommand(
+        new RunCommand(() -> chassis.driveTeleop(m_driver.getY(Hand.kLeft), m_driver.getY(Hand.kRight)), chassis));
 
-    spinner.setDefaultCommand(new SpinnerStow(spinner));
-
-    // spinner.setDefaultCommand(new RunCommand(() ->
-    // spinner.setSetPoint(SpinnerConstants.kStopRPMs), spinner));
+    spinner.setDefaultCommand(new RunCommand(() -> spinner.setSetPoint(Constants.SpinnerConstants.kStopRPMs), spinner));
 
     // A chooser for autonomous commands
     m_chooser.addOption("Auton", m_auton);

@@ -17,7 +17,8 @@ public class SpinnerStopOnColor extends CommandBase {
 
   private Spinner m_subsystem;
   private COLOR color;
-  char gameColor;
+  String gameData;
+  char gotoColor;
 
   public SpinnerStopOnColor(Spinner subsystem) {
     m_subsystem = subsystem;
@@ -29,7 +30,12 @@ public class SpinnerStopOnColor extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    gameColor = DriverStation.getInstance().getGameSpecificMessage().charAt(0);
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
+    if (gameData.length() > 0) {
+      gotoColor = gameData.charAt(0);
+    } else {
+      gotoColor = 'X';
+    }
     m_subsystem.setSetPoint(SpinnerConstants.kStopOnColorRPMs);
   }
 
@@ -42,7 +48,7 @@ public class SpinnerStopOnColor extends CommandBase {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return m_subsystem.getStopOnColor(gameColor) == color;
+    return m_subsystem.getStopOnColor(gotoColor) == color;
   }
 
   // Called once after isFinished returns true
