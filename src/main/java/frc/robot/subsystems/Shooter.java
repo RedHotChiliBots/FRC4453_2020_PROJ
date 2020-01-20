@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
@@ -17,6 +18,8 @@ import com.revrobotics.CANEncoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.networktables.NetworkTable;
@@ -34,25 +37,16 @@ public class Shooter extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  // @Override
-  // public void initDefaultCommand() {
-  // // Set the default command for a subsystem here.
-  // // setDefaultCommand(new MySpecialCommand());
-  // }
-  // private final SpeedController m_leftMaster = leftMaster;
-  private static final CANSparkMax shooter = new CANSparkMax(ShooterConstants.kShooterMotor, MotorType.kBrushless);
-  private static final SpeedController shootMotor = shooter;
-  private final CANSparkMax angler = new CANSparkMax(ShooterConstants.kShooterMotor, MotorType.kBrushless);
-  private final SpeedController angleMotor = angler;
-  // private final CANSparkMaxSendable angleMotor = angler;
-  private final CANSparkMax tilter = new CANSparkMax(ShooterConstants.kShooterMotor, MotorType.kBrushless);
-  private final SpeedController tiltMotor = tilter;
+  private final CANSparkMax shootMotor = new CANSparkMax(ShooterConstants.kShooterMotor, MotorType.kBrushless);
+  private final CANSparkMax angleMotor = new CANSparkMax(ShooterConstants.kShooterMotor, MotorType.kBrushless);
+  private final CANSparkMax tiltMotor = new CANSparkMax(ShooterConstants.kShooterMotor, MotorType.kBrushless);
 
-  private final PIDController PIDController = new PIDController(ShooterConstants.kP, ShooterConstants.kI,
-      ShooterConstants.kD);
-
-  public CANEncoder angleEncoder = null;
-  public CANEncoder tiltEncoder = null;
+  private final CANPIDController shootPIDController = new CANPIDController(shootMotor);
+  private final CANEncoder shootEncoder = new CANEncoder(shootMotor);
+  private final CANPIDController anglePIDController = new CANPIDController(angleMotor);
+  private final CANEncoder angleEncoder = new CANEncoder(angleMotor);
+  private final CANPIDController tiltPIDController = new CANPIDController(tiltMotor);
+  private final CANEncoder tiltEncoder = new CANEncoder(tiltMotor);
 
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry tx = table.getEntry("tx");
@@ -76,16 +70,21 @@ public class Shooter extends SubsystemBase {
   // m_reverseLimit.enableLimitSwitch(false);
 
   public Shooter() {
-    System.out.println("Shooter starting ...");
+    System.out.println("+++++ Shooter Constructor starting ...");
+    ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+
+    // shooterTab.add("AHRS Angle", ahrs);
+
     // //angleLim.enableLimitSwitch(false);
     // angleEncoder = angleMotor.getEncoder();
+    System.out.println("----- Shooter Constructor finished ...");
   }
 
-  public static void shoot() {
+  public void shoot() {
     shootMotor.set(ShooterConstants.shootSpeed);
   }
 
-  public static void stopShoot() {
+  public void stopShoot() {
     shootMotor.set(0);
   }
 

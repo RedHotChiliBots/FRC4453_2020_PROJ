@@ -79,13 +79,17 @@ public class Chassis extends SubsystemBase {
 	 */
 	public Chassis() {
 		super();
-		System.out.println("Chassis starting ...");
+		System.out.println("+++++ Chassis Constructor starting ...");
+		chassisTab = Shuffleboard.getTab("Chassis");
 
 		ahrs.reset();
 		ahrs.zeroYaw();
 
 		// m_leftPIDController.reset();
 		// m_rightPIDController.reset();
+
+		m_leftGroup.setInverted(true);
+		m_rightGroup.setInverted(true);
 
 		// Set the distance per pulse for the drive encoders. We can simply use the
 		// distance traveled for one rotation of the wheel divided by the encoder
