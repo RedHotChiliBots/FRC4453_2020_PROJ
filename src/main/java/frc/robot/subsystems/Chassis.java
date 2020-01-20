@@ -124,8 +124,6 @@ public class Chassis extends SubsystemBase {
 	}
 
 	public void periodic() {
-		// SmartDashboard.putData("Left Encoder", leftMaster);
-
 		chassisTab.add("LM Current", leftMaster.getOutputCurrent());
 		chassisTab.add("RM Current", rightMaster.getOutputCurrent());
 		chassisTab.add("LM Temp", leftMaster.getMotorTemperature() * UnitsConstants.kC2F);

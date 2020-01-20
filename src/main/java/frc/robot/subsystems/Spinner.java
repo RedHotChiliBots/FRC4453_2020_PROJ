@@ -37,9 +37,8 @@ public class Spinner extends SubsystemBase {
   // here. Call these from Commands.
   private final CANSparkMax spinMotor = new CANSparkMax(SpinnerConstants.kSpinnerMotor, MotorType.kBrushless);
 
-  private final CANPIDController m_spinPIDController;
-
-  private final CANEncoder m_spinEncoder;
+  private final CANPIDController m_spinPIDController = new CANPIDController(spinMotor);
+  private final CANEncoder m_spinEncoder = spinMotor.getEncoder();
 
   /**
    * Change the I2C port below to match the connection of your color sensor
@@ -80,9 +79,6 @@ public class Spinner extends SubsystemBase {
     spinnerTab = Shuffleboard.getTab("Spinner");
 
     spinMotor.restoreFactoryDefaults();
-
-    m_spinPIDController = new CANPIDController(spinMotor);
-    m_spinEncoder = spinMotor.getEncoder();
 
     // set PID coefficients
     m_spinPIDController.setP(SpinnerConstants.kP);
