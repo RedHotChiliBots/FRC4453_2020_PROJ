@@ -10,14 +10,14 @@ package frc.robot.subsystems;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.ColorMatchResult;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorMatchResult;
+import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
@@ -102,8 +102,7 @@ public class Spinner extends SubsystemBase {
   }
 
   public void setSetPoint(double rpm) {
-    double setPoint = Library.Clip(rpm, 0.0, SpinnerConstants.kMaxRPM);
-    this.setPoint = setPoint;
+    this.setPoint = Library.Clip(rpm, SpinnerConstants.kMinRPM, SpinnerConstants.kMaxRPM);
     m_spinPIDController.setReference(setPoint, ControlType.kVelocity);
   }
 

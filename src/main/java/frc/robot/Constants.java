@@ -50,6 +50,11 @@ public final class Constants {
 		public static final double kP = 1;
 		public static final double kI = 0;
 		public static final double kD = 0;
+
+		public static final int kCompressorChannel = 0;
+		public static final int kHiPressureChannel = 0;
+		public static final int kLoPressureChannel = 1;
+		public static final double kInputVoltage = 5.0 / 1024;
 	}
 
 	public final static class ShooterConstants {
@@ -75,7 +80,8 @@ public final class Constants {
 		public static final double kIz = 0.0;
 		public static final double kFF = 0.0;
 		public static final double kMaxOutput = 1.0;
-		public static final double kMinOutput = 1.0;
+		public static final double kMinOutput = -1.0;
+		public static final double kMinRPM = 0.0;
 		public static final double kMaxRPM = 5700.0;
 
 		public static final double kStopOnColorRPMs = 1000.0;

@@ -7,16 +7,9 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.GenericHID;
-// import edu.wpi.first.wpilibj.AnalogGyro;
-// import edu.wpi.first.wpilibj.Encoder;
-// import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
@@ -25,17 +18,19 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.kauailabs.navx.frc.AHRS;
+
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import frc.robot.Constants;
 import frc.robot.Constants.ChassisConstants;
-import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.UnitsConstants;
 
 /**
@@ -58,10 +53,8 @@ public class Chassis extends SubsystemBase {
 
 	private final DifferentialDrive m_tankDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
 
-	// private final Encoder m_leftEncoder = new Encoder(0, 1);
 	public final CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
 	public final CANEncoder m_rightEncoder = new CANEncoder(rightMaster);
-	// private final Encoder m_rightEncoder = new Encoder(2, 3);
 
 	private final CANPIDController m_leftPIDController = new CANPIDController(leftMaster);
 	private final CANPIDController m_rightPIDController = new CANPIDController(rightMaster);
@@ -69,23 +62,16 @@ public class Chassis extends SubsystemBase {
 	/* Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB */
 	private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
-	// private final AnalogGyro m_gyro = new AnalogGyro(0);
-	// private final PIDController m_rightPIDController = new PIDController(1, 0,
-	// 0);
-
-	// Compressor c = new Compressor(0);
-
-	// c.setClosedLoopControl(true);
-	// c.setClosedLoopControl(false);
-
-	// boolean enabled = c.enabled();
-	// boolean pressureSwitch = c.getPressureSwitchValue();
-	// double current = c.getCompressorCurrent();
-
 	private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
 			ChassisConstants.kTrackWidth);
 
 	private final DifferentialDriveOdometry m_odometry;
+
+	private final Compressor compressor = new Compressor(Constants.ChassisConstants.kCompressorChannel);
+	private final AnalogInput hiPressureSensor = new AnalogInput(Constants.ChassisConstants.kHiPressureChannel);
+	private final AnalogInput loPressureSensor = new AnalogInput(Constants.ChassisConstants.kLoPressureChannel);
+
+	private ShuffleboardTab chassisTab;
 
 	/**
 	 * Constructs a differential drive object. Sets the encoder distance per pulse
@@ -117,15 +103,10 @@ public class Chassis extends SubsystemBase {
 
 		m_odometry = new DifferentialDriveOdometry(getAngle());
 
-		// SmartDashboard.putData("AHRS Angle", ahrs);
-		// SmartDashboard.putData("Left PID", m_leftPIDController);
-		// SmartDashboard.putData("Right PID", m_rightPIDController);
-		// SmartDashboard.putData("Left Master", m_leftEncoder);
-		// SmartDashboard.putData("Right Master", m_rightMaster);
-		// SmartDashboard.putData("Left Group", m_leftGroup);
-		// SmartDashboard.putData("Right Group", m_rightGroup);
+		// compressor.setClosedLoopControl(true);
+		// compressor.setClosedLoopControl(false);
 
-		ShuffleboardTab chassisTab = Shuffleboard.getTab("Chassis");
+		chassisTab = Shuffleboard.getTab("Chassis");
 		chassisTab.add("AHRS Angle", ahrs);
 		chassisTab.add("Tank Drive", m_tankDrive);
 		chassisTab.add("Left Group", m_leftGroup);
@@ -134,32 +115,33 @@ public class Chassis extends SubsystemBase {
 		chassisTab.add("Right PID", m_rightPIDController);
 		chassisTab.add("Left Encoder", m_leftEncoder);
 		chassisTab.add("Right Encoder", m_rightEncoder);
+
+		chassisTab.add("Compressor", compressor);
 	}
 
 	public void periodic() {
 		// SmartDashboard.putData("Left Encoder", leftMaster);
 
-		SmartDashboard.putNumber("LM Current", leftMaster.getOutputCurrent());
-		SmartDashboard.putNumber("RM Current", rightMaster.getOutputCurrent());
-		SmartDashboard.putNumber("LM Temp", leftMaster.getMotorTemperature() * UnitsConstants.kC2F);
-		SmartDashboard.putNumber("RM Temp", rightMaster.getMotorTemperature() * UnitsConstants.kC2F);
+		chassisTab.add("LM Current", leftMaster.getOutputCurrent());
+		chassisTab.add("RM Current", rightMaster.getOutputCurrent());
+		chassisTab.add("LM Temp", leftMaster.getMotorTemperature() * UnitsConstants.kC2F);
+		chassisTab.add("RM Temp", rightMaster.getMotorTemperature() * UnitsConstants.kC2F);
 
-		SmartDashboard.putNumber("LM Position", m_leftEncoder.getPosition());
-		SmartDashboard.putNumber("LM Velocity", m_leftEncoder.getVelocity());
-		SmartDashboard.putNumber("RM Position", m_rightEncoder.getPosition());
-		SmartDashboard.putNumber("RM Velocity", m_rightEncoder.getVelocity());
+		chassisTab.add("LM Position", m_leftEncoder.getPosition());
+		chassisTab.add("LM Velocity", m_leftEncoder.getVelocity());
+		chassisTab.add("RM Position", m_rightEncoder.getPosition());
+		chassisTab.add("RM Velocity", m_rightEncoder.getVelocity());
 
-		// Shuffleboard.getTab("Tab3").add("L Encoder Position",
-		// m_leftEncoder.getPosition());
-		// Shuffleboard.getTab("Tab3").add("R Encoder Position",
-		// m_rightEncoder.getPosition());
+		chassisTab.add("Comp Pressure", isCompEnabled());
+		chassisTab.add("Comp Pressure", isCompSwitch());
+		chassisTab.add("Comp Current", getCompCurrent());
+		chassisTab.add("Hi Pressure", getHiPressure());
+		chassisTab.add("Lo Pressure", getLoPressure());
 	}
 
 	public void driveTeleop(double left, double right) {
 		m_leftGroup.set(left);
 		m_rightGroup.set(right);
-		SmartDashboard.putNumber("Teleop Left Y", left);
-		SmartDashboard.putNumber("Teleop Right Y", right);
 	}
 
 	/**
@@ -215,4 +197,30 @@ public class Chassis extends SubsystemBase {
 	// m_leftPIDController.setRefer
 	// }
 
+	/**
+	 * Get Compressor info
+	 */
+	public boolean isCompEnabled() {
+		return compressor.enabled();
+	}
+
+	public boolean isCompSwitch() {
+		return compressor.getPressureSwitchValue();
+
+	}
+
+	public double getCompCurrent() {
+		return compressor.getCompressorCurrent();
+	}
+
+	/**
+	 * Get Hi and Lo pressure sensors in PSI
+	 */
+	public double getLoPressure() {
+		return 250.0 * (loPressureSensor.getVoltage() / Constants.ChassisConstants.kInputVoltage) - 25.0;
+	}
+
+	public double getHiPressure() {
+		return 250.0 * (hiPressureSensor.getVoltage() / Constants.ChassisConstants.kInputVoltage) - 25.0;
+	}
 }
