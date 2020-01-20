@@ -1,19 +1,20 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018 FIRST. All Rights Reserved. */
-/* Open Source Software - may be modified and shared by FRC teams. The code */
+/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project. */
+/* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Shooter;
 
-public class ShooterShoot extends CommandBase {
+public class ShooterStop extends CommandBase {
+
   private final Shooter m_shooter;
 
-  public ShooterShoot(Shooter shooter) {
+  public ShooterStop(Shooter shooter) {
     m_shooter = shooter;
     addRequirements(shooter);
     // super(timeout);
@@ -29,10 +30,9 @@ public class ShooterShoot extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_shooter.shoot(1000);
+    m_shooter.stopShoot();
   }
 
-  // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
     return true;
@@ -42,10 +42,4 @@ public class ShooterShoot extends CommandBase {
   @Override
   public void end(boolean interrupted) {
   }
-
-  // // Called when another command which requires one or more of the same
-  // // subsystems is scheduled to run
-  // @Override
-  // public void interrupted() {
-  // }
 }

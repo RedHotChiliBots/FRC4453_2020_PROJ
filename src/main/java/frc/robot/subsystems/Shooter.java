@@ -11,6 +11,7 @@ import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANEncoder;
@@ -27,7 +28,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj2.smartdashboard.SmartDashboard;
-
+import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
 /**
@@ -58,6 +59,8 @@ public class Shooter extends SubsystemBase {
   double y = ty.getDouble(0.0);
   double area = ta.getDouble(0.0);
 
+  // private ShuffleboardTab shooterTab;
+
   // post to smart dashboard periodically
   // SmartDashboard.putNumber("LimelightX", x);
   // SmartDashboard.putNumber("LimelightY", y);
@@ -71,7 +74,23 @@ public class Shooter extends SubsystemBase {
 
   public Shooter() {
     System.out.println("+++++ Shooter Constructor starting ...");
-    ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+    // ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+
+    shootPIDController.setP(Constants.ShooterConstants.kP);
+    shootPIDController.setI(Constants.ShooterConstants.kI);
+    shootPIDController.setD(Constants.ShooterConstants.kD);
+    shootPIDController.setIZone(Constants.ShooterConstants.kIz);
+    shootPIDController.setFF(Constants.ShooterConstants.kFF);
+    shootPIDController.setOutputRange(Constants.ShooterConstants.kMin, Constants.ShooterConstants.kMax);
+
+    shootEncoder.setPositionConversionFactor(2 * Math.PI * ShooterConstants.kWheelRadius / 4096);
+
+    // SmartDashboard.putNumber("SetPoint", setPoint);
+    // SmartDashboard.putNumber("ProcessVariable", m_encoder.getVelocity());
+
+    // shooterTab = Shuffleboard.getTab("Shooter");
+    // shooterTab.add("Velocity", shootEncoder.getVelocity());
+    // shooterTab.add("Position", shootEncoder.getPosition());
 
     // shooterTab.add("AHRS Angle", ahrs);
 
@@ -80,8 +99,17 @@ public class Shooter extends SubsystemBase {
     System.out.println("----- Shooter Constructor finished ...");
   }
 
-  public void shoot() {
-    shootMotor.set(ShooterConstants.shootSpeed);
+  public void periodic() {
+    // shooterTab.add("Velocity", shootEncoder.getVelocity());
+    // shooterTab.add("Position", shootEncoder.getPosition());
+    SmartDashboard.putNumber("Velocity", shootEncoder.getVelocity());
+    SmartDashboard.putNumber("Position", shootEncoder.getPosition());
+  }
+
+  public void shoot(double setPoint) {
+    // shootMotor.set(ShooterConstants.shootSpeed);
+    // double setPoint = m_stick.getY() * maxRPM;
+    shootPIDController.setReference(setPoint, ControlType.kVelocity);
   }
 
   public void stopShoot() {

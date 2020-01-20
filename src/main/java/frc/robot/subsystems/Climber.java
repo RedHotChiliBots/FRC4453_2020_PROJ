@@ -46,7 +46,7 @@ public class Climber extends SubsystemBase {
 
 	public Climber() {
 		System.out.println("+++++ Climber Constructor starting ...");
-		climberTab = Shuffleboard.getTab("Climber");
+		// climberTab = Shuffleboard.getTab("Climber");
 
 		// climberTab.add("AHRS Angle", ahrs);
 		System.out.println("----- Climber Constructor finished ...");

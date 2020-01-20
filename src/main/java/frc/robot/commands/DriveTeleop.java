@@ -39,9 +39,6 @@ public class DriveTeleop extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    chassisTab.add("Left Y", left.getAsDouble());
-    chassisTab.add("Right Y", right.getAsDouble());
-
     m_chassis.driveTeleop(left.getAsDouble(), right.getAsDouble());
   }
 

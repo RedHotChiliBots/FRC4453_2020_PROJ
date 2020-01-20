@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 import frc.robot.Library;
@@ -72,11 +73,11 @@ public class Spinner extends SubsystemBase {
   private ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
   private COLOR colorString = COLOR.UNKNOWN;
 
-  private ShuffleboardTab spinnerTab;
+  // private ShuffleboardTab spinnerTab;
 
   public Spinner() {
     System.out.println("+++++ Spinner Constructor starting ...");
-    spinnerTab = Shuffleboard.getTab("Spinner");
+    // spinnerTab = Shuffleboard.getTab("Spinner");
 
     spinMotor.restoreFactoryDefaults();
 
@@ -104,9 +105,13 @@ public class Spinner extends SubsystemBase {
     /**
      * Open Smart Dashboard or Shuffleboard to see the color detected by the sensor.
      */
-    spinnerTab.add("Red", detectedColor.red);
-    spinnerTab.add("Green", detectedColor.green);
-    spinnerTab.add("Blue", detectedColor.blue);
+
+    // spinnerTab.add("Red", detectedColor.red);
+    // spinnerTab.add("Green", detectedColor.green);
+    // spinnerTab.add("Blue", detectedColor.blue);
+    SmartDashboard.putNumber("Red", detectedColor.red);
+    SmartDashboard.putNumber("Green", detectedColor.green);
+    SmartDashboard.putNumber("Blue", detectedColor.blue);
 
     // spinnerTab.add("Color Sensor", m_colorSensor);
     System.out.println("----- Spinner Constructor finished ...");
@@ -119,11 +124,16 @@ public class Spinner extends SubsystemBase {
      * Open Smart Dashboard or Shuffleboard to see the color detected by the sensor.
      */
 
-    spinnerTab.add("Confidence", match.confidence);
-    spinnerTab.add("Detected Color", colorString.toString());
+    // spinnerTab.add("Confidence", match.confidence);
+    // spinnerTab.add("Detected Color", colorString.toString());
 
-    spinnerTab.add("SetPoint", setPoint);
-    spinnerTab.add("Spin RPMs", m_spinEncoder.getVelocity());
+    // spinnerTab.add("SetPoint", setPoint);
+    // spinnerTab.add("Spin RPMs", m_spinEncoder.getVelocity());
+    SmartDashboard.putNumber("Confidence", match.confidence);
+    SmartDashboard.putString("Detected Color", colorString.toString());
+
+    SmartDashboard.putNumber("SetPoint", setPoint);
+    SmartDashboard.putNumber("Spin RPMs", m_spinEncoder.getVelocity());
   }
 
   public void setSetPoint(double rpm) {

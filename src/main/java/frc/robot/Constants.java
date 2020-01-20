@@ -65,6 +65,12 @@ public final class Constants {
 		public static final double kP = 1;
 		public static final double kI = 0;
 		public static final double kD = 0;
+		public static final double kIz = 0;
+		public static final double kFF = 0;
+		public static final double kMin = -1;
+		public static final double kMax = 1;
+
+		public static final double kWheelRadius = 4;
 
 		public static final double shootSpeed = 1.0;
 
