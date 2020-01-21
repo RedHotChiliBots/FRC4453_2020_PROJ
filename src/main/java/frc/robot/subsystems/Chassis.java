@@ -66,7 +66,8 @@ public class Chassis extends SubsystemBase {
 
 	private final DifferentialDriveOdometry m_odometry;
 
-	private final Compressor compressor = new Compressor(Constants.ChassisConstants.kCompressorChannel);
+	private final Compressor compressor = new Compressor();
+	// (Constants.ChassisConstants.kCompressorChannel);
 	private final AnalogInput hiPressureSensor = new AnalogInput(Constants.ChassisConstants.kHiPressureChannel);
 	private final AnalogInput loPressureSensor = new AnalogInput(Constants.ChassisConstants.kLoPressureChannel);
 
@@ -112,7 +113,7 @@ public class Chassis extends SubsystemBase {
 
 		m_odometry = new DifferentialDriveOdometry(getAngle());
 
-		// compressor.setClosedLoopControl(true);
+		compressor.setClosedLoopControl(true);
 		// compressor.setClosedLoopControl(false);
 
 		SmartDashboard.putData("AHRS Angle", ahrs);

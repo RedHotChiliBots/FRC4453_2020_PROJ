@@ -113,7 +113,7 @@ public class Spinner extends SubsystemBase {
   }
 
   // Called once per Robot execution loop - 50Hz
-  public void Periodic() {
+  public void periodic() {
     colorString = getColor();
 
     SmartDashboard.putNumber("Spin Detected Red", detectedColor.red);
@@ -133,8 +133,8 @@ public class Spinner extends SubsystemBase {
    * @param rpm - Target RPMs
    */
   public void setSetPoint(double rpm) {
-    this.setPoint = Library.Clip(rpm, SpinnerConstants.kMinRPM, SpinnerConstants.kMaxRPM);
-    m_spinPIDController.setReference(setPoint, ControlType.kVelocity);
+    this.setPoint = Library.Clip(rpm, SpinnerConstants.kMaxRPM, SpinnerConstants.kMinRPM);
+    m_spinPIDController.setReference(this.setPoint, ControlType.kVelocity);
   }
 
   /**
@@ -219,6 +219,16 @@ public class Spinner extends SubsystemBase {
       }
     }
     return sum;
+  }
+
+  public void spin(double setPoint) {
+    // shootMotor.set(ShooterConstants.shootSpeed);
+    // double setPoint = m_stick.getY() * maxRPM;
+    m_spinPIDController.setReference(setPoint, ControlType.kVelocity);
+  }
+
+  public void stopSpin() {
+    spinMotor.set(0);
   }
 
   // @Override

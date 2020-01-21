@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -103,6 +104,7 @@ public class Robot extends TimedRobot {
 		// SmartDashboard.putNumber("Lift Target", Robot.lift.getTgtPosition());
 		// SmartDashboard.putNumber("Lift Current", Robot.lift.getMotorCurrent());
 		// SmartDashboard.putNumber("Lift Temp", Robot.lift.getMotorTemp());
+		// gameData = DriverStation.getInstance().getGameSpecificMessage();
 	}
 
 	@Override
