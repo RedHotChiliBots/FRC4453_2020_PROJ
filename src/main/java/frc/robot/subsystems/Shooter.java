@@ -19,8 +19,6 @@ import com.revrobotics.CANEncoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.networktables.NetworkTable;
@@ -59,8 +57,6 @@ public class Shooter extends SubsystemBase {
   double y = ty.getDouble(0.0);
   double area = ta.getDouble(0.0);
 
-  // private ShuffleboardTab shooterTab;
-
   // post to smart dashboard periodically
   // SmartDashboard.putNumber("LimelightX", x);
   // SmartDashboard.putNumber("LimelightY", y);
@@ -74,7 +70,6 @@ public class Shooter extends SubsystemBase {
 
   public Shooter() {
     System.out.println("+++++ Shooter Constructor starting ...");
-    // ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
 
     shootPIDController.setP(Constants.ShooterConstants.kP);
     shootPIDController.setI(Constants.ShooterConstants.kI);
@@ -88,11 +83,10 @@ public class Shooter extends SubsystemBase {
     // SmartDashboard.putNumber("SetPoint", setPoint);
     // SmartDashboard.putNumber("ProcessVariable", m_encoder.getVelocity());
 
-    // shooterTab = Shuffleboard.getTab("Shooter");
-    // shooterTab.add("Velocity", shootEncoder.getVelocity());
-    // shooterTab.add("Position", shootEncoder.getPosition());
+    // SmartDashboard.putNumber("Velocity", shootEncoder.getVelocity());
+    // SmartDashboard.putNumber("Position", shootEncoder.getPosition());
 
-    // shooterTab.add("AHRS Angle", ahrs);
+    // SmartDashboard.putNumber("AHRS Angle", ahrs);
 
     // //angleLim.enableLimitSwitch(false);
     // angleEncoder = angleMotor.getEncoder();
@@ -100,8 +94,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void periodic() {
-    // shooterTab.add("Velocity", shootEncoder.getVelocity());
-    // shooterTab.add("Position", shootEncoder.getPosition());
+    // SmartDashboard.putNumber("Velocity", shootEncoder.getVelocity());
+    // SmartDashboard.putNumber("Position", shootEncoder.getPosition());
     SmartDashboard.putNumber("Velocity", shootEncoder.getVelocity());
     SmartDashboard.putNumber("Position", shootEncoder.getPosition());
   }

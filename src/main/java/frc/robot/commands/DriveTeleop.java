@@ -9,8 +9,6 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Chassis;
 
@@ -19,7 +17,6 @@ public class DriveTeleop extends CommandBase {
   private final Chassis m_chassis;
   private DoubleSupplier left;
   private DoubleSupplier right;
-  private ShuffleboardTab chassisTab;
 
   public DriveTeleop(Chassis chassis, DoubleSupplier left, DoubleSupplier right) {
     this.m_chassis = chassis;
@@ -28,7 +25,6 @@ public class DriveTeleop extends CommandBase {
     addRequirements(chassis);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    chassisTab = Shuffleboard.getTab("Chassis");
   }
 
   // Called just before this Command runs the first time

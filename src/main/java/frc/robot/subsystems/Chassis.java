@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
@@ -72,8 +70,6 @@ public class Chassis extends SubsystemBase {
 	private final AnalogInput hiPressureSensor = new AnalogInput(Constants.ChassisConstants.kHiPressureChannel);
 	private final AnalogInput loPressureSensor = new AnalogInput(Constants.ChassisConstants.kLoPressureChannel);
 
-	private ShuffleboardTab chassisTab;
-
 	/**
 	 * Constructs a differential drive object. Sets the encoder distance per pulse
 	 * and resets the gyro.
@@ -81,7 +77,6 @@ public class Chassis extends SubsystemBase {
 	public Chassis() {
 		super();
 		System.out.println("+++++ Chassis Constructor starting ...");
-		// chassisTab = Shuffleboard.getTab("Chassis");
 
 		ahrs.reset();
 		ahrs.zeroYaw();
@@ -111,47 +106,19 @@ public class Chassis extends SubsystemBase {
 		// compressor.setClosedLoopControl(true);
 		// compressor.setClosedLoopControl(false);
 
-		// chassisTab = Shuffleboard.getTab("Chassis");
-		// chassisTab.add("AHRS Angle", ahrs);
-		// chassisTab.add("Tank Drive", m_tankDrive);
-		// chassisTab.add("Left Group", m_leftGroup);
-		// chassisTab.add("Right Group", m_rightGroup);
-		// // chassisTab.add("Left PID", m_leftPIDController);
-		// // chassisTab.add("Right PID", m_rightPIDController);
-		// // chassisTab.add("Left Encoder", m_leftEncoder);
-		// // chassisTab.add("Right Encoder", m_rightEncoder);
-
-		// chassisTab.add("Compressor", compressor);
-
-		// chassisTab.add("LM Current", leftMaster.getOutputCurrent());
-		// chassisTab.add("RM Current", rightMaster.getOutputCurrent());
-		// chassisTab.add("LM Temp", leftMaster.getMotorTemperature() *
-		// UnitsConstants.kC2F);
-		// chassisTab.add("RM Temp", rightMaster.getMotorTemperature() *
-		// UnitsConstants.kC2F);
-
-		// chassisTab.add("LM Position", m_leftEncoder.getPosition());
-		// chassisTab.add("LM Velocity", m_leftEncoder.getVelocity());
-		// chassisTab.add("RM Position", m_rightEncoder.getPosition());
-		// chassisTab.add("RM Velocity", m_rightEncoder.getVelocity());
-
-		// chassisTab.add("Comp Enabled", isCompEnabled());
-		// chassisTab.add("Comp Pressure", isCompSwitch());
-		// chassisTab.add("Comp Current", getCompCurrent());
-		// chassisTab.add("Hi Pressure", getHiPressure());
-		// chassisTab.add("Lo Pressure", getLoPressure());
-
 		SmartDashboard.putData("AHRS Angle", ahrs);
 		SmartDashboard.putData("Tank Drive", m_tankDrive);
 		SmartDashboard.putData("Left Group", m_leftGroup);
 		SmartDashboard.putData("Right Group", m_rightGroup);
-		// chassisTab.add("Left PID", m_leftPIDController);
-		// chassisTab.add("Right PID", m_rightPIDController);
-		// chassisTab.add("Left Encoder", m_leftEncoder);
-		// chassisTab.add("Right Encoder", m_rightEncoder);
+		// SmartDashboard.putData("Left PID", m_leftPIDController);
+		// SmartDashboard.putData("Right PID", m_rightPIDController);
+		// SmartDashboard.putData("Left Encoder", m_leftEncoder);
+		// SmartDashboard.putData("Right Encoder", m_rightEncoder);
 
 		SmartDashboard.putData("Compressor", compressor);
+	}
 
+	public void periodic() {
 		SmartDashboard.putNumber("LM Current", leftMaster.getOutputCurrent());
 		SmartDashboard.putNumber("RM Current", rightMaster.getOutputCurrent());
 		SmartDashboard.putNumber("LM Temp", leftMaster.getMotorTemperature() * UnitsConstants.kC2F);
@@ -167,9 +134,6 @@ public class Chassis extends SubsystemBase {
 		SmartDashboard.putNumber("Comp Current", getCompCurrent());
 		SmartDashboard.putNumber("Hi Pressure", getHiPressure());
 		SmartDashboard.putNumber("Lo Pressure", getLoPressure());
-	}
-
-	public void periodic() {
 	}
 
 	public void driveTeleop(double left, double right) {

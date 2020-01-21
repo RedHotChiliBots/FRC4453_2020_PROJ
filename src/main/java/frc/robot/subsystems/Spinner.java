@@ -21,11 +21,9 @@ import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-
+import frc.robot.Constants;
 import frc.robot.Library;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.Constants.SpinnerConstants.COLOR;
@@ -73,11 +71,8 @@ public class Spinner extends SubsystemBase {
   private ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
   private COLOR colorString = COLOR.UNKNOWN;
 
-  // private ShuffleboardTab spinnerTab;
-
   public Spinner() {
     System.out.println("+++++ Spinner Constructor starting ...");
-    // spinnerTab = Shuffleboard.getTab("Spinner");
 
     spinMotor.restoreFactoryDefaults();
 
@@ -88,6 +83,8 @@ public class Spinner extends SubsystemBase {
     m_spinPIDController.setIZone(SpinnerConstants.kIz);
     m_spinPIDController.setFF(SpinnerConstants.kFF);
     m_spinPIDController.setOutputRange(-1.0, 1.0);
+
+    m_spinEncoder.setVelocityConversionFactor(Constants.SpinnerConstants.kVelFactor);
 
     m_colorMatcher.addColorMatch(SpinnerConstants.kBlueTarget);
     m_colorMatcher.addColorMatch(SpinnerConstants.kGreenTarget);
@@ -102,33 +99,16 @@ public class Spinner extends SubsystemBase {
     initColorCounter();
     setSetPoint(0.0);
 
-    /**
-     * Open Smart Dashboard or Shuffleboard to see the color detected by the sensor.
-     */
-
-    // spinnerTab.add("Red", detectedColor.red);
-    // spinnerTab.add("Green", detectedColor.green);
-    // spinnerTab.add("Blue", detectedColor.blue);
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
 
-    // spinnerTab.add("Color Sensor", m_colorSensor);
     System.out.println("----- Spinner Constructor finished ...");
   }
 
   public void Periodic() {
     getColor();
 
-    /**
-     * Open Smart Dashboard or Shuffleboard to see the color detected by the sensor.
-     */
-
-    // spinnerTab.add("Confidence", match.confidence);
-    // spinnerTab.add("Detected Color", colorString.toString());
-
-    // spinnerTab.add("SetPoint", setPoint);
-    // spinnerTab.add("Spin RPMs", m_spinEncoder.getVelocity());
     SmartDashboard.putNumber("Confidence", match.confidence);
     SmartDashboard.putString("Detected Color", colorString.toString());
 
@@ -207,7 +187,7 @@ public class Spinner extends SubsystemBase {
     for (final COLOR color : COLOR.values()) {
       if (color != COLOR.UNKNOWN) {
         num = colorCounter.get(color);
-        // spinnerTab.add(color.toString(), num);
+        SmartDashboard.putNumber(color.toString(), num);
         sum += num;
       }
     }
