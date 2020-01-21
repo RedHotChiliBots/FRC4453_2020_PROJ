@@ -87,16 +87,25 @@ public class Chassis extends SubsystemBase {
 		m_leftGroup.setInverted(true);
 		m_rightGroup.setInverted(true);
 
+		m_leftPIDController.setP(ChassisConstants.kP);
+		m_leftPIDController.setI(ChassisConstants.kI);
+		m_leftPIDController.setD(ChassisConstants.kD);
+		m_leftPIDController.setIZone(ChassisConstants.kIz);
+		m_leftPIDController.setFF(ChassisConstants.kFF);
+		m_leftPIDController.setOutputRange(ChassisConstants.kMinSpeedMPS, ChassisConstants.kMaxSpeedMPS);
+
+		m_rightPIDController.setP(ChassisConstants.kP);
+		m_rightPIDController.setI(ChassisConstants.kI);
+		m_rightPIDController.setD(ChassisConstants.kD);
+		m_rightPIDController.setIZone(ChassisConstants.kIz);
+		m_rightPIDController.setFF(ChassisConstants.kFF);
+		m_rightPIDController.setOutputRange(ChassisConstants.kMinSpeedMPS, ChassisConstants.kMaxSpeedMPS);
+
 		// Set the distance per pulse for the drive encoders. We can simply use the
 		// distance traveled for one rotation of the wheel divided by the encoder
 		// resolution.
-		m_leftEncoder.setPositionConversionFactor(2 * Math.PI * ChassisConstants.kWheelRadius / 4096);
-
-		// .setDistancePerPulse(2 * Math.PI * ChassisConstants.kWheelRadius /
-		// ChassisConstants.kEncoderResolution);
-		m_rightEncoder.setPositionConversionFactor(2 * Math.PI * ChassisConstants.kWheelRadius / 4096);
-		// .setDistancePerPulse(2 * Math.PI * ChassisConstants.kWheelRadius /
-		// ChassisConstants.kEncoderResolution);
+		m_leftEncoder.setPositionConversionFactor(ChassisConstants.kVelFactor);
+		m_rightEncoder.setPositionConversionFactor(ChassisConstants.kVelFactor);
 
 		// m_leftEncoder.reset();
 		// m_rightEncoder.reset();

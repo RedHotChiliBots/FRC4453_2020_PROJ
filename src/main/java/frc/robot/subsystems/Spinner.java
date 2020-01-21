@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
@@ -67,64 +68,92 @@ public class Spinner extends SubsystemBase {
   private double setPoint = 0.0;
   private COLOR oldColor = COLOR.UNKNOWN;
 
-  private Color detectedColor = m_colorSensor.getColor();
-  private ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
+  private Color detectedColor;
+  private ColorMatchResult match;// = m_colorMatcher.matchClosestColor(detectedColor);
   private COLOR colorString = COLOR.UNKNOWN;
 
   public Spinner() {
     System.out.println("+++++ Spinner Constructor starting ...");
 
+    // Configure Motor
     spinMotor.restoreFactoryDefaults();
+    spinMotor.clearFaults();
 
-    // set PID coefficients
+    spinMotor.setIdleMode(IdleMode.kBrake);
+    spinMotor.setInverted(false);
+
+    // Configure PID Controller
     m_spinPIDController.setP(SpinnerConstants.kP);
     m_spinPIDController.setI(SpinnerConstants.kI);
     m_spinPIDController.setD(SpinnerConstants.kD);
     m_spinPIDController.setIZone(SpinnerConstants.kIz);
     m_spinPIDController.setFF(SpinnerConstants.kFF);
-    m_spinPIDController.setOutputRange(-1.0, 1.0);
+    m_spinPIDController.setOutputRange(SpinnerConstants.kMinRPM, SpinnerConstants.kMaxRPM);
 
+    // Configure Encoder
     m_spinEncoder.setVelocityConversionFactor(Constants.SpinnerConstants.kVelFactor);
 
+    // Initialize color detection
     m_colorMatcher.addColorMatch(SpinnerConstants.kBlueTarget);
     m_colorMatcher.addColorMatch(SpinnerConstants.kGreenTarget);
     m_colorMatcher.addColorMatch(SpinnerConstants.kRedTarget);
     m_colorMatcher.addColorMatch(SpinnerConstants.kYellowTarget);
 
+    // Initialize Game Color to Stop On Color
     stopOnColor.put('G', COLOR.YELLOW);
     stopOnColor.put('B', COLOR.RED);
     stopOnColor.put('Y', COLOR.GREEN);
     stopOnColor.put('R', COLOR.BLUE);
 
+    // Initialize local setup
     initColorCounter();
-    setSetPoint(0.0);
-
-    SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Green", detectedColor.green);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
+    setSetPoint(SpinnerConstants.kStopRPMs);
 
     System.out.println("----- Spinner Constructor finished ...");
   }
 
+  // Called once per Robot execution loop - 50Hz
   public void Periodic() {
-    getColor();
+    colorString = getColor();
 
-    SmartDashboard.putNumber("Confidence", match.confidence);
-    SmartDashboard.putString("Detected Color", colorString.toString());
+    SmartDashboard.putNumber("Spin Detected Red", detectedColor.red);
+    SmartDashboard.putNumber("Spin Detected Green", detectedColor.green);
+    SmartDashboard.putNumber("Spin Detected Blue", detectedColor.blue);
 
-    SmartDashboard.putNumber("SetPoint", setPoint);
+    SmartDashboard.putNumber("Spin Confidence", match.confidence);
+    SmartDashboard.putString("Spin Color Detected", colorString.toString());
+
+    SmartDashboard.putNumber("Spin SetPoint", setPoint);
     SmartDashboard.putNumber("Spin RPMs", m_spinEncoder.getVelocity());
   }
 
+  /**
+   * Set the target RPMs
+   * 
+   * @param rpm - Target RPMs
+   */
   public void setSetPoint(double rpm) {
     this.setPoint = Library.Clip(rpm, SpinnerConstants.kMinRPM, SpinnerConstants.kMaxRPM);
     m_spinPIDController.setReference(setPoint, ControlType.kVelocity);
   }
 
-  public COLOR getStopOnColor(char color) {
-    return stopOnColor.get(color);
+  /**
+   * Convert Game Color from FMS to Control Panel Color to detect and stop. The
+   * color sensor is two colors away from where the Game Panel needs to stop.
+   * 
+   * @param gameColor - from FMS
+   * @return color to detect
+   */
+  public COLOR getStopOnColor(char gameColor) {
+    return stopOnColor.get(gameColor);
   }
 
+  /**
+   * Read the color from the color sensor. If the color sensed is not one of four
+   * known colors, then return UNKNOWN.
+   * 
+   * @return color sensed by sensor
+   */
   public COLOR getColor() {
     detectedColor = m_colorSensor.getColor();
     match = m_colorMatcher.matchClosestColor(detectedColor);
@@ -138,17 +167,15 @@ public class Spinner extends SubsystemBase {
       colorString = COLOR.GREEN;
     } else if (match.color == SpinnerConstants.kYellowTarget) {
       colorString = COLOR.YELLOW;
-    } else {
-      colorString = COLOR.UNKNOWN;
     }
 
     return colorString;
   }
 
   /**
-   * This method counts each color the first time it is seen as the control panel
-   * rotates.
+   * Count each color the first time it is sensed as the control panel rotates.
    * 
+   * @param init - true initializes counters first
    * @return Nothing.
    */
   public void countColor(final boolean init) {
@@ -164,7 +191,7 @@ public class Spinner extends SubsystemBase {
   }
 
   /**
-   * This method initializes the color counters to zero.
+   * Initialize the color counters to zero.
    * 
    * @return Nothing.
    */
@@ -175,9 +202,9 @@ public class Spinner extends SubsystemBase {
   }
 
   /**
-   * This method adds all the individual color counters and used to count the
-   * number of revolutions made by the control panel. There are eight color panels
-   * on the control panel hence counts counts per revolution.
+   * Add all the individual color counters to count the number of revolutions made
+   * by the control panel. There are eight color panels on the control panel hence
+   * eight counts per revolution or 24 counts per three revolutions.
    * 
    * @return int This returns sum of all the color counters.
    */

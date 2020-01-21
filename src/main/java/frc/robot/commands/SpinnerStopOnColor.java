@@ -23,20 +23,17 @@ public class SpinnerStopOnColor extends CommandBase {
   public SpinnerStopOnColor(Spinner subsystem) {
     m_subsystem = subsystem;
     addRequirements(subsystem);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    gotoColor = 'X';
     gameData = DriverStation.getInstance().getGameSpecificMessage();
     if (gameData.length() > 0) {
       gotoColor = gameData.charAt(0);
-    } else {
-      gotoColor = 'X';
+      m_subsystem.setSetPoint(SpinnerConstants.kStopOnColorRPMs);
     }
-    m_subsystem.setSetPoint(SpinnerConstants.kStopOnColorRPMs);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -48,7 +45,7 @@ public class SpinnerStopOnColor extends CommandBase {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return m_subsystem.getStopOnColor(gotoColor) == color;
+    return ((m_subsystem.getStopOnColor(gotoColor) == color) || (gotoColor == 'X'));
   }
 
   // Called once after isFinished returns true

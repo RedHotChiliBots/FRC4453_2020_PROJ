@@ -18,8 +18,6 @@ public class SpinnerCountRevs extends CommandBase {
   public SpinnerCountRevs(Spinner subsystem) {
     m_subsystem = subsystem;
     addRequirements(subsystem);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time

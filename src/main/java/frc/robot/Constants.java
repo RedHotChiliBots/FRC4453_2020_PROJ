@@ -40,16 +40,20 @@ public final class Constants {
 
 		public static final double kMaxSpeedFPS = 10.0; // feet per second
 		public static final double kMaxSpeedMPS = kMaxSpeedFPS * UnitsConstants.kF2M; // meters per second
+		public static final double kMinSpeedMPS = -kMaxSpeedMPS; // meters per second
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
 		public static final double kTrackWidth = 1.5 * UnitsConstants.kF2M * 2; // meters
 		public static final double kWheelDiameter = 6.0 * UnitsConstants.kF2M;
 		public static final double kWheelRadius = kWheelDiameter / 2.0;
 		public static final int kEncoderResolution = 4096;
+		public static final double kVelFactor = (Math.PI * ChassisConstants.kWheelDiameter) / 4096;
 
 		public static final double kP = 1;
 		public static final double kI = 0;
 		public static final double kD = 0;
+		public static final double kIz = 0;
+		public static final double kFF = 0;
 
 		public static final int kCompressorChannel = 0;
 		public static final int kHiPressureChannel = 0;
