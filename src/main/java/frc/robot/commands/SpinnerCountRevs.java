@@ -31,6 +31,7 @@ public class SpinnerCountRevs extends CommandBase {
   @Override
   public void execute() {
     m_subsystem.countColor(false);
+    // m_subsystem.spin(500);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -43,5 +44,6 @@ public class SpinnerCountRevs extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_subsystem.setSetPoint(SpinnerConstants.kStopRPMs);
+    // m_subsystem.stopSpin();
   }
 }

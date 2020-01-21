@@ -66,15 +66,22 @@ public final class Constants {
 		public static final int kAngleMotor = 11;
 		public static final int kTiltMotor = 12;
 
-		public static final double kP = 1;
-		public static final double kI = 0;
+		public static final double kP = 0.00005;
+		public static final double kI = 0.000001;
 		public static final double kD = 0;
 		public static final double kIz = 0;
 		public static final double kFF = 0;
 		public static final double kMin = -1;
 		public static final double kMax = 1;
 
-		public static final double kWheelRadius = 4;
+		public static final double kTicsPerRev = 4096;
+		public static final double kWheelDiameter = 4.0;
+		public static final double kVelFactor = (SpinnerConstants.kWheelDiameter * Math.PI)
+				/ SpinnerConstants.kTicsPerRev;
+
+		public static final double kStopRPMs = 0.0;
+		public static final double kMinRPM = 0.0;
+		public static final double kMaxRPM = 5700.0;
 
 		public static final double shootSpeed = 1.0;
 
