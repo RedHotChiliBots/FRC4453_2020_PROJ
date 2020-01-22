@@ -53,6 +53,5 @@ public class SpinnerStopOnColor extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_subsystem.setSetPoint(SpinnerConstants.kStopRPMs);
-
   }
 }

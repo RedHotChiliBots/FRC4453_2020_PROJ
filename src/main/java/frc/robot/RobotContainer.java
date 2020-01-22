@@ -29,7 +29,6 @@ import frc.robot.commands.ShooterShoot;
 import frc.robot.commands.ShooterStop;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStopOnColor;
-import frc.robot.commands.SpinnerStopSpin;
 import frc.robot.commands.SpinnerStow;
 import frc.robot.commands.AutonDrive;
 
@@ -55,8 +54,6 @@ public class RobotContainer {
   private final ShooterShoot m_shooterShoot = new ShooterShoot(shooter);
   private final ShooterStop m_shooterStop = new ShooterStop(shooter);
   private final ShooterMoveToAngle m_shooterMoveToAngle = new ShooterMoveToAngle(shooter);
-  // private final SpinnerStopSpin m_spinnerStopSpin = new
-  // SpinnerStopSpin(spinner);
 
   private final AutonDrive m_auton = new AutonDrive(chassis, spinner);
 
@@ -109,7 +106,7 @@ public class RobotContainer {
     new JoystickButton(m_operator, Button.kY.value).whenHeld(new ShooterShoot(shooter));
     new JoystickButton(m_operator, Button.kX.value).whenPressed(new ShooterStop(shooter));
 
-    new JoystickButton(m_operator, Button.kStart.value).whenPressed(new SpinnerStopSpin(spinner));
+    new JoystickButton(m_operator, Button.kStart.value).whenPressed(new SpinnerStow(spinner));
 
     // new JoystickButton(m_driver, Button.kA.value)
     // .whenPressed(new InstantCommand(m_hatchSubsystem::grabHatch,

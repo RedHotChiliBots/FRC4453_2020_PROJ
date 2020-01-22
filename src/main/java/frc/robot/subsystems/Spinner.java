@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.Constants;
 import frc.robot.Library;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.Constants.SpinnerConstants.COLOR;
@@ -69,7 +68,7 @@ public class Spinner extends SubsystemBase {
   private COLOR oldColor = COLOR.UNKNOWN;
 
   private Color detectedColor;
-  private ColorMatchResult match;// = m_colorMatcher.matchClosestColor(detectedColor);
+  private ColorMatchResult match;
   private COLOR colorString = COLOR.UNKNOWN;
 
   public Spinner() {
@@ -91,13 +90,13 @@ public class Spinner extends SubsystemBase {
     m_spinPIDController.setOutputRange(SpinnerConstants.kMinRPM, SpinnerConstants.kMaxRPM);
 
     // Configure Encoder
-    m_spinEncoder.setVelocityConversionFactor(Constants.SpinnerConstants.kVelFactor);
+    m_spinEncoder.setVelocityConversionFactor(SpinnerConstants.kVelFactor);
 
     // Initialize color detection
-    m_colorMatcher.addColorMatch(SpinnerConstants.kBlueTarget);
     m_colorMatcher.addColorMatch(SpinnerConstants.kGreenTarget);
-    m_colorMatcher.addColorMatch(SpinnerConstants.kRedTarget);
+    m_colorMatcher.addColorMatch(SpinnerConstants.kBlueTarget);
     m_colorMatcher.addColorMatch(SpinnerConstants.kYellowTarget);
+    m_colorMatcher.addColorMatch(SpinnerConstants.kRedTarget);
 
     // Initialize Game Color to Stop On Color
     stopOnColor.put('G', COLOR.YELLOW);
@@ -122,6 +121,13 @@ public class Spinner extends SubsystemBase {
 
     SmartDashboard.putNumber("Spin Confidence", match.confidence);
     SmartDashboard.putString("Spin Color Detected", colorString.toString());
+
+    String cntString = "";
+    for (COLOR color : COLOR.values()) {
+      cntString += color.toString().charAt(0) + ":" + colorCounter.get(color) + " ";
+    }
+    cntString += sumColor();
+    SmartDashboard.putString("Spin Color Counters", cntString);
 
     SmartDashboard.putNumber("Spin SetPoint", setPoint);
     SmartDashboard.putNumber("Spin RPMs", m_spinEncoder.getVelocity());
@@ -159,14 +165,14 @@ public class Spinner extends SubsystemBase {
     match = m_colorMatcher.matchClosestColor(detectedColor);
     colorString = COLOR.UNKNOWN;
 
-    if (match.color == SpinnerConstants.kBlueTarget) {
-      colorString = COLOR.BLUE;
-    } else if (match.color == SpinnerConstants.kRedTarget) {
-      colorString = COLOR.RED;
-    } else if (match.color == SpinnerConstants.kGreenTarget) {
+    if (match.color == SpinnerConstants.kGreenTarget) {
       colorString = COLOR.GREEN;
+    } else if (match.color == SpinnerConstants.kBlueTarget) {
+      colorString = COLOR.BLUE;
     } else if (match.color == SpinnerConstants.kYellowTarget) {
       colorString = COLOR.YELLOW;
+    } else if (match.color == SpinnerConstants.kRedTarget) {
+      colorString = COLOR.RED;
     }
 
     return colorString;
@@ -221,15 +227,15 @@ public class Spinner extends SubsystemBase {
     return sum;
   }
 
-  public void spin(double setPoint) {
-    // shootMotor.set(ShooterConstants.shootSpeed);
-    // double setPoint = m_stick.getY() * maxRPM;
-    m_spinPIDController.setReference(setPoint, ControlType.kVelocity);
-  }
+  // public void spin(double setPoint) {
+  // // shootMotor.set(ShooterConstants.shootSpeed);
+  // // double setPoint = m_stick.getY() * maxRPM;
+  // m_spinPIDController.setReference(setPoint, ControlType.kVelocity);
+  // }
 
-  public void stopSpin() {
-    spinMotor.set(0);
-  }
+  // public void stopSpin() {
+  // spinMotor.set(0);
+  // }
 
   // @Override
   // public void initDefaultCommand() {

@@ -96,8 +96,8 @@ public final class Constants {
 		public static final double kD = 0.0;
 		public static final double kIz = 0.0;
 		public static final double kFF = 0.0;
+		public static final double kMinOutput = 0.0;
 		public static final double kMaxOutput = 1.0;
-		public static final double kMinOutput = -1.0;
 		public static final double kMinRPM = 0.0;
 		public static final double kMaxRPM = 5700.0;
 
@@ -106,7 +106,7 @@ public final class Constants {
 		public static final double kVelFactor = (SpinnerConstants.kWheelDiameter * Math.PI)
 				/ SpinnerConstants.kTicsPerRev;
 		public static final double kStopOnColorRPMs = 1000.0;
-		public static final double kCountRevRPMs = 4000.0;
+		public static final double kCountRevRPMs = 7680.0;
 		public static final double kStopRPMs = 0.0;
 
 		public static enum COLOR {
@@ -117,10 +117,10 @@ public final class Constants {
 		 * Note: Any example colors should be calibrated as the user needs, these are
 		 * here as a basic example.
 		 */
-		public static final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
 		public static final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
-		public static final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
+		public static final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
 		public static final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
+		public static final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
 	}
 
 	public static final class ClimberConstants {
