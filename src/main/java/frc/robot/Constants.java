@@ -9,6 +9,7 @@ package frc.robot;
 
 import com.revrobotics.ColorMatch;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.util.Color;
 
 /**
@@ -84,6 +85,7 @@ public final class Constants {
 		public static final double kMaxRPM = 5700.0;
 
 		public static final double shootSpeed = 1.0;
+		public static final double shootRPMs = 100.0;
 
 		public static final double shooterShootTime = 4;
 	}
@@ -124,7 +126,10 @@ public final class Constants {
 	}
 
 	public static final class ClimberConstants {
-		public static final int kClimberSolenoidForwardChannel = 1;
-		public static final int kClimberSolenoidReverseChannel = 2;
+		public static final int kClimberExtendSolenoid = 0;
+		public static final int kClimberRetractSolenoid = 1;
+
+		public static final DoubleSolenoid.Value ClimberExtend = DoubleSolenoid.Value.kForward;
+		public static final DoubleSolenoid.Value ClimberRetract = DoubleSolenoid.Value.kReverse;
 	}
 }

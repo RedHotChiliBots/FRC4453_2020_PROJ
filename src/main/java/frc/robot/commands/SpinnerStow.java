@@ -23,7 +23,7 @@ public class SpinnerStow extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    m_subsystem.setSetPoint(SpinnerConstants.kStopRPMs);
+    m_subsystem.setSetPoint(/* SpinnerConstants.kStopRPMs */0);
   }
 
   // Called repeatedly when this Command is scheduled to run

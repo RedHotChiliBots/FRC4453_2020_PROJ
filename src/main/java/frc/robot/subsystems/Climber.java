@@ -34,8 +34,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Climber extends SubsystemBase {
 
-	DoubleSolenoid climberSolenoid = new DoubleSolenoid(ClimberConstants.kClimberSolenoidForwardChannel,
-			ClimberConstants.kClimberSolenoidReverseChannel);
+	DoubleSolenoid climberSolenoid = new DoubleSolenoid(ClimberConstants.kClimberExtendSolenoid,
+			ClimberConstants.kClimberRetractSolenoid);
 
 	// climberSolenoid.set(kOff);
 	// climberSolenoid.set(kForward);
@@ -47,5 +47,13 @@ public class Climber extends SubsystemBase {
 		SmartDashboard.putData("Climber Solenoid", climberSolenoid);
 
 		System.out.println("----- Climber Constructor finished ...");
+	}
+
+	public void climberExtend() {
+		climberSolenoid.set(ClimberConstants.ClimberExtend);
+	}
+
+	public void climberRetract() {
+		climberSolenoid.set(ClimberConstants.ClimberRetract);
 	}
 }

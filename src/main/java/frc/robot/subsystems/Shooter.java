@@ -44,8 +44,10 @@ public class Shooter extends SubsystemBase {
   private final CANSparkMax angleMotor = new CANSparkMax(ShooterConstants.kShooterMotor, MotorType.kBrushless);
   private final CANSparkMax tiltMotor = new CANSparkMax(ShooterConstants.kShooterMotor, MotorType.kBrushless);
 
-  private final CANPIDController shootPIDController = new CANPIDController(shootMotor);
-  private final CANEncoder shootEncoder = new CANEncoder(shootMotor);
+  private final CANPIDController shootPIDController;
+  // = new CANPIDController(shootMotor);
+  private final CANEncoder shootEncoder;
+  // = new CANEncoder(shootMotor);
   private final CANPIDController anglePIDController = new CANPIDController(angleMotor);
   private final CANEncoder angleEncoder = new CANEncoder(angleMotor);
   private final CANPIDController tiltPIDController = new CANPIDController(tiltMotor);
@@ -84,6 +86,9 @@ public class Shooter extends SubsystemBase {
 
     shootMotor.setIdleMode(IdleMode.kBrake);
     shootMotor.setInverted(false);
+
+    shootPIDController = shootMotor.getPIDController();
+    shootEncoder = shootMotor.getEncoder();
 
     shootPIDController.setP(Constants.ShooterConstants.kP);
     shootPIDController.setI(Constants.ShooterConstants.kI);

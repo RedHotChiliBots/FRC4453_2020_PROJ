@@ -36,8 +36,10 @@ public class Spinner extends SubsystemBase {
   // here. Call these from Commands.
   private final CANSparkMax spinMotor = new CANSparkMax(SpinnerConstants.kSpinnerMotor, MotorType.kBrushless);
 
-  private final CANPIDController m_spinPIDController = new CANPIDController(spinMotor);
-  private final CANEncoder m_spinEncoder = spinMotor.getEncoder();
+  private final CANPIDController m_spinPIDController;
+  // = new CANPIDController(spinMotor);
+  private final CANEncoder m_spinEncoder;
+  // = spinMotor.getEncoder();
 
   /**
    * Change the I2C port below to match the connection of your color sensor
@@ -80,6 +82,9 @@ public class Spinner extends SubsystemBase {
 
     spinMotor.setIdleMode(IdleMode.kBrake);
     spinMotor.setInverted(false);
+
+    m_spinPIDController = spinMotor.getPIDController();
+    m_spinEncoder = spinMotor.getEncoder();
 
     // Configure PID Controller
     m_spinPIDController.setP(SpinnerConstants.kP);
@@ -124,7 +129,7 @@ public class Spinner extends SubsystemBase {
 
     String cntString = "";
     for (COLOR color : COLOR.values()) {
-      cntString += color.toString().charAt(0) + ":" + colorCounter.get(color) + " ";
+      cntString += color.toString().charAt(0) + ":" + colorCounter.get(color).toString() + " ";
     }
     cntString += sumColor();
     SmartDashboard.putString("Spin Color Counters", cntString);

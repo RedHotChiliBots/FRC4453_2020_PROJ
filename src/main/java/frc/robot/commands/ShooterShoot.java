@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.*;
 
 public class ShooterShoot extends CommandBase {
@@ -24,12 +25,13 @@ public class ShooterShoot extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    m_shooter.setShootSetPoint(ShooterConstants.shootRPMs);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_shooter.shoot(1000);
+    // m_shooter.shoot(ShooterConstants.shootSpeed);
   }
 
   // Make this return true when this Command no longer needs to run execute()
