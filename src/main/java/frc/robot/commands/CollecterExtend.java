@@ -8,41 +8,39 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.SpinnerConstants;
-import frc.robot.subsystems.Spinner;
+import frc.robot.subsystems.Collecter;
 
-public class SpinnerCountRevs extends CommandBase {
+public class CollecterExtend extends CommandBase {
+  private final Collecter m_collecter;
 
-  private final Spinner m_subsystem;
-
-  public SpinnerCountRevs(Spinner subsystem) {
-    m_subsystem = subsystem;
-    addRequirements(subsystem);
+  public CollecterExtend(Collecter collecter) {
+    m_collecter = collecter;
+    addRequirements(collecter);
+    // super(timeout);
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    m_subsystem.countColor(true);
-    m_subsystem.setSetPoint(SpinnerConstants.kCountRevRPMs);
+    m_collecter.collecterExtend();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_subsystem.countColor(false);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return m_subsystem.sumColor() >= 25;
+    return true;
   }
 
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    // m_subsystem.setSetPoint(SpinnerConstants.kStopRPMs);
-    m_subsystem.stopSpin();
   }
+
 }

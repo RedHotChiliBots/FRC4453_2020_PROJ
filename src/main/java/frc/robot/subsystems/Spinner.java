@@ -197,7 +197,7 @@ public class Spinner extends SubsystemBase {
     if (color != oldColor) {
       oldColor = color;
       int i = colorCounter.get(color);
-      colorCounter.put(color, i++);
+      colorCounter.put(color, ++i);
     }
   }
 
@@ -238,9 +238,9 @@ public class Spinner extends SubsystemBase {
   // m_spinPIDController.setReference(setPoint, ControlType.kVelocity);
   // }
 
-  // public void stopSpin() {
-  // spinMotor.set(0);
-  // }
+  public void stopSpin() {
+    spinMotor.set(0);
+  }
 
   // @Override
   // public void initDefaultCommand() {

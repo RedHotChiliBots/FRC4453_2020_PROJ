@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Collecter;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spinner;
 
@@ -31,6 +32,10 @@ import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStopOnColor;
 import frc.robot.commands.SpinnerStow;
 import frc.robot.commands.AutonDrive;
+import frc.robot.commands.ClimberExtend;
+import frc.robot.commands.ClimberRetract;
+import frc.robot.commands.CollecterExtend;
+import frc.robot.commands.CollecterRetract;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -45,6 +50,7 @@ public class RobotContainer {
   private final Spinner spinner = new Spinner();
   private final Shooter shooter = new Shooter();
   private final Climber climber = new Climber();
+  private final Collecter collecter = new Collecter();
 
   // Define Commands
   private final SpinnerStow m_spinnerStow = new SpinnerStow(spinner);
@@ -107,6 +113,12 @@ public class RobotContainer {
     new JoystickButton(m_operator, Button.kX.value).whenPressed(new ShooterStop(shooter));
 
     new JoystickButton(m_operator, Button.kStart.value).whenPressed(new SpinnerStow(spinner));
+
+    new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new ClimberExtend(climber));
+    new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new ClimberRetract(climber));
+
+    new JoystickButton(m_driver, Button.kBumperRight.value).whenPressed(new CollecterExtend(collecter));
+    new JoystickButton(m_driver, Button.kBumperLeft.value).whenPressed(new CollecterRetract(collecter));
 
     // new JoystickButton(m_driver, Button.kA.value)
     // .whenPressed(new InstantCommand(m_hatchSubsystem::grabHatch,

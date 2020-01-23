@@ -132,4 +132,13 @@ public final class Constants {
 		public static final DoubleSolenoid.Value ClimberExtend = DoubleSolenoid.Value.kForward;
 		public static final DoubleSolenoid.Value ClimberRetract = DoubleSolenoid.Value.kReverse;
 	}
+
+	public static final class CollecterConstants {
+		public static final int kCollecterExtendSolenoid = 2;
+		public static final int kCollecterRetractSolenoid = 3;
+
+		public static final DoubleSolenoid.Value CollecterExtend = DoubleSolenoid.Value.kForward;
+		public static final DoubleSolenoid.Value CollecterRetract = DoubleSolenoid.Value.kReverse;
+	}
+
 }
