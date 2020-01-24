@@ -100,16 +100,16 @@ public final class Constants {
 		public static final double kFF = 0.0;
 		public static final double kMinOutput = 0.0;
 		public static final double kMaxOutput = 1.0;
-		public static final double kMinRPM = 0.0;
-		public static final double kMaxRPM = 5700.0;
+		public static final int kMinRPM = 0;
+		public static final int kMaxRPM = 5700;
 
 		public static final double kTicsPerRev = 4096;
 		public static final double kWheelDiameter = 3.0;
 		public static final double kVelFactor = (SpinnerConstants.kWheelDiameter * Math.PI)
 				/ SpinnerConstants.kTicsPerRev;
-		public static final double kStopOnColorRPMs = 1000.0;
-		public static final double kCountRevRPMs = 7680.0;
-		public static final double kStopRPMs = 0.0;
+		public static final int kStopOnColorRPMs = 1000;
+		public static final int kCountRevRPMs = 7680;
+		public static final int kStopRPMs = 0;
 
 		public static enum COLOR {
 			GREEN, BLUE, YELLOW, RED, UNKNOWN;

@@ -23,4 +23,8 @@ public final class Library {
 		return Math.min(Math.max(value, min), max);
 	}
 
+	public static int Clip(int value, int max, int min) {
+		return Math.min(Math.max(value, min), max);
+	}
+
 }

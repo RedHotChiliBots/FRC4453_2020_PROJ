@@ -35,8 +35,8 @@ public class Spinner extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   private final CANSparkMax spinMotor = new CANSparkMax(SpinnerConstants.kSpinnerMotor, MotorType.kBrushless);
-  private CANPIDController m_spinPIDController;
-  private CANEncoder m_spinEncoder;
+  private CANPIDController m_spinPIDController = spinMotor.getPIDController();
+  private CANEncoder m_spinEncoder = spinMotor.getEncoder();
 
   /**
    * Change the I2C port below to match the connection of your color sensor
@@ -63,7 +63,7 @@ public class Spinner extends SubsystemBase {
    */
   private Map<COLOR, Integer> colorCounter = new HashMap<>();
   private Map<Character, COLOR> stopOnColor = new HashMap<>();
-  private double setPoint = 0.0;
+  private int setPoint = 0;
   private COLOR oldColor = COLOR.UNKNOWN;
 
   private Color detectedColor;
@@ -79,9 +79,6 @@ public class Spinner extends SubsystemBase {
 
     spinMotor.setIdleMode(IdleMode.kBrake);
     spinMotor.setInverted(false);
-
-    m_spinPIDController = spinMotor.getPIDController();
-    m_spinEncoder = spinMotor.getEncoder();
 
     // Configure PID Controller
     m_spinPIDController.setP(SpinnerConstants.kP);
@@ -140,8 +137,9 @@ public class Spinner extends SubsystemBase {
    * 
    * @param rpm - Target RPMs
    */
-  public void setSetPoint(double rpm) {
+  public void setSetPoint(int rpm) {
     this.setPoint = Library.Clip(rpm, SpinnerConstants.kMaxRPM, SpinnerConstants.kMinRPM);
+    SmartDashboard.putString("Clip", "RPM:" + Integer.toString(rpm) + "   SetPoint:" + Integer.toString(this.setPoint));
     m_spinPIDController.setReference(this.setPoint, ControlType.kVelocity);
   }
 
