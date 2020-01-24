@@ -52,11 +52,15 @@ public class Chassis extends SubsystemBase {
 
 	private final DifferentialDrive m_tankDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
 
-	public final CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
-	public final CANEncoder m_rightEncoder = new CANEncoder(rightMaster);
+	public final CANEncoder m_leftEncoder;
+	// = new CANEncoder(leftMaster);
+	public final CANEncoder m_rightEncoder;
+	// = new CANEncoder(rightMaster);
 
-	private final CANPIDController m_leftPIDController = new CANPIDController(leftMaster);
-	private final CANPIDController m_rightPIDController = new CANPIDController(rightMaster);
+	private final CANPIDController m_leftPIDController;
+	// = new CANPIDController(leftMaster);
+	private final CANPIDController m_rightPIDController;
+	// = new CANPIDController(rightMaster);
 
 	/* Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB */
 	private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
@@ -66,10 +70,12 @@ public class Chassis extends SubsystemBase {
 
 	private final DifferentialDriveOdometry m_odometry;
 
-	private final Compressor compressor = new Compressor(0);
+	// private final Compressor compressor = new Compressor(0);
 	// (Constants.ChassisConstants.kCompressorChannel);
-	private final AnalogInput hiPressureSensor = new AnalogInput(Constants.ChassisConstants.kHiPressureChannel);
-	private final AnalogInput loPressureSensor = new AnalogInput(Constants.ChassisConstants.kLoPressureChannel);
+	private AnalogInput hiPressureSensor = null;
+	// = new AnalogInput(Constants.ChassisConstants.kHiPressureChannel);
+	private AnalogInput loPressureSensor = null;
+	// new AnalogInput(Constants.ChassisConstants.kLoPressureChannel);
 
 	/**
 	 * Constructs a differential drive object. Sets the encoder distance per pulse
@@ -87,6 +93,12 @@ public class Chassis extends SubsystemBase {
 
 		m_leftGroup.setInverted(true);
 		m_rightGroup.setInverted(true);
+
+		m_leftPIDController = leftMaster.getPIDController();
+		m_rightPIDController = rightMaster.getPIDController();
+
+		m_leftEncoder = leftMaster.getEncoder();
+		m_rightEncoder = rightMaster.getEncoder();
 
 		m_leftPIDController.setP(ChassisConstants.kP);
 		m_leftPIDController.setI(ChassisConstants.kI);
@@ -113,11 +125,16 @@ public class Chassis extends SubsystemBase {
 
 		m_odometry = new DifferentialDriveOdometry(getAngle());
 
-		compressor.setClosedLoopControl(true);
+		hiPressureSensor = new AnalogInput(Constants.ChassisConstants.kHiPressureChannel);
+		loPressureSensor = new AnalogInput(Constants.ChassisConstants.kLoPressureChannel);
 
-		boolean enabled = compressor.enabled();
-		boolean pressureSwitch = compressor.getPressureSwitchValue();
-		double current = compressor.getCompressorCurrent();
+		// compressor.setClosedLoopControl(true);
+
+		// compressor.start();
+
+		// boolean enabled = compressor.enabled();
+		// boolean pressureSwitch = compressor.getPressureSwitchValue();
+		// double current = compressor.getCompressorCurrent();
 
 		// compressor.setClosedLoopControl(false);
 
@@ -130,7 +147,7 @@ public class Chassis extends SubsystemBase {
 		// SmartDashboard.putData("Left Encoder", m_leftEncoder);
 		// SmartDashboard.putData("Right Encoder", m_rightEncoder);
 
-		SmartDashboard.putData("Compressor", compressor);
+		// SmartDashboard.putData("Compressor", compressor);
 	}
 
 	public void periodic() {
@@ -144,11 +161,16 @@ public class Chassis extends SubsystemBase {
 		SmartDashboard.putNumber("RM Position", m_rightEncoder.getPosition());
 		SmartDashboard.putNumber("RM Velocity", m_rightEncoder.getVelocity());
 
-		SmartDashboard.putBoolean("Comp Enabled", isCompEnabled());
-		SmartDashboard.putBoolean("Comp Pressure", isCompSwitch());
-		SmartDashboard.putNumber("Comp Current", getCompCurrent());
+		// SmartDashboard.putBoolean("Comp Enabled", isCompEnabled());
+		// SmartDashboard.putBoolean("Comp Pressure", isCompSwitch());
+		// SmartDashboard.putNumber("Comp Current", getCompCurrent());
 		SmartDashboard.putNumber("Hi Pressure", getHiPressure());
 		SmartDashboard.putNumber("Lo Pressure", getLoPressure());
+		// SmartDashboard.putData("Compressor", compressor);
+		// SmartDashboard.putNumber("Lo Pressure Voltage",
+		// loPressureSensor.getVoltage());
+		// SmartDashboard.putNumber("Hi Pressure Voltage",
+		// hiPressureSensor.getVoltage());
 	}
 
 	public void driveTeleop(double left, double right) {
@@ -213,18 +235,18 @@ public class Chassis extends SubsystemBase {
 	/**
 	 * Get Compressor info
 	 */
-	public boolean isCompEnabled() {
-		return compressor.enabled();
-	}
+	// public boolean isCompEnabled() {
+	// return compressor.enabled();
+	// }
 
-	public boolean isCompSwitch() {
-		return compressor.getPressureSwitchValue();
+	// public boolean isCompSwitch() {
+	// return compressor.getPressureSwitchValue();
 
-	}
+	// }
 
-	public double getCompCurrent() {
-		return compressor.getCompressorCurrent();
-	}
+	// public double getCompCurrent() {
+	// return compressor.getCompressorCurrent();
+	// }
 
 	/**
 	 * Get Hi and Lo pressure sensors in PSI

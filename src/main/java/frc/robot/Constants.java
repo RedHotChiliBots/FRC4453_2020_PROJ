@@ -59,7 +59,7 @@ public final class Constants {
 		public static final int kCompressorChannel = 0;
 		public static final int kHiPressureChannel = 0;
 		public static final int kLoPressureChannel = 1;
-		public static final double kInputVoltage = 5.0 / 1024;
+		public static final double kInputVoltage = 5.0;
 	}
 
 	public final static class ShooterConstants {
