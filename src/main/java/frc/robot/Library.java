@@ -26,5 +26,4 @@ public final class Library {
 	public static int Clip(int value, int max, int min) {
 		return Math.min(Math.max(value, min), max);
 	}
-
 }

@@ -105,8 +105,9 @@ public final class Constants {
 
 		public static final double kTicsPerRev = 4096;
 		public static final double kWheelDiameter = 3.0;
+		public static final double kGearBoxRatio = 16.0;
 		public static final double kVelFactor = (SpinnerConstants.kWheelDiameter * Math.PI)
-				/ SpinnerConstants.kTicsPerRev;
+				/ SpinnerConstants.kTicsPerRev / kGearBoxRatio;
 		public static final int kStopOnColorRPMs = 1000;
 		public static final int kCountRevRPMs = 10240;
 		public static final int kStopRPMs = 0;
