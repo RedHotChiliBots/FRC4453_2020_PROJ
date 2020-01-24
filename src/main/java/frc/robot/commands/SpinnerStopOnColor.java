@@ -30,7 +30,7 @@ public class SpinnerStopOnColor extends CommandBase {
   public void initialize() {
     gotoColor = 'X';
     gameData = DriverStation.getInstance().getGameSpecificMessage();
-    gameData = "R";
+    gameData = "Y";
     if (gameData.length() > 0) {
       gotoColor = gameData.charAt(0);
       m_subsystem.setSetPoint(SpinnerConstants.kStopOnColorRPMs);
