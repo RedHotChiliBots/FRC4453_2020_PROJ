@@ -35,11 +35,8 @@ public class Spinner extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   private final CANSparkMax spinMotor = new CANSparkMax(SpinnerConstants.kSpinnerMotor, MotorType.kBrushless);
-
-  private final CANPIDController m_spinPIDController;
-  // = new CANPIDController(spinMotor);
-  private final CANEncoder m_spinEncoder;
-  // = spinMotor.getEncoder();
+  private CANPIDController m_spinPIDController;
+  private CANEncoder m_spinEncoder;
 
   /**
    * Change the I2C port below to match the connection of your color sensor
@@ -156,7 +153,10 @@ public class Spinner extends SubsystemBase {
    * @return color to detect
    */
   public COLOR getStopOnColor(char gameColor) {
-    return stopOnColor.get(gameColor);
+    COLOR color = stopOnColor.get(gameColor);
+    String strColor = gameColor + ":" + color.toString();
+    SmartDashboard.putString("Spin Stop On Color", strColor);
+    return color;
   }
 
   /**
