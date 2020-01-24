@@ -52,6 +52,7 @@ public class SpinnerStopOnColor extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.setSetPoint(SpinnerConstants.kStopRPMs);
+    // m_subsystem.setSetPoint(SpinnerConstants.kStopRPMs);
+    m_subsystem.stopSpin();
   }
 }
