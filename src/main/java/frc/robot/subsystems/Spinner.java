@@ -13,6 +13,7 @@ import java.util.Map;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
@@ -34,9 +35,10 @@ import frc.robot.Constants.SpinnerConstants.COLOR;
 public class Spinner extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private final CANSparkMax spinMotor = new CANSparkMax(SpinnerConstants.kSpinnerMotor, MotorType.kBrushless);
+  private final CANSparkMax spinMotor = new CANSparkMax(SpinnerConstants.kSpinnerMotor, MotorType.kBrushed);
   private CANPIDController m_spinPIDController = spinMotor.getPIDController();
-  private CANEncoder m_spinEncoder = spinMotor.getEncoder();
+  private CANEncoder m_spinEncoder = spinMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature,
+      SpinnerConstants.kTicsPerRev);
 
   /**
    * Change the I2C port below to match the connection of your color sensor
@@ -130,6 +132,14 @@ public class Spinner extends SubsystemBase {
 
     SmartDashboard.putNumber("Spin SetPoint", setPoint);
     SmartDashboard.putNumber("Spin RPMs", m_spinEncoder.getVelocity());
+  }
+
+  public double getRPMs() {
+    return m_spinEncoder.getVelocity();
+  }
+
+  public void setRPMs(double rpm) {
+    spinMotor.set(rpm);
   }
 
   /**

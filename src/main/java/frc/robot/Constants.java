@@ -103,9 +103,9 @@ public final class Constants {
 		public static final int kMinRPM = 0;
 		public static final int kMaxRPM = 14984; // 80% of 775 Free Spin RPMs
 
-		public static final double kTicsPerRev = 4096;
+		public static final int kTicsPerRev = 48; // RS7 encoder on 775 motor
 		public static final double kWheelDiameter = 3.0;
-		public static final double kGearBoxRatio = 16.0;
+		public static final int kGearBoxRatio = 16;
 		public static final double kVelFactor = (SpinnerConstants.kWheelDiameter * Math.PI)
 				/ SpinnerConstants.kTicsPerRev / kGearBoxRatio;
 		public static final int kStopOnColorRPMs = 1000;
