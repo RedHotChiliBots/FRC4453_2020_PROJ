@@ -10,34 +10,33 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ClimberConstants;
-import frc.robot.Constants.CollecterConstants;
+import frc.robot.Constants.CollectorConstants;
 
 /**
  * Add your docs here.
  */
-public class Collecter extends SubsystemBase {
+public class Collector extends SubsystemBase {
 
-	DoubleSolenoid collecterSolenoid = new DoubleSolenoid(CollecterConstants.kCollecterExtendSolenoid,
-			CollecterConstants.kCollecterRetractSolenoid);
+	DoubleSolenoid collectorSolenoid = new DoubleSolenoid(CollectorConstants.kCollectorExtendSolenoid,
+			CollectorConstants.kCollectorRetractSolenoid);
 
 	// climberSolenoid.set(kOff);
 	// climberSolenoid.set(kForward);
 	// climberSolenoid.set(kReverse);
 
-	public Collecter() {
-		System.out.println("+++++ Climber Constructor starting ...");
+	public Collector() {
+		System.out.println("+++++ Collector Constructor starting ...");
 
-		SmartDashboard.putData("Climber Solenoid", collecterSolenoid);
+		SmartDashboard.putData("Collector Solenoid", collectorSolenoid);
 
-		System.out.println("----- Climber Constructor finished ...");
+		System.out.println("----- Collector Constructor finished ...");
 	}
 
-	public void collecterExtend() {
-		collecterSolenoid.set(ClimberConstants.ClimberExtend);
+	public void collectorExtend() {
+		collectorSolenoid.set(CollectorConstants.CollectorExtend);
 	}
 
-	public void collecterRetract() {
-		collecterSolenoid.set(ClimberConstants.ClimberRetract);
+	public void collectorRetract() {
+		collectorSolenoid.set(CollectorConstants.CollectorRetract);
 	}
 }

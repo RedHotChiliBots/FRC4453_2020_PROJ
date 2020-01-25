@@ -13,17 +13,17 @@ import frc.robot.subsystems.Spinner;
 
 public class SpinnerStow extends CommandBase {
 
-  private final Spinner m_subsystem;
+  private final Spinner spinner;
 
-  public SpinnerStow(Spinner subsystem) {
-    m_subsystem = subsystem;
-    addRequirements(subsystem);
+  public SpinnerStow(Spinner spinner) {
+    this.spinner = spinner;
+    addRequirements(spinner);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    m_subsystem.setSetPoint(/* SpinnerConstants.kStopRPMs */0);
+    spinner.setSetPoint(/* SpinnerConstants.kStopRPMs */0);
   }
 
   // Called repeatedly when this Command is scheduled to run

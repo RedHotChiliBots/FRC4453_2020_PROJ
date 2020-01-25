@@ -93,6 +93,10 @@ public final class Constants {
 	public final static class SpinnerConstants {
 		public static final int kSpinnerMotor = 20;
 
+		public static final int kSlotIdx = 0;
+		public static final int kPIDLoopIdx = 0;
+		public static final int kTimeoutMs = 30;
+
 		public static final double kP = 0.00005;
 		public static final double kI = 0.000001;
 		public static final double kD = 0.0;
@@ -134,12 +138,12 @@ public final class Constants {
 		public static final DoubleSolenoid.Value ClimberRetract = DoubleSolenoid.Value.kReverse;
 	}
 
-	public static final class CollecterConstants {
-		public static final int kCollecterExtendSolenoid = 2;
-		public static final int kCollecterRetractSolenoid = 3;
+	public static final class CollectorConstants {
+		public static final int kCollectorExtendSolenoid = 2;
+		public static final int kCollectorRetractSolenoid = 3;
 
-		public static final DoubleSolenoid.Value CollecterExtend = DoubleSolenoid.Value.kForward;
-		public static final DoubleSolenoid.Value CollecterRetract = DoubleSolenoid.Value.kReverse;
+		public static final DoubleSolenoid.Value CollectorExtend = DoubleSolenoid.Value.kForward;
+		public static final DoubleSolenoid.Value CollectorRetract = DoubleSolenoid.Value.kReverse;
 	}
 
 }

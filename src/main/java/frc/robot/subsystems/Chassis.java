@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -37,45 +38,49 @@ import frc.robot.Constants.UnitsConstants;
  */
 public class Chassis extends SubsystemBase {
 
+	// Define the left side motors, master and follower
 	private final CANSparkMax leftMaster = new CANSparkMax(ChassisConstants.kLeftMasterMotor, MotorType.kBrushless);
 	private final SpeedController m_leftMaster = leftMaster;
 	private final SpeedController m_leftFollower = new CANSparkMax(ChassisConstants.kLeftFollowerMotor,
 			MotorType.kBrushless);
 
+	// Define the right side motors, master and follower
 	private final CANSparkMax rightMaster = new CANSparkMax(ChassisConstants.kRightMasterMotor, MotorType.kBrushless);
 	private final SpeedController m_rightMaster = rightMaster;
 	private final SpeedController m_rightFollower = new CANSparkMax(ChassisConstants.kRightFollowerMotor,
 			MotorType.kBrushless);
 
+	// Group the left and right motors
 	private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
 	private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
 
+	// Use differential drive to control chassis - provides tank or arcade
 	private final DifferentialDrive m_tankDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
 
-	public final CANEncoder m_leftEncoder;
-	// = new CANEncoder(leftMaster);
-	public final CANEncoder m_rightEncoder;
-	// = new CANEncoder(rightMaster);
+	// Identify left and rigt encoders
+	public final CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
+	public final CANEncoder m_rightEncoder = new CANEncoder(rightMaster);
 
-	private final CANPIDController m_leftPIDController;
-	// = new CANPIDController(leftMaster);
-	private final CANPIDController m_rightPIDController;
-	// = new CANPIDController(rightMaster);
-
-	/* Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB */
-	private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
+	// Identify left and right PID controllers
+	private final CANPIDController m_leftPIDController = new CANPIDController(leftMaster);
+	private final CANPIDController m_rightPIDController = new CANPIDController(rightMaster);
 
 	private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
 			ChassisConstants.kTrackWidth);
 
 	private final DifferentialDriveOdometry m_odometry;
 
-	// private final Compressor compressor = new Compressor(0);
-	// (Constants.ChassisConstants.kCompressorChannel);
-	private AnalogInput hiPressureSensor = null;
-	// = new AnalogInput(Constants.ChassisConstants.kHiPressureChannel);
-	private AnalogInput loPressureSensor = null;
-	// new AnalogInput(Constants.ChassisConstants.kLoPressureChannel);
+	// Initialize NavX AHRS board
+	// Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB
+	private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
+
+	// Identify PDP and PCM
+	private final PowerDistributionPanel pdp = new PowerDistributionPanel(0);
+	private final Compressor compressor = new Compressor();
+
+	// Identify compressor hi and lo sensors
+	private AnalogInput hiPressureSensor = new AnalogInput(Constants.ChassisConstants.kHiPressureChannel);
+	private AnalogInput loPressureSensor = new AnalogInput(Constants.ChassisConstants.kLoPressureChannel);
 
 	/**
 	 * Constructs a differential drive object. Sets the encoder distance per pulse
@@ -85,6 +90,9 @@ public class Chassis extends SubsystemBase {
 		super();
 		System.out.println("+++++ Chassis Constructor starting ...");
 
+		pdp.clearStickyFaults();
+		compressor.clearAllPCMStickyFaults();
+
 		ahrs.reset();
 		ahrs.zeroYaw();
 
@@ -93,12 +101,6 @@ public class Chassis extends SubsystemBase {
 
 		m_leftGroup.setInverted(true);
 		m_rightGroup.setInverted(true);
-
-		m_leftPIDController = leftMaster.getPIDController();
-		m_rightPIDController = rightMaster.getPIDController();
-
-		m_leftEncoder = leftMaster.getEncoder();
-		m_rightEncoder = rightMaster.getEncoder();
 
 		m_leftPIDController.setP(ChassisConstants.kP);
 		m_leftPIDController.setI(ChassisConstants.kI);
@@ -124,9 +126,6 @@ public class Chassis extends SubsystemBase {
 		// m_rightEncoder.reset();
 
 		m_odometry = new DifferentialDriveOdometry(getAngle());
-
-		hiPressureSensor = new AnalogInput(Constants.ChassisConstants.kHiPressureChannel);
-		loPressureSensor = new AnalogInput(Constants.ChassisConstants.kLoPressureChannel);
 
 		// compressor.setClosedLoopControl(true);
 

@@ -8,14 +8,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Collecter;
+import frc.robot.subsystems.Collector;
 
-public class CollecterExtend extends CommandBase {
-  private final Collecter m_collecter;
+public class CollectorExtend extends CommandBase {
+  private final Collector m_collector;
 
-  public CollecterExtend(Collecter collecter) {
-    m_collecter = collecter;
-    addRequirements(collecter);
+  public CollectorExtend(Collector collector) {
+    m_collector = collector;
+    addRequirements(collector);
     // super(timeout);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -24,7 +24,7 @@ public class CollecterExtend extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    m_collecter.collecterExtend();
+    m_collector.collectorExtend();
   }
 
   // Called repeatedly when this Command is scheduled to run

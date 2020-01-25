@@ -20,6 +20,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
@@ -35,7 +38,13 @@ import frc.robot.Constants.SpinnerConstants.COLOR;
 public class Spinner extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private final CANSparkMax spinMotor = new CANSparkMax(SpinnerConstants.kSpinnerMotor, MotorType.kBrushed);
+  // private final CANSparkMax spinMotor = new
+  // CANSparkMax(SpinnerConstants.kSpinnerMotor, MotorType.kBrushed);
+  // private CANPIDController m_spinPIDController = spinMotor.getPIDController();
+  // private CANEncoder m_spinEncoder =
+  // spinMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature,
+  // SpinnerConstants.kTicsPerRev);
+  private final TalonSRX spinMotor = new TalonSRX(SpinnerConstants.kSpinnerMotor);
   private CANPIDController m_spinPIDController = spinMotor.getPIDController();
   private CANEncoder m_spinEncoder = spinMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature,
       SpinnerConstants.kTicsPerRev);
@@ -75,11 +84,34 @@ public class Spinner extends SubsystemBase {
   public Spinner() {
     System.out.println("+++++ Spinner Constructor starting ...");
 
-    // Configure Motor
-    spinMotor.restoreFactoryDefaults();
-    spinMotor.clearFaults();
+    /* Factory Default all hardware to prevent unexpected behaviour */
+    spinMotor.configFactoryDefault();
+    spinMotor.clearStickyFaults();
 
-    spinMotor.setIdleMode(IdleMode.kBrake);
+    /* Config sensor used for Primary PID [Velocity] */
+    spinMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, SpinnerConstants.kPIDLoopIdx,
+        SpinnerConstants.kTimeoutMs);
+
+    /**
+     * Phase sensor accordingly. Positive Sensor Reading should match Green
+     * (blinking) Leds on Talon
+     */
+    spinMotor.setSensorPhase(true);
+
+    /* Config the peak and nominal outputs */
+    spinMotor.configNominalOutputForward(0, SpinnerConstants.kTimeoutMs);
+    spinMotor.configNominalOutputReverse(0, SpinnerConstants.kTimeoutMs);
+    spinMotor.configPeakOutputForward(1, SpinnerConstants.kTimeoutMs);
+    spinMotor.configPeakOutputReverse(-1, SpinnerConstants.kTimeoutMs);
+
+    /* Config the Velocity closed loop gains in slot0 */
+    spinMotor.config_kF(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kFF, SpinnerConstants.kTimeoutMs);
+    spinMotor.config_kP(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kP, SpinnerConstants.kTimeoutMs);
+    spinMotor.config_kI(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kI, SpinnerConstants.kTimeoutMs);
+    spinMotor.config_kD(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kD, SpinnerConstants.kTimeoutMs);
+
+    // Configure Motor
+    spinMotor.setNeutralMode(NeutralMode.Brake);
     spinMotor.setInverted(false);
 
     // Configure PID Controller

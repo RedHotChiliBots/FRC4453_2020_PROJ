@@ -22,7 +22,7 @@ public class SpinnerCountRevs extends PIDCommand {
         // Create PID Controller
         new PIDController(SpinnerConstants.kP, SpinnerConstants.kI, SpinnerConstants.kD),
         // Close loop on RPMs
-        spinner.getRPMs(),
+        spinner::getRPMs,
         // Set set point
         (double) SpinnerConstants.kCountRevRPMs,
         // Pipe output to spinner motor
@@ -54,7 +54,7 @@ public class SpinnerCountRevs extends PIDCommand {
 
   // Called once after isFinished returns true
   @Override
-  public void end(boolean interrupted) {
+  public void end(final boolean interrupted) {
     // spinner.setSetPoint(SpinnerConstants.kStopRPMs);
     spinner.stopSpin();
   }
