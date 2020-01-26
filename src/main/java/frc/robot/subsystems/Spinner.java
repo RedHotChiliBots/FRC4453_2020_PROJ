@@ -10,26 +10,20 @@ package frc.robot.subsystems;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.AlternateEncoderType;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+
 import frc.robot.Library;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.Constants.SpinnerConstants.COLOR;
@@ -83,6 +77,8 @@ public class Spinner extends SubsystemBase {
   private Color detectedColor;
   private ColorMatchResult match;
   private COLOR colorString = COLOR.UNKNOWN;
+
+  Library lib = new Library();
 
   public Spinner() {
     System.out.println("+++++ Spinner Constructor starting ...");
@@ -182,7 +178,7 @@ public class Spinner extends SubsystemBase {
    * @param rpm - Target RPMs
    */
   // public void setSetPoint(int rpm) {
-  // this.setPoint = Library.Clip(rpm, SpinnerConstants.kMaxRPM,
+  // this.setPoint = lib.Clip(rpm, SpinnerConstants.kMaxRPM,
   // SpinnerConstants.kMinRPM);
   // SmartDashboard.putString("Clip", "RPM:" + Integer.toString(rpm) + "
   // SetPoint:" + Integer.toString(this.setPoint));

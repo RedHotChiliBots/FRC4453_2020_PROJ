@@ -14,12 +14,12 @@ import frc.robot.subsystems.Chassis;
 
 public class DriveTeleop extends CommandBase {
 
-  private final Chassis m_chassis;
+  private final Chassis chassis;
   private DoubleSupplier left;
   private DoubleSupplier right;
 
   public DriveTeleop(Chassis chassis, DoubleSupplier left, DoubleSupplier right) {
-    this.m_chassis = chassis;
+    this.chassis = chassis;
     this.left = left;
     this.right = right;
     addRequirements(chassis);
@@ -35,7 +35,7 @@ public class DriveTeleop extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_chassis.driveTeleop(left.getAsDouble(), right.getAsDouble());
+    chassis.driveTeleop(left.getAsDouble(), right.getAsDouble());
   }
 
   // Make this return true when this Command no longer needs to run execute()

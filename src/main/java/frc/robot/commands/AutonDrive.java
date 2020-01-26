@@ -13,12 +13,12 @@ import frc.robot.subsystems.Spinner;
 
 public class AutonDrive extends CommandBase {
 
-  private final Chassis m_chassis;
-  private final Spinner m_spinner;
+  private final Chassis chassis;
+  private final Spinner spinner;
 
   public AutonDrive(Chassis chassis, Spinner spinner) {
-    m_chassis = chassis;
-    m_spinner = spinner;
+    this.chassis = chassis;
+    this.spinner = spinner;
     addRequirements(chassis, spinner);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);

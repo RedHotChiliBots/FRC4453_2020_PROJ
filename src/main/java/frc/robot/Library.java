@@ -19,11 +19,11 @@ package frc.robot;
  */
 public final class Library {
 
-	public static double Clip(double value, double max, double min) {
+	public double Clip(double value, double max, double min) {
 		return Math.min(Math.max(value, min), max);
 	}
 
-	public static int Clip(int value, int max, int min) {
+	public int Clip(int value, int max, int min) {
 		return Math.min(Math.max(value, min), max);
 	}
 }

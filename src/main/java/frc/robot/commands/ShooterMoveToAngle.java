@@ -12,12 +12,12 @@ import frc.robot.subsystems.Shooter;
 
 public class ShooterMoveToAngle extends CommandBase {
 
-	private Shooter m_subsystem;
+	private Shooter shooter;
 
-	public ShooterMoveToAngle(Shooter subsystem) {
+	public ShooterMoveToAngle(Shooter shooter) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		this.m_subsystem = subsystem;
+		this.shooter = shooter;
 	}
 
 	// Called just before this Command runs the first time

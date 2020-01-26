@@ -32,7 +32,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj2.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
+
 import frc.robot.Library;
 import frc.robot.Constants.ShooterConstants;
 
@@ -44,8 +44,8 @@ public class Shooter extends SubsystemBase {
   // here. Call these from Commands.
 
   private final CANSparkMax shootMotor = new CANSparkMax(ShooterConstants.kShooterMotor, MotorType.kBrushless);
-  private final TalonSRX angleMotor = new TalonSRX(ShooterConstants.kShooterMotor);
-  private final TalonSRX tiltMotor = new TalonSRX(ShooterConstants.kShooterMotor);
+  private final TalonSRX angleMotor = new TalonSRX(ShooterConstants.kAngleMotor);
+  private final TalonSRX tiltMotor = new TalonSRX(ShooterConstants.kTiltMotor);
 
   private final CANPIDController shootPIDController = new CANPIDController(shootMotor);
   private final CANEncoder shootEncoder = new CANEncoder(shootMotor);
@@ -75,25 +75,29 @@ public class Shooter extends SubsystemBase {
 
   // m_reverseLimit.enableLimitSwitch(false);
 
+  Library lib = new Library();
+
   public Shooter() {
     System.out.println("+++++ Shooter Constructor starting ...");
     // ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+
+    // Define Shooter motor
     shootMotor.restoreFactoryDefaults();
     shootMotor.clearFaults();
 
     shootMotor.setIdleMode(IdleMode.kBrake);
     shootMotor.setInverted(false);
 
-    shootPIDController.setP(Constants.ShooterConstants.kP);
-    shootPIDController.setI(Constants.ShooterConstants.kI);
-    shootPIDController.setD(Constants.ShooterConstants.kD);
-    shootPIDController.setIZone(Constants.ShooterConstants.kIz);
-    shootPIDController.setFF(Constants.ShooterConstants.kFF);
-    shootPIDController.setOutputRange(Constants.ShooterConstants.kMin, Constants.ShooterConstants.kMax);
+    shootPIDController.setP(ShooterConstants.kP);
+    shootPIDController.setI(ShooterConstants.kI);
+    shootPIDController.setD(ShooterConstants.kD);
+    shootPIDController.setIZone(ShooterConstants.kIz);
+    shootPIDController.setFF(ShooterConstants.kFF);
+    shootPIDController.setOutputRange(ShooterConstants.kMin, ShooterConstants.kMax);
 
-    shootEncoder.setVelocityConversionFactor(Constants.ShooterConstants.kVelFactor);
+    shootEncoder.setVelocityConversionFactor(ShooterConstants.kVelFactor);
 
-    /* Factory Default all hardware to prevent unexpected behaviour */
+    // Define Angle motor
     angleMotor.configFactoryDefault();
     angleMotor.clearStickyFaults();
 
@@ -112,12 +116,13 @@ public class Shooter extends SubsystemBase {
     angleMotor.configPeakOutputForward(1, ShooterConstants.kTimeoutMs);
     angleMotor.configPeakOutputReverse(-1, ShooterConstants.kTimeoutMs);
 
+    /* Config the PID values */
     angleMotor.config_kF(ShooterConstants.kPIDLoopIdx, ShooterConstants.kFF, ShooterConstants.kTimeoutMs);
     angleMotor.config_kP(ShooterConstants.kPIDLoopIdx, ShooterConstants.kP, ShooterConstants.kTimeoutMs);
     angleMotor.config_kI(ShooterConstants.kPIDLoopIdx, ShooterConstants.kI, ShooterConstants.kTimeoutMs);
     angleMotor.config_kD(ShooterConstants.kPIDLoopIdx, ShooterConstants.kD, ShooterConstants.kTimeoutMs);
 
-    /* Factory Default all hardware to prevent unexpected behaviour */
+    // Define Tilt motor
     tiltMotor.configFactoryDefault();
     tiltMotor.clearStickyFaults();
 
@@ -136,6 +141,7 @@ public class Shooter extends SubsystemBase {
     tiltMotor.configPeakOutputForward(1, ShooterConstants.kTimeoutMs);
     tiltMotor.configPeakOutputReverse(-1, ShooterConstants.kTimeoutMs);
 
+    /* Config PID Values */
     tiltMotor.config_kF(ShooterConstants.kPIDLoopIdx, ShooterConstants.kFF, ShooterConstants.kTimeoutMs);
     tiltMotor.config_kP(ShooterConstants.kPIDLoopIdx, ShooterConstants.kP, ShooterConstants.kTimeoutMs);
     tiltMotor.config_kI(ShooterConstants.kPIDLoopIdx, ShooterConstants.kI, ShooterConstants.kTimeoutMs);
@@ -154,7 +160,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShootSetPoint(double rpm) {
-    this.setPoint = Library.Clip(rpm, ShooterConstants.kMaxRPM, ShooterConstants.kMinRPM);
+    this.setPoint = lib.Clip(rpm, ShooterConstants.kMaxRPM, ShooterConstants.kMinRPM);
     shootPIDController.setReference(setPoint, ControlType.kVelocity);
   }
 
