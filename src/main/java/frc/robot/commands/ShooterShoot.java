@@ -12,10 +12,10 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.*;
 
 public class ShooterShoot extends CommandBase {
-  private final Shooter m_shooter;
+  private final Shooter shooter;
 
   public ShooterShoot(Shooter shooter) {
-    m_shooter = shooter;
+    this.shooter = shooter;
     addRequirements(shooter);
     // super(timeout);
     // Use requires() here to declare subsystem dependencies
@@ -25,13 +25,13 @@ public class ShooterShoot extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    m_shooter.setShootSetPoint(ShooterConstants.shootRPMs);
+    shooter.setShootSetPoint(ShooterConstants.shootRPMs);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    // m_shooter.shoot(ShooterConstants.shootSpeed);
+    // shooter.shoot(ShooterConstants.shootSpeed);
   }
 
   // Make this return true when this Command no longer needs to run execute()

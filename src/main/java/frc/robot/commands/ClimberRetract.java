@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class ClimberRetract extends CommandBase {
-  private final Climber m_climber;
+  private final Climber climber;
 
   public ClimberRetract(Climber climber) {
-    m_climber = climber;
+    this.climber = climber;
     addRequirements(climber);
     // super(timeout);
     // Use requires() here to declare subsystem dependencies
@@ -24,7 +24,7 @@ public class ClimberRetract extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    m_climber.climberRetract();
+    climber.climberRetract();
   }
 
   // Called repeatedly when this Command is scheduled to run

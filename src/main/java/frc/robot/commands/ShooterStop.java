@@ -12,10 +12,10 @@ import frc.robot.subsystems.Shooter;
 
 public class ShooterStop extends CommandBase {
 
-  private final Shooter m_shooter;
+  private final Shooter shooter;
 
   public ShooterStop(Shooter shooter) {
-    m_shooter = shooter;
+    this.shooter = shooter;
     addRequirements(shooter);
     // super(timeout);
     // Use requires() here to declare subsystem dependencies
@@ -30,7 +30,7 @@ public class ShooterStop extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_shooter.stopShoot();
+    shooter.stopShoot();
   }
 
   @Override

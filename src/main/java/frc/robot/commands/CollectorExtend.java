@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Collector;
 
 public class CollectorExtend extends CommandBase {
-  private final Collector m_collector;
+  private final Collector collector;
 
   public CollectorExtend(Collector collector) {
-    m_collector = collector;
+    this.collector = collector;
     addRequirements(collector);
     // super(timeout);
     // Use requires() here to declare subsystem dependencies
@@ -24,7 +24,7 @@ public class CollectorExtend extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    m_collector.collectorExtend();
+    collector.collectorExtend();
   }
 
   // Called repeatedly when this Command is scheduled to run

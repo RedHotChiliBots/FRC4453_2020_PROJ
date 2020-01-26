@@ -14,10 +14,10 @@ import frc.robot.subsystems.Collector;
  * Add your docs here.
  */
 public class CollectorRetract extends CommandBase {
-	private final Collector m_collector;
+	private final Collector collector;
 
 	public CollectorRetract(Collector collector) {
-		m_collector = collector;
+		this.collector = collector;
 		addRequirements(collector);
 		// super(timeout);
 		// Use requires() here to declare subsystem dependencies
@@ -27,7 +27,7 @@ public class CollectorRetract extends CommandBase {
 	// Called just before this Command runs the first time
 	@Override
 	public void initialize() {
-		m_collector.collectorRetract();
+		collector.collectorRetract();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
