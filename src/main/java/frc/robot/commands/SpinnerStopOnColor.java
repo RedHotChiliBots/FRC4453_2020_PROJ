@@ -9,12 +9,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.Constants.SpinnerConstants.COLOR;
 import frc.robot.subsystems.Spinner;
 
-public class SpinnerStopOnColor extends PIDCommand {
+public class SpinnerStopOnColor extends CommandBase {
 
   private Spinner spinner;
   private COLOR color;
@@ -22,19 +23,8 @@ public class SpinnerStopOnColor extends PIDCommand {
   char gotoColor;
 
   public SpinnerStopOnColor(Spinner spinner) {
-    super(
-        // Create PID Controller
-        new PIDController(SpinnerConstants.kP, SpinnerConstants.kI, SpinnerConstants.kD),
-        // Close loop on RPMs
-        spinner::getRPMs,
-        // Set set point
-        (double) SpinnerConstants.kStopOnColorRPMs,
-        // Pipe output to spinner motor
-        output -> spinner.setRPMs(output),
-        // Require the spinner
-        spinner);
-
     this.spinner = spinner;
+    addRequirements(spinner);
   }
 
   // Called just before this Command runs the first time
@@ -45,7 +35,7 @@ public class SpinnerStopOnColor extends PIDCommand {
     gameData = "Y";
     if (gameData.length() > 0) {
       gotoColor = gameData.charAt(0);
-      // spinner.setSetPoint(SpinnerConstants.kStopOnColorRPMs);
+      spinner.setRPMs(SpinnerConstants.kStopOnColorRPMs);
     }
   }
 
@@ -64,7 +54,6 @@ public class SpinnerStopOnColor extends PIDCommand {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    // spinner.setSetPoint(SpinnerConstants.kStopRPMs);
-    spinner.stopSpin();
+    spinner.setRPMs(SpinnerConstants.kStopRPMs);
   }
 }

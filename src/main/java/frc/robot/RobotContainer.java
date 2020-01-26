@@ -88,7 +88,9 @@ public class RobotContainer {
     chassis.setDefaultCommand(
         new RunCommand(() -> chassis.driveTeleop(m_driver.getY(Hand.kLeft), m_driver.getY(Hand.kRight)), chassis));
 
-    spinner.setDefaultCommand(new RunCommand(() -> spinner.setSetPoint(Constants.SpinnerConstants.kStopRPMs), spinner));
+    spinner.setDefaultCommand(new RunCommand(() -> spinner.setRPMs(Constants.SpinnerConstants.kStopRPMs), spinner));
+
+    shooter.setDefaultCommand(new RunCommand(() -> shooter.stopShoot(), shooter));
 
     // shooter.setDefaultCommand(new ShooterStop(shooter));
 
@@ -109,9 +111,9 @@ public class RobotContainer {
     // Define Operator controls
     new JoystickButton(m_operator, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));
     new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
+    new JoystickButton(m_operator, Button.kX.value).whenPressed(new SpinnerStow(spinner));
 
     new JoystickButton(m_operator, Button.kY.value).whenHeld(new ShooterShoot(shooter));
-    new JoystickButton(m_operator, Button.kX.value).whenPressed(new ShooterStop(shooter));
 
     new JoystickButton(m_operator, Button.kStart.value).whenPressed(new SpinnerStow(spinner));
 

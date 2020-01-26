@@ -8,36 +8,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.subsystems.Spinner;
 
-public class SpinnerCountRevs extends PIDCommand {
+public class SpinnerCountRevs extends CommandBase {
 
   private final Spinner spinner;
   // private final double setPoint = SpinnerConstants.kCountRevRPMs;
 
   public SpinnerCountRevs(Spinner spinner) {
-    super(
-        // Create PID Controller
-        new PIDController(SpinnerConstants.kP, SpinnerConstants.kI, SpinnerConstants.kD),
-        // Close loop on RPMs
-        spinner::getRPMs,
-        // Set set point
-        (double) SpinnerConstants.kCountRevRPMs,
-        // Pipe output to spinner motor
-        output -> spinner.setRPMs(output),
-        // Require the spinner
-        spinner);
-
     this.spinner = spinner;
+    addRequirements(spinner);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
     spinner.countColor(true);
-    // spinner.setSetPoint(SpinnerConstants.kCountRevRPMs);
+
+    spinner.setRPMs(SpinnerConstants.kCountRevRPMs);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -56,6 +47,6 @@ public class SpinnerCountRevs extends PIDCommand {
   @Override
   public void end(final boolean interrupted) {
     // spinner.setSetPoint(SpinnerConstants.kStopRPMs);
-    spinner.stopSpin();
+    spinner.setRPMs(0.0);
   }
 }

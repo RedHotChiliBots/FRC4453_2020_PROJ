@@ -20,8 +20,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -45,9 +47,10 @@ public class Spinner extends SubsystemBase {
   // spinMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature,
   // SpinnerConstants.kTicsPerRev);
   private final TalonSRX spinMotor = new TalonSRX(SpinnerConstants.kSpinnerMotor);
-  private CANPIDController m_spinPIDController = spinMotor.getPIDController();
-  private CANEncoder m_spinEncoder = spinMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature,
-      SpinnerConstants.kTicsPerRev);
+  // private CANPIDController m_spinPIDController = spinMotor.getPIDController();
+  // private CANEncoder m_spinEncoder =
+  // spinMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature,
+  // SpinnerConstants.kTicsPerRev);
 
   /**
    * Change the I2C port below to match the connection of your color sensor
@@ -74,7 +77,7 @@ public class Spinner extends SubsystemBase {
    */
   private Map<COLOR, Integer> colorCounter = new HashMap<>();
   private Map<Character, COLOR> stopOnColor = new HashMap<>();
-  private int setPoint = 0;
+  private double setPoint = 0.0;
   private COLOR oldColor = COLOR.UNKNOWN;
 
   private Color detectedColor;
@@ -105,6 +108,15 @@ public class Spinner extends SubsystemBase {
     spinMotor.configPeakOutputReverse(-1, SpinnerConstants.kTimeoutMs);
 
     /* Config the Velocity closed loop gains in slot0 */
+    // Configure PID Controller
+    // spinMotor.setP(SpinnerConstants.kP);
+    // spinMotor.setI(SpinnerConstants.kI);
+    // m_spinPIDController.setD(SpinnerConstants.kD);
+    // m_spinPIDController.setIZone(SpinnerConstants.kIz);
+    // m_spinPIDController.setFF(SpinnerConstants.kFF);
+    // m_spinPIDController.setOutputRange(SpinnerConstants.kMinRPM,
+    // SpinnerConstants.kMaxRPM);
+
     spinMotor.config_kF(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kFF, SpinnerConstants.kTimeoutMs);
     spinMotor.config_kP(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kP, SpinnerConstants.kTimeoutMs);
     spinMotor.config_kI(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kI, SpinnerConstants.kTimeoutMs);
@@ -113,17 +125,6 @@ public class Spinner extends SubsystemBase {
     // Configure Motor
     spinMotor.setNeutralMode(NeutralMode.Brake);
     spinMotor.setInverted(false);
-
-    // Configure PID Controller
-    m_spinPIDController.setP(SpinnerConstants.kP);
-    m_spinPIDController.setI(SpinnerConstants.kI);
-    m_spinPIDController.setD(SpinnerConstants.kD);
-    m_spinPIDController.setIZone(SpinnerConstants.kIz);
-    m_spinPIDController.setFF(SpinnerConstants.kFF);
-    m_spinPIDController.setOutputRange(SpinnerConstants.kMinRPM, SpinnerConstants.kMaxRPM);
-
-    // Configure Encoder
-    m_spinEncoder.setVelocityConversionFactor(SpinnerConstants.kVelFactor);
 
     // Initialize color detection
     m_colorMatcher.addColorMatch(SpinnerConstants.kGreenTarget);
@@ -139,7 +140,7 @@ public class Spinner extends SubsystemBase {
 
     // Initialize local setup
     initColorCounter();
-    setSetPoint(SpinnerConstants.kStopRPMs);
+    setRPMs(SpinnerConstants.kStopRPMs);
 
     System.out.println("----- Spinner Constructor finished ...");
   }
@@ -163,15 +164,16 @@ public class Spinner extends SubsystemBase {
     SmartDashboard.putString("Spin Color Counters", cntString);
 
     SmartDashboard.putNumber("Spin SetPoint", setPoint);
-    SmartDashboard.putNumber("Spin RPMs", m_spinEncoder.getVelocity());
+    SmartDashboard.putNumber("Spin RPMs", getRPMs());
   }
 
   public double getRPMs() {
-    return m_spinEncoder.getVelocity();
+    return spinMotor.getSelectedSensorVelocity(SpinnerConstants.kPIDLoopIdx) / SpinnerConstants.kVelFactor;
   }
 
   public void setRPMs(double rpm) {
-    spinMotor.set(rpm);
+    setPoint = rpm;
+    spinMotor.set(ControlMode.Velocity, rpm * SpinnerConstants.kVelFactor);
   }
 
   /**
@@ -179,11 +181,13 @@ public class Spinner extends SubsystemBase {
    * 
    * @param rpm - Target RPMs
    */
-  public void setSetPoint(int rpm) {
-    this.setPoint = Library.Clip(rpm, SpinnerConstants.kMaxRPM, SpinnerConstants.kMinRPM);
-    SmartDashboard.putString("Clip", "RPM:" + Integer.toString(rpm) + "   SetPoint:" + Integer.toString(this.setPoint));
-    m_spinPIDController.setReference(this.setPoint, ControlType.kVelocity);
-  }
+  // public void setSetPoint(int rpm) {
+  // this.setPoint = Library.Clip(rpm, SpinnerConstants.kMaxRPM,
+  // SpinnerConstants.kMinRPM);
+  // SmartDashboard.putString("Clip", "RPM:" + Integer.toString(rpm) + "
+  // SetPoint:" + Integer.toString(this.setPoint));
+  // m_spinPIDController.setReference(this.setPoint, ControlType.kVelocity);
+  // }
 
   /**
    * Convert Game Color from FMS to Control Panel Color to detect and stop. The
@@ -270,16 +274,6 @@ public class Spinner extends SubsystemBase {
       }
     }
     return sum;
-  }
-
-  // public void spin(double setPoint) {
-  // // shootMotor.set(ShooterConstants.shootSpeed);
-  // // double setPoint = m_stick.getY() * maxRPM;
-  // m_spinPIDController.setReference(setPoint, ControlType.kVelocity);
-  // }
-
-  public void stopSpin() {
-    spinMotor.set(0);
   }
 
   // @Override
