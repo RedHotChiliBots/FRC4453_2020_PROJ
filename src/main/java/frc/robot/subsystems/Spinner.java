@@ -19,8 +19,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
@@ -31,7 +32,7 @@ import frc.robot.Constants.SpinnerConstants.COLOR;
 /**
  * Add your docs here.
  */
-public class Spinner extends SubsystemBase {
+public class Spinner extends PIDSubsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
@@ -72,6 +73,17 @@ public class Spinner extends SubsystemBase {
   Library lib = new Library();
 
   public Spinner() {
+    // Intert a subsystem name and PID values here
+    super(new PIDController(SpinnerConstants.kP, SpinnerConstants.kI, SpinnerConstants.kD));
+
+    getController().setTolerance(SpinnerConstants.kShooterToleranceRPS);
+    m_shooterEncoder.setDistancePerPulse(SpinnerConstants.kEncoderDistancePerPulse);
+    setSetpoint(SpinnerConstants.kStopRPMs);
+    // Use these to get going:
+    // setSetpoint() - Sets where the PID controller should move the system
+    // to
+    // enable() - Enables the PID controller.
+
     System.out.println("+++++ Spinner Constructor starting ...");
 
     /* Factory Default all hardware to prevent unexpected behaviour */
@@ -143,6 +155,16 @@ public class Spinner extends SubsystemBase {
 
     SmartDashboard.putNumber("Spin SetPoint", setPoint);
     SmartDashboard.putNumber("Spin RPMs", getRPMs());
+  }
+
+  @Override
+  public void useOutput(double output, double setpoint) {
+    m_shooterMotor.setVoltage(output + m_shooterFeedforward.calculate(setpoint));
+  }
+
+  @Override
+  public double getMeasurement() {
+    return getRPMs();
   }
 
   /**
