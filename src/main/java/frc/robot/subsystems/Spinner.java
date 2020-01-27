@@ -145,27 +145,24 @@ public class Spinner extends SubsystemBase {
     SmartDashboard.putNumber("Spin RPMs", getRPMs());
   }
 
+  /**
+   * Get current speed (rpms) of the Spinner motor
+   * 
+   * @return rpm - scaled speed to rpms
+   */
   public double getRPMs() {
     return spinMotor.getSelectedSensorVelocity(SpinnerConstants.kPIDLoopIdx) / SpinnerConstants.kVelFactor;
   }
 
+  /**
+   * Set speed (rpms) of Spinner motor/gearbox.
+   * 
+   * @param rpm - desired speed (rpms) of motor/gearbox
+   */
   public void setRPMs(double rpm) {
     setPoint = rpm;
     spinMotor.set(ControlMode.Velocity, rpm * SpinnerConstants.kVelFactor);
   }
-
-  /**
-   * Set the target RPMs
-   * 
-   * @param rpm - Target RPMs
-   */
-  // public void setSetPoint(int rpm) {
-  // this.setPoint = lib.Clip(rpm, SpinnerConstants.kMaxRPM,
-  // SpinnerConstants.kMinRPM);
-  // SmartDashboard.putString("Clip", "RPM:" + Integer.toString(rpm) + "
-  // SetPoint:" + Integer.toString(this.setPoint));
-  // m_spinPIDController.setReference(this.setPoint, ControlType.kVelocity);
-  // }
 
   /**
    * Convert Game Color from FMS to Control Panel Color to detect and stop. The
