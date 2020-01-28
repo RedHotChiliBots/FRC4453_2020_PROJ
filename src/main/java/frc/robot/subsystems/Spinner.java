@@ -20,6 +20,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,7 +32,7 @@ import frc.robot.Constants.SpinnerConstants.COLOR;
 /**
  * Add your docs here.
  */
-public class Spinner extends PIDSubsystem {
+public class Spinner extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
@@ -73,16 +74,17 @@ public class Spinner extends PIDSubsystem {
   private final StringBuilder _sb = new StringBuilder();
 
   public Spinner() {
-    // Intert a subsystem name and PID values here
-    super(new PIDController(SpinnerConstants.kP, SpinnerConstants.kI, SpinnerConstants.kD));
+    // // Intert a subsystem name and PID values here
+    // super(new PIDController(SpinnerConstants.kP, SpinnerConstants.kI,
+    // SpinnerConstants.kD));
 
-    getController().setTolerance(SpinnerConstants.kShooterToleranceRPS);
-    m_shooterEncoder.setDistancePerPulse(SpinnerConstants.kEncoderDistancePerPulse);
-    setSetpoint(SpinnerConstants.kStopRPMs);
-    // Use these to get going:
-    // setSetpoint() - Sets where the PID controller should move the system
-    // to
-    // enable() - Enables the PID controller.
+    // getController().setTolerance(SpinnerConstants.kShooterToleranceRPS);
+    // m_shooterEncoder.setDistancePerPulse(SpinnerConstants.kEncoderDistancePerPulse);
+    // setSetpoint(SpinnerConstants.kStopRPMs);
+    // // Use these to get going:
+    // // setSetpoint() - Sets where the PID controller should move the system
+    // // to
+    // // enable() - Enables the PID controller.
 
     System.out.println("+++++ Spinner Constructor starting ...");
 
@@ -182,15 +184,15 @@ public class Spinner extends PIDSubsystem {
     _sb.setLength(0);
   }
 
-  @Override
-  public void useOutput(double output, double setpoint) {
-    m_shooterMotor.setVoltage(output + m_shooterFeedforward.calculate(setpoint));
-  }
+  // @Override
+  // public void useOutput(double output, double setpoint) {
+  // m_shooterMotor.setVoltage(output + m_shooterFeedforward.calculate(setpoint));
+  // }
 
-  @Override
-  public double getMeasurement() {
-    return getRPMs();
-  }
+  // @Override
+  // public double getMeasurement() {
+  // return getRPMs();
+  // }
 
   /**
    * Get current speed (rpms) of the Spinner motor
