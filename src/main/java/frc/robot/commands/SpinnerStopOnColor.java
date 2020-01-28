@@ -30,7 +30,7 @@ public class SpinnerStopOnColor extends CommandBase {
   public void initialize() {
     gotoColor = 'X';
     gameData = DriverStation.getInstance().getGameSpecificMessage();
-    gameData = "Y";
+    // gameData = "Y";
     if (gameData.length() > 0) {
       gotoColor = gameData.charAt(0);
       spinner.setRPMs(SpinnerConstants.kStopOnColorRPMs);
@@ -46,7 +46,7 @@ public class SpinnerStopOnColor extends CommandBase {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return ((spinner.getStopOnColor(gotoColor) == color) || (gotoColor == 'X'));
+    return ((gotoColor == 'X') || (spinner.getStopOnColor(gotoColor) == color));
   }
 
   // Called once after isFinished returns true
