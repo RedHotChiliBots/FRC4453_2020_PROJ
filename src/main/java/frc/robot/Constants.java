@@ -101,26 +101,26 @@ public final class Constants {
 		public static final int kPIDLoopIdx = 0;
 		public static final int kTimeoutMs = 30;
 
-		public static final double kP = 0.00005;
-		public static final double kI = 0.000001;
+		public static final double kP = 1.0; // 0.00005;
+		public static final double kI = 0.0; // 0.000001;
 		public static final double kD = 0.0;
 		public static final double kIz = 0.0;
 		public static final double kFF = 0.0;
 		public static final double kMinOutput = 0.0;
 		public static final double kMaxOutput = 1.0;
 		public static final int kMinRPM = 0;
-		public static final int kMaxRPM = 14984; // 80% of 775 Free Spin RPMs
+		public static final int kMaxRPM = 15000; // 80% of 775 Free Spin RPMs
 
-		public static final double kWheelDiameter = 3.0;
+		public static final double kWheelDiameter = 2.25;
 		public static final int kTicsPerRev = 48; // RS7 encoder on 775 motor
 		public static final int kGearBoxRatio = 16;
 		public static final int k100msPerMin = 600; // constant
 		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
 		// (SpinnerConstants.kWheelDiameter * Math.PI) / SpinnerConstants.kTicsPerRev /
 		// kGearBoxRatio;
-		public static final int kStopOnColorRPMs = 1000;
-		public static final int kCountRevRPMs = 10240;
-		public static final int kStopRPMs = 0;
+		public static final int kStopOnColorRPMs = 2500; // Guess, so far
+		public static final int kCountRevRPMs = 13500; // Given 2.25" wheel
+		public static final int kStopRPMs = 0; // Stop spinning
 
 		public static enum COLOR {
 			GREEN, BLUE, YELLOW, RED, UNKNOWN;

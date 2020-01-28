@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
-import frc.robot.Library;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.Constants.SpinnerConstants.COLOR;
 
@@ -69,7 +68,8 @@ public class Spinner extends SubsystemBase {
   private ColorMatchResult match;
   private COLOR colorString = COLOR.UNKNOWN;
 
-  Library lib = new Library();
+  /* String for output */
+  private final StringBuilder _sb = new StringBuilder();
 
   public Spinner() {
     System.out.println("+++++ Spinner Constructor starting ...");
@@ -82,11 +82,10 @@ public class Spinner extends SubsystemBase {
     spinMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, SpinnerConstants.kPIDLoopIdx,
         SpinnerConstants.kTimeoutMs);
 
-    /**
-     * Phase sensor accordingly. Positive Sensor Reading should match Green
-     * (blinking) Leds on Talon
-     */
-    spinMotor.setSensorPhase(true);
+    // Conifigure motor controller
+    spinMotor.setSensorPhase(true); // Positive Sensor Reading should match Green (blinking) Leds on Talon
+    spinMotor.setNeutralMode(NeutralMode.Brake); // Brake motor on neutral input
+    spinMotor.setInverted(false); // Run motor in normal rotation with positive input
 
     /* Config the peak and nominal outputs */
     spinMotor.configNominalOutputForward(0, SpinnerConstants.kTimeoutMs);
@@ -99,10 +98,6 @@ public class Spinner extends SubsystemBase {
     spinMotor.config_kP(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kP, SpinnerConstants.kTimeoutMs);
     spinMotor.config_kI(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kI, SpinnerConstants.kTimeoutMs);
     spinMotor.config_kD(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kD, SpinnerConstants.kTimeoutMs);
-
-    // Configure Motor
-    spinMotor.setNeutralMode(NeutralMode.Brake);
-    spinMotor.setInverted(false);
 
     // Initialize color detection
     m_colorMatcher.addColorMatch(SpinnerConstants.kGreenTarget);
@@ -143,6 +138,36 @@ public class Spinner extends SubsystemBase {
 
     SmartDashboard.putNumber("Spin SetPoint", setPoint);
     SmartDashboard.putNumber("Spin RPMs", getRPMs());
+
+    /* Get Talon/Victor's current output percentage */
+    double motorOutput = spinMotor.getMotorOutputPercent();
+
+    /* Prepare line to print */
+    _sb.append("\tSpin:");
+    /* Cast to int to remove decimal places */
+    _sb.append((int) (motorOutput * 100));
+    _sb.append("%"); // Percent
+
+    _sb.append("\tSPD:");
+    _sb.append(spinMotor.getSelectedSensorVelocity(SpinnerConstants.kPIDLoopIdx));
+    _sb.append("u / "); // Native units
+    _sb.append(getRPMs());
+    _sb.append("rpm"); // Native units
+
+    /* Append more signals to print when in speed mode. */
+    _sb.append("\tERR:");
+    _sb.append(spinMotor.getClosedLoopError(SpinnerConstants.kPIDLoopIdx));
+
+    _sb.append("\tTGT:");
+    _sb.append(setPoint);
+    _sb.append("rpm / "); // Native units
+    _sb.append(setPoint * SpinnerConstants.kVelFactor);
+    _sb.append("u / "); // Native units
+
+    SmartDashboard.putString("Spin Updates", _sb.toString());
+
+    /* Reset built string */
+    _sb.setLength(0);
   }
 
   /**
