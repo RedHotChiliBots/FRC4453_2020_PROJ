@@ -101,8 +101,8 @@ public final class Constants {
 		public static final int kPIDLoopIdx = 0;
 		public static final int kTimeoutMs = 30;
 
-		public static final double kP = 1.0; // 0.00005;
-		public static final double kI = 0.0; // 0.000001;
+		public static final double kP = 1.0;
+		public static final double kI = 0.005;
 		public static final double kD = 0.0;
 		public static final double kIz = 0.0;
 		public static final double kFF = 0.0;
@@ -116,12 +116,12 @@ public final class Constants {
 		public static final double kWheelDiameter = 2.25;
 		public static final double kWheelRPM = (kCPDiameter / kWheelDiameter) * kCPMaxRPM;
 
-		public static final double kTicsPerRev = 12 * 4; // RS7 quad encoder on 775 motor
+		public static final double kTicsPerRev = 12; // * 4; // RS7 quad encoder on 775 motor
 		public static final double kGearBoxRatio = 16;
 		public static final double k100msPerMin = 600; // constant
 		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
 
-		public static final double kStopOnColorRPMs = 100; // Guess, so far
+		public static final double kStopOnColorRPMs = 250; // Guess, so far
 		public static final double kCountRevRPMs = kWheelRPM; // Given 2.25" wheel
 		public static final double kStopRPMs = 0; // Stop spinning
 

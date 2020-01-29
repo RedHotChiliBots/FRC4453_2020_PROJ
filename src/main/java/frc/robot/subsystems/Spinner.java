@@ -80,7 +80,7 @@ public class Spinner extends SubsystemBase {
         SpinnerConstants.kTimeoutMs);
 
     // Conifigure motor controller
-    spinMotor.setSensorPhase(true); // Positive Sensor Reading should match Green (blinking) Leds on Talon
+    spinMotor.setSensorPhase(false); // Positive Sensor Reading should match Green (blinking) Leds on Talon
     spinMotor.setNeutralMode(NeutralMode.Brake); // Brake motor on neutral input
     spinMotor.setInverted(false); // Run motor in normal rotation with positive input
 
