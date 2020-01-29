@@ -111,15 +111,18 @@ public final class Constants {
 		public static final double kMinRPM = 0;
 		public static final double kMaxRPM = 15000; // 80% of 775 Free Spin RPMs
 
+		public static final double kCPMaxRPM = 60; // Rules limit CP to 1 rps
+		public static final double kCPDiameter = 32; // inches (2' 8")
 		public static final double kWheelDiameter = 2.25;
-		public static final double kTicsPerRev = 12 * 4; // RS7 encoder on 775 motor
+		public static final double kWheelRPM = (kCPDiameter / kWheelDiameter) * kCPMaxRPM;
+
+		public static final double kTicsPerRev = 12 * 4; // RS7 quad encoder on 775 motor
 		public static final double kGearBoxRatio = 16;
 		public static final double k100msPerMin = 600; // constant
 		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
-		// (SpinnerConstants.kWheelDiameter * Math.PI) / SpinnerConstants.kTicsPerRev /
-		// kGearBoxRatio;
-		public static final double kStopOnColorRPMs = 853; // Guess, so far
-		public static final double kCountRevRPMs = 100; // Given 2.25" wheel
+
+		public static final double kStopOnColorRPMs = 100; // Guess, so far
+		public static final double kCountRevRPMs = kWheelRPM; // Given 2.25" wheel
 		public static final double kStopRPMs = 0; // Stop spinning
 
 		public static enum COLOR {

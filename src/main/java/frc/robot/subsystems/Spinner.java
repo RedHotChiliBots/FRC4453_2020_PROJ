@@ -19,10 +19,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
@@ -69,9 +67,6 @@ public class Spinner extends SubsystemBase {
   private Color detectedColor;
   private ColorMatchResult match;
   private COLOR colorString = COLOR.UNKNOWN;
-
-  /* String for output */
-  private final StringBuilder _sb = new StringBuilder();
 
   public Spinner() {
     System.out.println("+++++ Spinner Constructor starting ...");
@@ -138,11 +133,13 @@ public class Spinner extends SubsystemBase {
     cntString += sumColor();
     SmartDashboard.putString("Spin Color Counters", cntString);
 
+    SmartDashboard.putNumber("Spin Calc kVelFactor", SpinnerConstants.kVelFactor);
+    SmartDashboard.putNumber("Spin Calc kWheel RPM", SpinnerConstants.kWheelRPM);
     SmartDashboard.putNumber("Spin SetPoint (rpm)", setPoint);
     SmartDashboard.putNumber("Spin SetPoint (unit)", setPoint * SpinnerConstants.kVelFactor);
     SmartDashboard.putNumber("Spin Target (%)", spinMotor.getMotorOutputPercent() * 100);
     SmartDashboard.putNumber("Spin Target (rpm)", getRPMs());
-    SmartDashboard.putNumber("Spin Target (units)", spinMotor.getSelectedSensorVelocity(SpinnerConstants.kPIDLoopIdx));
+    SmartDashboard.putNumber("Spin Target (units)", getRPMs() * SpinnerConstants.kVelFactor);
     SmartDashboard.putNumber("Spin Error (units)", spinMotor.getClosedLoopError(SpinnerConstants.kPIDLoopIdx));
   }
 
