@@ -74,18 +74,6 @@ public class Spinner extends SubsystemBase {
   private final StringBuilder _sb = new StringBuilder();
 
   public Spinner() {
-    // // Intert a subsystem name and PID values here
-    // super(new PIDController(SpinnerConstants.kP, SpinnerConstants.kI,
-    // SpinnerConstants.kD));
-
-    // getController().setTolerance(SpinnerConstants.kShooterToleranceRPS);
-    // m_shooterEncoder.setDistancePerPulse(SpinnerConstants.kEncoderDistancePerPulse);
-    // setSetpoint(SpinnerConstants.kStopRPMs);
-    // // Use these to get going:
-    // // setSetpoint() - Sets where the PID controller should move the system
-    // // to
-    // // enable() - Enables the PID controller.
-
     System.out.println("+++++ Spinner Constructor starting ...");
 
     /* Factory Default all hardware to prevent unexpected behaviour */
@@ -150,49 +138,13 @@ public class Spinner extends SubsystemBase {
     cntString += sumColor();
     SmartDashboard.putString("Spin Color Counters", cntString);
 
-    SmartDashboard.putNumber("Spin SetPoint", setPoint);
-    SmartDashboard.putNumber("Spin RPMs", getRPMs());
-
-    /* Get Talon/Victor's current output percentage */
-    double motorOutput = spinMotor.getMotorOutputPercent();
-
-    /* Prepare line to print */
-    _sb.append("\tSpin:");
-    /* Cast to int to remove decimal places */
-    _sb.append((int) (motorOutput * 100));
-    _sb.append("%"); // Percent
-
-    _sb.append("\tSPD:");
-    _sb.append(spinMotor.getSelectedSensorVelocity(SpinnerConstants.kPIDLoopIdx));
-    _sb.append("u / "); // Native units
-    _sb.append(getRPMs());
-    _sb.append("rpm"); // Native units
-
-    /* Append more signals to print when in speed mode. */
-    _sb.append("\tERR:");
-    _sb.append(spinMotor.getClosedLoopError(SpinnerConstants.kPIDLoopIdx));
-
-    _sb.append("\tTGT:");
-    _sb.append(setPoint);
-    _sb.append("rpm / "); // Native units
-    _sb.append(setPoint * SpinnerConstants.kVelFactor);
-    _sb.append("u / "); // Native units
-
-    SmartDashboard.putString("Spin Updates", _sb.toString());
-
-    /* Reset built string */
-    _sb.setLength(0);
+    SmartDashboard.putNumber("Spin SetPoint (rpm)", setPoint);
+    SmartDashboard.putNumber("Spin SetPoint (unit)", setPoint * SpinnerConstants.kVelFactor);
+    SmartDashboard.putNumber("Spin Target (%)", spinMotor.getMotorOutputPercent() * 100);
+    SmartDashboard.putNumber("Spin Target (rpm)", getRPMs());
+    SmartDashboard.putNumber("Spin Target (units)", spinMotor.getSelectedSensorVelocity(SpinnerConstants.kPIDLoopIdx));
+    SmartDashboard.putNumber("Spin Error (units)", spinMotor.getClosedLoopError(SpinnerConstants.kPIDLoopIdx));
   }
-
-  // @Override
-  // public void useOutput(double output, double setpoint) {
-  // m_shooterMotor.setVoltage(output + m_shooterFeedforward.calculate(setpoint));
-  // }
-
-  // @Override
-  // public double getMeasurement() {
-  // return getRPMs();
-  // }
 
   /**
    * Get current speed (rpms) of the Spinner motor

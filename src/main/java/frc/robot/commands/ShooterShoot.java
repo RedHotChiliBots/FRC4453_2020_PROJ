@@ -25,19 +25,19 @@ public class ShooterShoot extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    shooter.setShootSetPoint(ShooterConstants.shootRPMs);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
+    shooter.setShootSetPoint(ShooterConstants.shootRPMs);
     // shooter.shoot(ShooterConstants.shootSpeed);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true

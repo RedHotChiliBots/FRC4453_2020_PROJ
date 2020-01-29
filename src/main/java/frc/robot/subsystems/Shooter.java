@@ -87,7 +87,7 @@ public class Shooter extends SubsystemBase {
     shootMotor.clearFaults();
 
     shootMotor.setIdleMode(IdleMode.kBrake);
-    shootMotor.setInverted(false);
+    shootMotor.setInverted(true);
 
     shootPIDController.setP(ShooterConstants.kP);
     shootPIDController.setI(ShooterConstants.kI);
@@ -161,8 +161,10 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShootSetPoint(double rpm) {
-    this.setPoint = lib.Clip(rpm, ShooterConstants.kMaxRPM, ShooterConstants.kMinRPM);
-    shootPIDController.setReference(setPoint, ControlType.kVelocity);
+    shootMotor.set(0.9); // temporary while testing
+    // this.setPoint = lib.Clip(rpm, ShooterConstants.kMaxRPM,
+    // ShooterConstants.kMinRPM);
+    // shootPIDController.setReference(setPoint, ControlType.kVelocity);
   }
 
   public void shoot(double setPoint) {
