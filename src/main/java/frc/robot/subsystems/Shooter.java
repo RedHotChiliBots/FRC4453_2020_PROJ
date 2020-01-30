@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -35,6 +36,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Library;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.TiltConstants;
+import frc.robot.Constants.AngleConstants;
 
 /**
  * Add your docs here.
@@ -44,8 +47,8 @@ public class Shooter extends SubsystemBase {
   // here. Call these from Commands.
 
   private final CANSparkMax shootMotor = new CANSparkMax(ShooterConstants.kShooterMotor, MotorType.kBrushless);
-  private final TalonSRX angleMotor = new TalonSRX(ShooterConstants.kAngleMotor);
-  private final TalonSRX tiltMotor = new TalonSRX(ShooterConstants.kTiltMotor);
+  private final TalonSRX angleMotor = new TalonSRX(AngleConstants.kAngleMotor);
+  private final TalonSRX tiltMotor = new TalonSRX(TiltConstants.kTiltMotor);
 
   private final CANPIDController shootPIDController = new CANPIDController(shootMotor);
   private final CANEncoder shootEncoder = new CANEncoder(shootMotor);
@@ -60,7 +63,9 @@ public class Shooter extends SubsystemBase {
   double y = ty.getDouble(0.0);
   double area = ta.getDouble(0.0);
 
-  private double setPoint = 0.0;
+  private double shooterSetPoint = 0.0;
+  private double tiltSetPoint = 0.0;
+  private double angleSetPoint = 0.0;
 
   // private ShuffleboardTab shooterTab;
 
@@ -94,7 +99,7 @@ public class Shooter extends SubsystemBase {
     shootPIDController.setD(ShooterConstants.kD);
     shootPIDController.setIZone(ShooterConstants.kIz);
     shootPIDController.setFF(ShooterConstants.kFF);
-    shootPIDController.setOutputRange(ShooterConstants.kMin, ShooterConstants.kMax);
+    shootPIDController.setOutputRange(ShooterConstants.kMinOutput, ShooterConstants.kMaxOutput);
 
     shootEncoder.setVelocityConversionFactor(ShooterConstants.kVelFactor);
 
@@ -108,20 +113,20 @@ public class Shooter extends SubsystemBase {
     angleMotor.setSensorPhase(true);
 
     /* Config sensor used for Primary PID [Velocity] */
-    angleMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, ShooterConstants.kPIDLoopIdx,
-        ShooterConstants.kTimeoutMs);
+    angleMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, AngleConstants.kPIDLoopIdx,
+        AngleConstants.kTimeoutMs);
 
     /* Config the peak and nominal outputs */
-    angleMotor.configNominalOutputForward(0, ShooterConstants.kTimeoutMs);
-    angleMotor.configNominalOutputReverse(0, ShooterConstants.kTimeoutMs);
-    angleMotor.configPeakOutputForward(1, ShooterConstants.kTimeoutMs);
-    angleMotor.configPeakOutputReverse(-1, ShooterConstants.kTimeoutMs);
+    angleMotor.configNominalOutputForward(0, AngleConstants.kTimeoutMs);
+    angleMotor.configNominalOutputReverse(0, AngleConstants.kTimeoutMs);
+    angleMotor.configPeakOutputForward(1, AngleConstants.kTimeoutMs);
+    angleMotor.configPeakOutputReverse(-1, AngleConstants.kTimeoutMs);
 
     /* Config the PID values */
-    angleMotor.config_kF(ShooterConstants.kPIDLoopIdx, ShooterConstants.kFF, ShooterConstants.kTimeoutMs);
-    angleMotor.config_kP(ShooterConstants.kPIDLoopIdx, ShooterConstants.kP, ShooterConstants.kTimeoutMs);
-    angleMotor.config_kI(ShooterConstants.kPIDLoopIdx, ShooterConstants.kI, ShooterConstants.kTimeoutMs);
-    angleMotor.config_kD(ShooterConstants.kPIDLoopIdx, ShooterConstants.kD, ShooterConstants.kTimeoutMs);
+    angleMotor.config_kF(ShooterConstants.kPIDLoopIdx, AngleConstants.kFF, AngleConstants.kTimeoutMs);
+    angleMotor.config_kP(ShooterConstants.kPIDLoopIdx, AngleConstants.kP, AngleConstants.kTimeoutMs);
+    angleMotor.config_kI(ShooterConstants.kPIDLoopIdx, AngleConstants.kI, AngleConstants.kTimeoutMs);
+    angleMotor.config_kD(ShooterConstants.kPIDLoopIdx, AngleConstants.kD, AngleConstants.kTimeoutMs);
 
     // Define Tilt motor
     tiltMotor.configFactoryDefault();
@@ -133,20 +138,20 @@ public class Shooter extends SubsystemBase {
     tiltMotor.setSensorPhase(true);
 
     /* Config sensor used for Primary PID [Velocity] */
-    tiltMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, ShooterConstants.kPIDLoopIdx,
-        ShooterConstants.kTimeoutMs);
+    tiltMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, TiltConstants.kPIDLoopIdx,
+        TiltConstants.kTimeoutMs);
 
     /* Config the peak and nominal outputs */
-    tiltMotor.configNominalOutputForward(0, ShooterConstants.kTimeoutMs);
-    tiltMotor.configNominalOutputReverse(0, ShooterConstants.kTimeoutMs);
-    tiltMotor.configPeakOutputForward(1, ShooterConstants.kTimeoutMs);
-    tiltMotor.configPeakOutputReverse(-1, ShooterConstants.kTimeoutMs);
+    tiltMotor.configNominalOutputForward(0, TiltConstants.kTimeoutMs);
+    tiltMotor.configNominalOutputReverse(0, TiltConstants.kTimeoutMs);
+    tiltMotor.configPeakOutputForward(1, TiltConstants.kTimeoutMs);
+    tiltMotor.configPeakOutputReverse(-1, TiltConstants.kTimeoutMs);
 
     /* Config PID Values */
-    tiltMotor.config_kF(ShooterConstants.kPIDLoopIdx, ShooterConstants.kFF, ShooterConstants.kTimeoutMs);
-    tiltMotor.config_kP(ShooterConstants.kPIDLoopIdx, ShooterConstants.kP, ShooterConstants.kTimeoutMs);
-    tiltMotor.config_kI(ShooterConstants.kPIDLoopIdx, ShooterConstants.kI, ShooterConstants.kTimeoutMs);
-    tiltMotor.config_kD(ShooterConstants.kPIDLoopIdx, ShooterConstants.kD, ShooterConstants.kTimeoutMs);
+    tiltMotor.config_kF(ShooterConstants.kPIDLoopIdx, TiltConstants.kFF, TiltConstants.kTimeoutMs);
+    tiltMotor.config_kP(ShooterConstants.kPIDLoopIdx, TiltConstants.kP, TiltConstants.kTimeoutMs);
+    tiltMotor.config_kI(ShooterConstants.kPIDLoopIdx, TiltConstants.kI, TiltConstants.kTimeoutMs);
+    tiltMotor.config_kD(ShooterConstants.kPIDLoopIdx, TiltConstants.kD, TiltConstants.kTimeoutMs);
 
     setShootSetPoint(ShooterConstants.kStopRPMs);
 
@@ -154,37 +159,54 @@ public class Shooter extends SubsystemBase {
   }
 
   public void periodic() {
-    // SmartDashboard.putNumber("ShootVelocity", shootEncoder.getVelocity());
-    // SmartDashboard.putNumber("ShootPosition", shootEncoder.getPosition());
-    // SmartDashboard.putNumber("AngleVelocity", angleEncoder.getVelocity());
-    // SmartDashboard.putNumber("AnglePosition", angleEncoder.getPosition());
+    SmartDashboard.putNumber("ShootVelocity", shootEncoder.getVelocity());
+    SmartDashboard.putNumber("Angle Position", getAnglePosition());
+    SmartDashboard.putNumber("Tilt Position", getTiltPosition());
+  }
+
+  public double getShootVelocity() {
+    return shootEncoder.getVelocity();
   }
 
   public void setShootSetPoint(double rpm) {
-    shootMotor.set(0.9); // temporary while testing
-    // this.setPoint = lib.Clip(rpm, ShooterConstants.kMaxRPM,
-    // ShooterConstants.kMinRPM);
-    // shootPIDController.setReference(setPoint, ControlType.kVelocity);
+    this.shooterSetPoint = lib.Clip(rpm, ShooterConstants.kMaxRPM, ShooterConstants.kMinRPM);
+    shootPIDController.setReference(shooterSetPoint, ControlType.kVelocity);
   }
 
-  public void shoot(double setPoint) {
-    // shootMotor.set(ShooterConstants.shootSpeed);
-    // double setPoint = m_stick.getY() * maxRPM;
-    shootPIDController.setReference(setPoint, ControlType.kVelocity);
-  }
+  // public void shoot(double setPoint) {
+  // // shootMotor.set(ShooterConstants.shootSpeed);
+  // // double setPoint = m_stick.getY() * maxRPM;
+  // shootPIDController.setReference(setPoint, ControlType.kVelocity);
+  // }
 
   public void stopShoot() {
     shootMotor.set(0);
   }
 
-  public void moveToAngle(double angle, double speed) {
-    // angleMotor.set(speed);
-    // angleEncoder.setPosition(angle); // TODO set constants to adjust from ticks
-    // anglePIDController.setReference(angle, ControlType.kVelocity);
+  public void stopAngle() {
+    angleMotor.set(ControlMode.PercentOutput, 0.0);
   }
 
-  public double getAngle() {
-    return 0;// angleEncoder.getPosition();
+  public void stopTilt() {
+    tiltMotor.set(ControlMode.PercentOutput, 0.0);
+  }
+
+  public double getAnglePosition() {
+    return angleMotor.getSelectedSensorPosition();
+  }
+
+  public void setAnglePosition(double pos) {
+    angleSetPoint = pos;
+    angleMotor.set(ControlMode.Position, pos);
+  }
+
+  public double getTiltPosition() {
+    return tiltMotor.getSelectedSensorPosition();
+  }
+
+  public void setTiltPosition(double pos) {
+    tiltSetPoint = pos;
+    tiltMotor.set(ControlMode.Position, pos);
   }
 
   // public boolean isLimit() {
@@ -199,6 +221,11 @@ public class Shooter extends SubsystemBase {
   // angleEncoder.setPosition(0);
   // }
   // }
+  public void moveToAngle(double angle, double speed) {
+    // angleMotor.set(speed);
+    // angleEncoder.setPosition(angle); // TODO set constants to adjust from ticks
+    // anglePIDController.setReference(angle, ControlType.kVelocity);
+  }
 
   public void moveToTilt(double position, double speed) { // TODO can I just set a postion or do I need to do other
                                                           // things to?

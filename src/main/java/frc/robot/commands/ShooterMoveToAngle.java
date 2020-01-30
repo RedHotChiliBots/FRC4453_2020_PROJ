@@ -7,17 +7,22 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterMoveToAngle extends CommandBase {
 
 	private Shooter shooter;
+	private double pos;
 
-	public ShooterMoveToAngle(Shooter shooter) {
+	public ShooterMoveToAngle(Shooter shooter, double pos) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		this.shooter = shooter;
+		this.pos = pos;
+
 	}
 
 	// Called just before this Command runs the first time
@@ -28,12 +33,14 @@ public class ShooterMoveToAngle extends CommandBase {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	public void execute() {
+		shooter.setAnglePosition(pos);
+
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	public boolean isFinished() {
-		return true;
+		return shooter.getAnglePosition() == pos;
 	}
 
 	// Called once after isFinished returns true

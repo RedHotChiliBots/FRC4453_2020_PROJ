@@ -64,20 +64,18 @@ public final class Constants {
 
 	public final static class ShooterConstants {
 		public static final int kShooterMotor = 10;
-		public static final int kAngleMotor = 11;
-		public static final int kTiltMotor = 12;
 
 		public static final int kSlotIdx = 0;
 		public static final int kPIDLoopIdx = 0;
 		public static final int kTimeoutMs = 30;
 
-		public static final double kP = 0.00005;
-		public static final double kI = 0.000001;
+		public static final double kP = 1.0;
+		public static final double kI = 0.05;
 		public static final double kD = 0;
 		public static final double kIz = 0;
 		public static final double kFF = 0;
-		public static final double kMin = -1;
-		public static final double kMax = 1;
+		public static final double kMinOutput = 0;
+		public static final double kMaxOutput = 1;
 
 		public static final double kTicsPerRev = 4096;
 		public static final double kWheelDiameter = 4.0;
@@ -89,7 +87,67 @@ public final class Constants {
 		public static final double kMaxRPM = 5700.0;
 
 		public static final double shootSpeed = 1.0;
-		public static final double shootRPMs = 100.0;
+		public static final double shootRPMs = 4500.0;
+
+		public static final double shooterShootTime = 4;
+	}
+
+	public final static class AngleConstants {
+		public static final int kAngleMotor = 11;
+
+		public static final int kSlotIdx = 0;
+		public static final int kPIDLoopIdx = 0;
+		public static final int kTimeoutMs = 30;
+
+		public static final double kP = 1.0;
+		public static final double kI = 0.05;
+		public static final double kD = 0;
+		public static final double kIz = 0;
+		public static final double kFF = 0;
+		public static final double kMinOutput = 0;
+		public static final double kMaxOutput = 1;
+
+		public static final double kTicsPerRev = 4096;
+		public static final double kWheelDiameter = 4.0;
+		public static final double kVelFactor = (SpinnerConstants.kWheelDiameter * Math.PI)
+				/ SpinnerConstants.kTicsPerRev;
+
+		public static final double kStopRPMs = 0.0;
+		public static final double kMinRPM = 0.0;
+		public static final double kMaxRPM = 5700.0;
+
+		public static final double shootSpeed = 1.0;
+		public static final double shootRPMs = 4500.0;
+
+		public static final double shooterShootTime = 4;
+	}
+
+	public final static class TiltConstants {
+		public static final int kTiltMotor = 12;
+
+		public static final int kSlotIdx = 0;
+		public static final int kPIDLoopIdx = 0;
+		public static final int kTimeoutMs = 30;
+
+		public static final double kP = 1.0;
+		public static final double kI = 0.05;
+		public static final double kD = 0;
+		public static final double kIz = 0;
+		public static final double kFF = 0;
+		public static final double kMinOutput = 0;
+		public static final double kMaxOutput = 1;
+
+		public static final double kTicsPerRev = 4096;
+		public static final double kWheelDiameter = 4.0;
+		public static final double kVelFactor = (SpinnerConstants.kWheelDiameter * Math.PI)
+				/ SpinnerConstants.kTicsPerRev;
+
+		public static final double kStopRPMs = 0.0;
+		public static final double kMinRPM = 0.0;
+		public static final double kMaxRPM = 5700.0;
+
+		public static final double shootSpeed = 1.0;
+		public static final double shootRPMs = 4500.0;
 
 		public static final double shooterShootTime = 4;
 	}

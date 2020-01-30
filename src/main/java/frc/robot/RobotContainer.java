@@ -52,6 +52,9 @@ public class RobotContainer {
   private final Climber climber = new Climber();
   private final Collector collector = new Collector();
 
+  XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
+
   // Define Commands
   private final SpinnerStow m_spinnerStow = new SpinnerStow(spinner);
   private final SpinnerStopOnColor m_spinnerStopOnColor = new SpinnerStopOnColor(spinner);
@@ -59,16 +62,13 @@ public class RobotContainer {
 
   private final ShooterShoot m_shooterShoot = new ShooterShoot(shooter);
   private final ShooterStop m_shooterStop = new ShooterStop(shooter);
-  private final ShooterMoveToAngle m_shooterMoveToAngle = new ShooterMoveToAngle(shooter);
+  private final ShooterMoveToAngle m_shooterMoveToAngle = new ShooterMoveToAngle(shooter,
+      m_operator.getY(Hand.kLeft) * 35);
 
   private final AutonDrive m_auton = new AutonDrive(chassis, spinner);
 
   // Define chooser for autonomous commands
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-
-  // Define the driver and operator controllers
-  XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
