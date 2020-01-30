@@ -77,19 +77,11 @@ public final class Constants {
 		public static final double kMinOutput = 0;
 		public static final double kMaxOutput = 1;
 
-		public static final double kTicsPerRev = 4096;
-		public static final double kWheelDiameter = 4.0;
-		public static final double kVelFactor = (SpinnerConstants.kWheelDiameter * Math.PI)
-				/ SpinnerConstants.kTicsPerRev;
-
 		public static final double kStopRPMs = 0.0;
 		public static final double kMinRPM = 0.0;
-		public static final double kMaxRPM = 5700.0;
+		public static final double kMaxRPM = 4500.0;
 
-		public static final double shootSpeed = 1.0;
-		public static final double shootRPMs = 4500.0;
-
-		public static final double shooterShootTime = 4;
+		public static final double shootRPMs = kMaxRPM;
 	}
 
 	public final static class AngleConstants {
@@ -107,19 +99,14 @@ public final class Constants {
 		public static final double kMinOutput = 0;
 		public static final double kMaxOutput = 1;
 
-		public static final double kTicsPerRev = 4096;
-		public static final double kWheelDiameter = 4.0;
-		public static final double kVelFactor = (SpinnerConstants.kWheelDiameter * Math.PI)
-				/ SpinnerConstants.kTicsPerRev;
+		public static final double kTicsPerMotorRev = 4096;
+		public static final double kGBRatio = 10;
+		public static final double kTicsPerGBRev = kTicsPerMotorRev * kGBRatio;
 
-		public static final double kStopRPMs = 0.0;
-		public static final double kMinRPM = 0.0;
-		public static final double kMaxRPM = 5700.0;
-
-		public static final double shootSpeed = 1.0;
-		public static final double shootRPMs = 4500.0;
-
-		public static final double shooterShootTime = 4;
+		public static final double kRGTeeth = 163.0; // Ring Gear
+		public static final double kGBTeeth = 15.0; // Gear Box
+		public static final double kGBRevPerRGRev = (kRGTeeth / kGBTeeth);
+		public static final double kPosFactor = (kGBRevPerRGRev * kTicsPerGBRev) / 360.0; // Tics / Deg @ Ring Gear
 	}
 
 	public final static class TiltConstants {
@@ -137,19 +124,16 @@ public final class Constants {
 		public static final double kMinOutput = 0;
 		public static final double kMaxOutput = 1;
 
-		public static final double kTicsPerRev = 4096;
-		public static final double kWheelDiameter = 4.0;
-		public static final double kVelFactor = (SpinnerConstants.kWheelDiameter * Math.PI)
-				/ SpinnerConstants.kTicsPerRev;
+		public static final double kTicsPerMotorRev = 4096;
+		public static final double kGBRatio = 10;
+		public static final double kTicsPerGBRev = kTicsPerMotorRev * kGBRatio;
 
-		public static final double kStopRPMs = 0.0;
-		public static final double kMinRPM = 0.0;
-		public static final double kMaxRPM = 5700.0;
-
-		public static final double shootSpeed = 1.0;
-		public static final double shootRPMs = 4500.0;
-
-		public static final double shooterShootTime = 4;
+		public static final double kInPerRevLS = 0.2; // Lead Screw (inches/rev)
+		public static final double kLengthLS = 5.55; // Lead Screw max travel inches
+		public static final double kTiltDegLS = 35.0; // Tilt Degrees by max Lead Screw travel
+		public static final double kInchPerTic = kInPerRevLS / kTicsPerGBRev;
+		public static final double kDegPerInch = kTiltDegLS / kLengthLS;
+		public static final double kPosFactor = kDegPerInch * kInchPerTic; // Deg / Tic }
 	}
 
 	public final static class SpinnerConstants {

@@ -17,9 +17,6 @@ public class ShooterShoot extends CommandBase {
   public ShooterShoot(Shooter shooter) {
     this.shooter = shooter;
     addRequirements(shooter);
-    // super(timeout);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
@@ -30,8 +27,7 @@ public class ShooterShoot extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    shooter.setShootSetPoint(ShooterConstants.shootRPMs);
-    // shooter.shoot(ShooterConstants.shootSpeed);
+    shooter.setShootVelocity(ShooterConstants.shootRPMs);
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -52,6 +52,6 @@ public class SpinnerStopOnColor extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    spinner.setRPMs(SpinnerConstants.kStopRPMs);
+    spinner.stopSpin();
   }
 }

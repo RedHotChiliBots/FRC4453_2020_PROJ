@@ -45,6 +45,6 @@ public class SpinnerCountRevs extends CommandBase {
   @Override
   public void end(final boolean interrupted) {
     // spinner.setSetPoint(SpinnerConstants.kStopRPMs);
-    spinner.setRPMs(0.0);
+    spinner.stopSpin();
   }
 }

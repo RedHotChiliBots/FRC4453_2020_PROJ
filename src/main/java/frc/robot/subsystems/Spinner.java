@@ -162,6 +162,10 @@ public class Spinner extends SubsystemBase {
     spinMotor.set(ControlMode.Velocity, rpm * SpinnerConstants.kVelFactor);
   }
 
+  public void stopSpin() {
+    spinMotor.set(ControlMode.PercentOutput, 0.0);
+  }
+
   /**
    * Convert Game Color from FMS to Control Panel Color to detect and stop. The
    * color sensor is two colors away from where the Game Panel needs to stop.

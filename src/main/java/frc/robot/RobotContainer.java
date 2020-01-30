@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -31,6 +31,7 @@ import frc.robot.commands.ShooterStop;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStopOnColor;
 import frc.robot.commands.SpinnerStow;
+import frc.robot.commands.AimShooter;
 import frc.robot.commands.AutonDrive;
 import frc.robot.commands.ClimberExtend;
 import frc.robot.commands.ClimberRetract;
@@ -116,6 +117,10 @@ public class RobotContainer {
     new JoystickButton(m_operator, Button.kY.value).whenHeld(new ShooterShoot(shooter));
 
     new JoystickButton(m_operator, Button.kStart.value).whenPressed(new SpinnerStow(spinner));
+
+    for (int i = 0; i < 8; i++) {
+      new POVButton(m_operator, i * 45).whenHeld(new AimShooter(shooter, i));
+    }
 
     new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new ClimberExtend(climber));
     new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new ClimberRetract(climber));

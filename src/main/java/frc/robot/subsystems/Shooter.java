@@ -101,7 +101,7 @@ public class Shooter extends SubsystemBase {
     shootPIDController.setFF(ShooterConstants.kFF);
     shootPIDController.setOutputRange(ShooterConstants.kMinOutput, ShooterConstants.kMaxOutput);
 
-    shootEncoder.setVelocityConversionFactor(ShooterConstants.kVelFactor);
+    // shootEncoder.setVelocityConversionFactor(ShooterConstants.kVelFactor);
 
     // Define Angle motor
     angleMotor.configFactoryDefault();
@@ -153,7 +153,7 @@ public class Shooter extends SubsystemBase {
     tiltMotor.config_kI(ShooterConstants.kPIDLoopIdx, TiltConstants.kI, TiltConstants.kTimeoutMs);
     tiltMotor.config_kD(ShooterConstants.kPIDLoopIdx, TiltConstants.kD, TiltConstants.kTimeoutMs);
 
-    setShootSetPoint(ShooterConstants.kStopRPMs);
+    setShootVelocity(ShooterConstants.kStopRPMs);
 
     System.out.println("----- Shooter Constructor finished ...");
   }
@@ -168,7 +168,7 @@ public class Shooter extends SubsystemBase {
     return shootEncoder.getVelocity();
   }
 
-  public void setShootSetPoint(double rpm) {
+  public void setShootVelocity(double rpm) {
     this.shooterSetPoint = lib.Clip(rpm, ShooterConstants.kMaxRPM, ShooterConstants.kMinRPM);
     shootPIDController.setReference(shooterSetPoint, ControlType.kVelocity);
   }
@@ -192,21 +192,21 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getAnglePosition() {
-    return angleMotor.getSelectedSensorPosition();
+    return angleMotor.getSelectedSensorPosition() / AngleConstants.kPosFactor;
   }
 
   public void setAnglePosition(double pos) {
     angleSetPoint = pos;
-    angleMotor.set(ControlMode.Position, pos);
+    angleMotor.set(ControlMode.Position, pos * AngleConstants.kPosFactor);
   }
 
   public double getTiltPosition() {
-    return tiltMotor.getSelectedSensorPosition();
+    return tiltMotor.getSelectedSensorPosition() / TiltConstants.kPosFactor;
   }
 
   public void setTiltPosition(double pos) {
     tiltSetPoint = pos;
-    tiltMotor.set(ControlMode.Position, pos);
+    tiltMotor.set(ControlMode.Position, pos * TiltConstants.kPosFactor);
   }
 
   // public boolean isLimit() {

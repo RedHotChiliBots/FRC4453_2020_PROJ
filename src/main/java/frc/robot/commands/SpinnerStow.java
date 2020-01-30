@@ -8,7 +8,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.SpinnerConstants;
 import frc.robot.subsystems.Spinner;
 
 public class SpinnerStow extends CommandBase {
@@ -23,7 +22,7 @@ public class SpinnerStow extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    spinner.setRPMs(SpinnerConstants.kStopRPMs);
+    spinner.stopSpin();
   }
 
   // Called repeatedly when this Command is scheduled to run
