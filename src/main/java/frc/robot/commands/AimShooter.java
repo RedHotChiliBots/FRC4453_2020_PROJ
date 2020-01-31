@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
@@ -15,8 +16,8 @@ public class AimShooter extends CommandBase {
   Shooter shooter = null;
   int deg = 0;
   int counter = 0;
-  double tiltInc = 0;
-  double angleInc = 0;
+  double tiltInc = 35 / 20;
+  double angleInc = 90 / 20;
 
   /**
    * Creates a new AimShooter.
@@ -69,6 +70,7 @@ public class AimShooter extends CommandBase {
       }
     }
     counter++;
+    SmartDashboard.putNumber("Counter", counter);
   }
 
   // Called once the command ends or is interrupted.

@@ -118,9 +118,17 @@ public class RobotContainer {
 
     new JoystickButton(m_operator, Button.kStart.value).whenPressed(new SpinnerStow(spinner));
 
-    for (int i = 0; i < 8; i++) {
-      new POVButton(m_operator, i * 45).whenHeld(new AimShooter(shooter, i));
-    }
+    // for (int i = 0; i < 8; i++) {
+    // new POVButton(m_operator, i * 45).whenHeld(new AimShooter(shooter, i));
+    // }
+    new POVButton(m_operator, 0).whenHeld(new AimShooter(shooter, 0));
+    // new POVButton(m_operator, 1).whenHeld(new AimShooter(shooter, 1));
+    // new POVButton(m_operator, 2).whenHeld(new AimShooter(shooter, 2));
+    // new POVButton(m_operator, 3).whenHeld(new AimShooter(shooter, 3));
+    // new POVButton(m_operator, 4).whenHeld(new AimShooter(shooter, 4));
+    // new POVButton(m_operator, 5).whenHeld(new AimShooter(shooter, 5));
+    // new POVButton(m_operator, 6).whenHeld(new AimShooter(shooter, 6));
+    // new POVButton(m_operator, 7).whenHeld(new AimShooter(shooter, 7));
 
     new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new ClimberExtend(climber));
     new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new ClimberRetract(climber));

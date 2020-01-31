@@ -110,7 +110,7 @@ public class Shooter extends SubsystemBase {
     // Configure Motor
     angleMotor.setNeutralMode(NeutralMode.Brake);
     angleMotor.setInverted(false);
-    angleMotor.setSensorPhase(true);
+    angleMotor.setSensorPhase(false);
 
     /* Config sensor used for Primary PID [Velocity] */
     angleMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, AngleConstants.kPIDLoopIdx,
@@ -128,6 +128,8 @@ public class Shooter extends SubsystemBase {
     angleMotor.config_kI(ShooterConstants.kPIDLoopIdx, AngleConstants.kI, AngleConstants.kTimeoutMs);
     angleMotor.config_kD(ShooterConstants.kPIDLoopIdx, AngleConstants.kD, AngleConstants.kTimeoutMs);
 
+    angleMotor.getSensorCollection().setQuadraturePosition(0, AngleConstants.kTimeoutMs);
+
     // Define Tilt motor
     tiltMotor.configFactoryDefault();
     tiltMotor.clearStickyFaults();
@@ -135,7 +137,7 @@ public class Shooter extends SubsystemBase {
     // Configure Motor
     tiltMotor.setNeutralMode(NeutralMode.Brake);
     tiltMotor.setInverted(false);
-    tiltMotor.setSensorPhase(true);
+    tiltMotor.setSensorPhase(false);
 
     /* Config sensor used for Primary PID [Velocity] */
     tiltMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, TiltConstants.kPIDLoopIdx,
@@ -153,6 +155,8 @@ public class Shooter extends SubsystemBase {
     tiltMotor.config_kI(ShooterConstants.kPIDLoopIdx, TiltConstants.kI, TiltConstants.kTimeoutMs);
     tiltMotor.config_kD(ShooterConstants.kPIDLoopIdx, TiltConstants.kD, TiltConstants.kTimeoutMs);
 
+    tiltMotor.getSensorCollection().setQuadraturePosition(0, TiltConstants.kTimeoutMs);
+
     setShootVelocity(ShooterConstants.kStopRPMs);
 
     System.out.println("----- Shooter Constructor finished ...");
@@ -162,6 +166,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("ShootVelocity", shootEncoder.getVelocity());
     SmartDashboard.putNumber("Angle Position", getAnglePosition());
     SmartDashboard.putNumber("Tilt Position", getTiltPosition());
+    SmartDashboard.putNumber("Angle SetPoint", angleSetPoint);
+    SmartDashboard.putNumber("Tilt SetPoint", tiltSetPoint);
   }
 
   public double getShootVelocity() {
