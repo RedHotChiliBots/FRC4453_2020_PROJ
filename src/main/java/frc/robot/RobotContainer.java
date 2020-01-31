@@ -31,12 +31,12 @@ import frc.robot.commands.ShooterStop;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStopOnColor;
 import frc.robot.commands.SpinnerStow;
-import frc.robot.commands.AimShooter;
 import frc.robot.commands.AutonDrive;
 import frc.robot.commands.ClimberExtend;
 import frc.robot.commands.ClimberRetract;
 import frc.robot.commands.CollectorExtend;
 import frc.robot.commands.CollectorRetract;
+import frc.robot.commands.ShooterAim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -119,9 +119,9 @@ public class RobotContainer {
     new JoystickButton(m_operator, Button.kStart.value).whenPressed(new SpinnerStow(spinner));
 
     // for (int i = 0; i < 8; i++) {
-    // new POVButton(m_operator, i * 45).whenHeld(new AimShooter(shooter, i));
+    // new POVButton(m_operator, i * 45).whenHeld(new ShooterAim(shooter, i));
     // }
-    new POVButton(m_operator, 0).whenHeld(new AimShooter(shooter, 0));
+    new POVButton(m_operator, 0).whenHeld(new ShooterAim(shooter, 0));
     // new POVButton(m_operator, 1).whenHeld(new AimShooter(shooter, 1));
     // new POVButton(m_operator, 2).whenHeld(new AimShooter(shooter, 2));
     // new POVButton(m_operator, 3).whenHeld(new AimShooter(shooter, 3));
