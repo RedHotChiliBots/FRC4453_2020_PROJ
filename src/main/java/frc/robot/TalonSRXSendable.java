@@ -1,7 +1,6 @@
 package frc.robot;
 
-import java.util.function.Supplier;
-
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -17,6 +16,10 @@ public class TalonSRXSendable implements Sendable {
 
     @Override
     public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("TalonSRX");
+        builder.setActuator(true);
+        builder.setSafeState(() -> talon.set(ControlMode.Disabled, 0));
+
         builder.addDoubleProperty("P", () -> {
             SlotConfiguration c = new SlotConfiguration();
             talon.getSlotConfigs(c);
@@ -49,7 +52,7 @@ public class TalonSRXSendable implements Sendable {
             talon.config_kF(0, p);
         });
 
-        builder.addDoubleProperty("position", () -> talon.getSelectedSensorPosition(), (double p) -> {});
+        builder.addDoubleProperty("Position", () -> talon.getSelectedSensorPosition(), (double p) -> {});
     }
 
 	
