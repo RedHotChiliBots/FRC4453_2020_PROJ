@@ -4,19 +4,19 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.PWMTalonSRX;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
 public class TalonSRXSendable implements Sendable {
     TalonSRX talon;
-
     public TalonSRXSendable(TalonSRX t) {
         talon = t;
     }
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("TalonSRX");
+        builder.setSmartDashboardType("Speed Controller");
         builder.setActuator(true);
         builder.setSafeState(() -> talon.set(ControlMode.Disabled, 0));
 
