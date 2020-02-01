@@ -118,10 +118,10 @@ public class RobotContainer {
 
     new JoystickButton(m_operator, Button.kStart.value).whenPressed(new SpinnerStow(spinner));
 
-    // for (int i = 0; i < 8; i++) {
-    // new POVButton(m_operator, i * 45).whenHeld(new ShooterAim(shooter, i));
-    // }
-    new POVButton(m_operator, 0).whenHeld(new ShooterAim(shooter, 0));
+    for (int i = 0; i < 8; i++) {
+      new POVButton(m_operator, i * 45).whenHeld(new ShooterAim(shooter, i));
+    }
+    // new POVButton(m_operator, 0).whenHeld(new ShooterAim(shooter, 0));
     // new POVButton(m_operator, 1).whenHeld(new AimShooter(shooter, 1));
     // new POVButton(m_operator, 2).whenHeld(new AimShooter(shooter, 2));
     // new POVButton(m_operator, 3).whenHeld(new AimShooter(shooter, 3));

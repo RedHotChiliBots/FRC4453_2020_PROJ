@@ -16,8 +16,8 @@ public class ShooterAim extends CommandBase {
   Shooter shooter = null;
   int deg = 0;
   int counter = 0;
-  double tiltInc = 35 / 20;
-  double angleInc = 90 / 20;
+  double tiltInc = 2.0;
+  double angleInc = 5.0;
 
   /**
    * Creates a new AimShooter.
@@ -40,7 +40,7 @@ public class ShooterAim extends CommandBase {
     if ((counter % 25) == 0) {
       switch (deg) {
       case 0:
-        shooter.setTiltPosition(/* shooter.getTiltPosition() */shooter.getTiltSetPoint() + tiltInc);
+        shooter.setTiltPosition(shooter.getTiltPosition() + tiltInc);
         break;
       case 1:
         shooter.setTiltPosition(shooter.getTiltPosition() + tiltInc);
