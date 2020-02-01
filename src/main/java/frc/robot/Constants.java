@@ -91,7 +91,7 @@ public final class Constants {
 		public static final int kPIDLoopIdx = 0;
 		public static final int kTimeoutMs = 30;
 
-		public static final double kP = 1.0;
+		public static final double kP = 5.0;
 		public static final double kI = 0.05;
 		public static final double kD = 0;
 		public static final double kIz = 0;
@@ -116,8 +116,8 @@ public final class Constants {
 		public static final int kPIDLoopIdx = 0;
 		public static final int kTimeoutMs = 30;
 
-		public static final double kP = 1.0;
-		public static final double kI = 0.0005;
+		public static final double kP = 20.0;
+		public static final double kI = 0.0;
 		public static final double kD = 0;
 		public static final double kIz = 0;
 		public static final double kFF = 0;
@@ -133,7 +133,11 @@ public final class Constants {
 		public static final double kTiltDegLS = 35.0; // Tilt Degrees by max Lead Screw travel
 		public static final double kInchPerTic = kInPerRevLS / kTicsPerGBRev;
 		public static final double kDegPerInch = kTiltDegLS / kLengthLS;
-		public static final double kPosFactor = kDegPerInch * kInchPerTic; // Deg / Tic }
+		// public static final double kPosFactor = kInchPerDeg * kInchPerTic; // Tic /
+		// Deg }
+		public static final double kInchPerDeg = kInPerRevLS / kTiltDegLS;
+		public static final double kRevPerIn = 1 / kInPerRevLS;
+		public static final double kPosFactor = kInchPerDeg * kRevPerIn * kTicsPerGBRev; // Tic / Deg }
 	}
 
 	public final static class SpinnerConstants {

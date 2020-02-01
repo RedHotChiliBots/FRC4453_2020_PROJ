@@ -40,7 +40,7 @@ public class ShooterAim extends CommandBase {
     if ((counter % 25) == 0) {
       switch (deg) {
       case 0:
-        shooter.setTiltPosition(shooter.getTiltPosition() + tiltInc);
+        shooter.setTiltPosition(/* shooter.getTiltPosition() */shooter.getTiltSetPoint() + tiltInc);
         break;
       case 1:
         shooter.setTiltPosition(shooter.getTiltPosition() + tiltInc);
