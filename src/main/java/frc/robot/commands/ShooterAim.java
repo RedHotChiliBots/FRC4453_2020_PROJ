@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class AimShooter extends CommandBase {
+public class ShooterAim extends CommandBase {
 
   Shooter shooter = null;
   int deg = 0;
@@ -22,7 +22,7 @@ public class AimShooter extends CommandBase {
   /**
    * Creates a new AimShooter.
    */
-  public AimShooter(Shooter shooter, int deg) {
+  public ShooterAim(Shooter shooter, int deg) {
     this.shooter = shooter;
     this.deg = deg;
     addRequirements(shooter);
