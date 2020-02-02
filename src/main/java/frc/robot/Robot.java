@@ -101,10 +101,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		// SmartDashboard.putNumber("Lift Target", Robot.lift.getTgtPosition());
-		// SmartDashboard.putNumber("Lift Current", Robot.lift.getMotorCurrent());
-		// SmartDashboard.putNumber("Lift Temp", Robot.lift.getMotorTemp());
-		// gameData = DriverStation.getInstance().getGameSpecificMessage();
 	}
 
 	@Override

@@ -103,7 +103,7 @@ public final class Constants {
 		public static final double kGBRatio = 10;
 		public static final double kTicsPerGBRev = kTicsPerMotorRev * kGBRatio;
 
-		public static final double kRGTeeth = 163.0; // Ring Gear
+		public static final double kRGTeeth = 170.0; // Ring Gear
 		public static final double kGBTeeth = 15.0; // Gear Box
 		public static final double kGBRevPerRGRev = (kRGTeeth / kGBTeeth);
 		public static final double kPosFactor = (kGBRevPerRGRev * kTicsPerGBRev) / 360.0; // Tics / Deg @ Ring Gear

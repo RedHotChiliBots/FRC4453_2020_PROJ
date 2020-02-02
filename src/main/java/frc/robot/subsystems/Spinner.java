@@ -119,9 +119,9 @@ public class Spinner extends SubsystemBase {
   public void periodic() {
     colorString = getColor();
 
-    SmartDashboard.putNumber("Spin Detected Red", detectedColor.red);
-    SmartDashboard.putNumber("Spin Detected Green", detectedColor.green);
-    SmartDashboard.putNumber("Spin Detected Blue", detectedColor.blue);
+    // SmartDashboard.putNumber("Spin Detected Red", detectedColor.red);
+    // SmartDashboard.putNumber("Spin Detected Green", detectedColor.green);
+    // SmartDashboard.putNumber("Spin Detected Blue", detectedColor.blue);
 
     SmartDashboard.putNumber("Spin Confidence", match.confidence);
     SmartDashboard.putString("Spin Color Detected", colorString.toString());
@@ -133,14 +133,8 @@ public class Spinner extends SubsystemBase {
     cntString += sumColor();
     SmartDashboard.putString("Spin Color Counters", cntString);
 
-    SmartDashboard.putNumber("Spin Calc kVelFactor", SpinnerConstants.kVelFactor);
-    SmartDashboard.putNumber("Spin Calc kWheel RPM", SpinnerConstants.kWheelRPM);
     SmartDashboard.putNumber("Spin SetPoint (rpm)", setPoint);
-    SmartDashboard.putNumber("Spin SetPoint (unit)", setPoint * SpinnerConstants.kVelFactor);
-    SmartDashboard.putNumber("Spin Target (%)", spinMotor.getMotorOutputPercent() * 100);
     SmartDashboard.putNumber("Spin Target (rpm)", getRPMs());
-    SmartDashboard.putNumber("Spin Target (units)", getRPMs() * SpinnerConstants.kVelFactor);
-    SmartDashboard.putNumber("Spin Error (units)", spinMotor.getClosedLoopError(SpinnerConstants.kPIDLoopIdx));
   }
 
   /**

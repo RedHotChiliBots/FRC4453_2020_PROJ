@@ -22,12 +22,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import edu.wpi.first.wpilibj2.smartdashboard.SmartDashboard;
 
 import frc.robot.Library;
-import frc.robot.TalonSRXSendable;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TiltConstants;
 import frc.robot.Constants.AngleConstants;
@@ -56,11 +53,9 @@ public class Shooter extends SubsystemBase {
   double y = ty.getDouble(0.0);
   double area = ta.getDouble(0.0);
 
-  private double shooterSetPoint = 0.0;
+  private double shootSetPoint = 0.0;
   private double tiltSetPoint = 0.0;
   private double angleSetPoint = 0.0;
-
-  // lw.addActuator("Shooter", "TiltMotor", tiltMotor);
 
   // private ShuffleboardTab shooterTab;
 
@@ -152,9 +147,6 @@ public class Shooter extends SubsystemBase {
 
     tiltMotor.getSensorCollection().setQuadraturePosition(0, TiltConstants.kTimeoutMs);
 
-    // LiveWindow.enableTelemetry(new TalonSRXSendable(tiltMotor));
-    SmartDashboard.putData("Tilt Motor", new TalonSRXSendable(tiltMotor));
-
     setShootVelocity(ShooterConstants.kStopRPMs);
 
     System.out.println("----- Shooter Constructor finished ...");
@@ -164,6 +156,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("ShootVelocity", getShootVelocity());
     SmartDashboard.putNumber("Angle Position", getAnglePosition());
     SmartDashboard.putNumber("Tilt Position", getTiltPosition());
+    SmartDashboard.putNumber("Angle SetPoint", shootSetPoint);
     SmartDashboard.putNumber("Angle SetPoint", angleSetPoint);
     SmartDashboard.putNumber("Tilt SetPoint", tiltSetPoint);
   }
@@ -173,8 +166,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShootVelocity(double rpm) {
-    this.shooterSetPoint = lib.Clip(rpm, ShooterConstants.kMaxRPM, ShooterConstants.kMinRPM);
-    shootPIDController.setReference(shooterSetPoint, ControlType.kVelocity);
+    this.shootSetPoint = lib.Clip(rpm, ShooterConstants.kMaxRPM, ShooterConstants.kMinRPM);
+    shootPIDController.setReference(shootSetPoint, ControlType.kVelocity);
   }
 
   // public void shoot(double setPoint) {
@@ -211,10 +204,6 @@ public class Shooter extends SubsystemBase {
   public void setTiltPosition(double pos) {
     tiltSetPoint = pos;
     tiltMotor.set(ControlMode.Position, pos * TiltConstants.kPosFactor);
-  }
-
-  public double getTiltSetPoint() {
-    return tiltSetPoint;
   }
 
   // public boolean isLimit() {
