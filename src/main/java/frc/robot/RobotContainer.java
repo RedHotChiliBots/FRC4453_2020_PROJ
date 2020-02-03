@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -39,6 +41,7 @@ import frc.robot.commands.CollectorStop;
 import frc.robot.commands.DriveTeleop;
 import frc.robot.commands.HopperStop;
 import frc.robot.commands.ShooterAim;
+import frc.robot.commands.ShooterInit;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -49,12 +52,12 @@ import frc.robot.commands.ShooterAim;
  */
 public class RobotContainer {
   // Define SubSystems
-  private final Chassis chassis = new Chassis();
-  private final Spinner spinner = new Spinner();
-  private final Shooter shooter = new Shooter();
-  private final Climber climber = new Climber();
-  private final Collector collector = new Collector();
-  private final Hopper hopper = new Hopper();
+  public final Chassis chassis = new Chassis();
+  public final Spinner spinner = new Spinner();
+  public final Shooter shooter = new Shooter();
+  public final Climber climber = new Climber();
+  public final Collector collector = new Collector();
+  public final Hopper hopper = new Hopper();
 
   XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
@@ -157,6 +160,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_chooser.getSelected();
+    return new SequentialCommandGroup(new ParallelCommandGroup(new ShooterInit(shooter)), m_chooser.getSelected());
   }
 }
