@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-
+import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.Constants.SpinnerConstants.COLOR;
 
@@ -34,7 +34,7 @@ public class Spinner extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  private final TalonSRX spinMotor = new TalonSRX(SpinnerConstants.kSpinnerMotor);
+  private final TalonSRX spinMotor = new TalonSRX(CANidConstants.kSpinnerMotor);
 
   /**
    * Change the I2C port below to match the connection of your color sensor

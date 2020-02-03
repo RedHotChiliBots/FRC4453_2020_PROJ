@@ -32,6 +32,8 @@ import frc.robot.Library;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TiltConstants;
 import frc.robot.Constants.AngleConstants;
+import frc.robot.Constants.CANidConstants;
+import frc.robot.Constants.DigitalIOConstants;
 
 /**
  * Add your docs here.
@@ -42,16 +44,14 @@ public class Shooter extends SubsystemBase {
 
   private final PowerDistributionPanel pdp = new PowerDistributionPanel(0);
 
-  private final CANSparkMax shootMotor = new CANSparkMax(ShooterConstants.kShooterMotor, MotorType.kBrushless);
-  private final TalonSRX angleMotor = new TalonSRX(AngleConstants.kAngleMotor);
-  private final TalonSRX tiltMotor = new TalonSRX(TiltConstants.kTiltMotor);
+  private final CANSparkMax shootMotor = new CANSparkMax(CANidConstants.kShooterMotor, MotorType.kBrushless);
+  private final TalonSRX angleMotor = new TalonSRX(CANidConstants.kAngleMotor);
+  private final TalonSRX tiltMotor = new TalonSRX(CANidConstants.kTiltMotor);
 
   private final CANPIDController shootPIDController = new CANPIDController(shootMotor);
   private final CANEncoder shootEncoder = new CANEncoder(shootMotor);
 
-  private final DigitalInput angleLeftLimit = new DigitalInput(AngleConstants.kLeftDigital);
-  private final DigitalInput angleCenterPos = new DigitalInput(AngleConstants.kLeftDigital);
-  private final DigitalInput angleRightLimit = new DigitalInput(AngleConstants.kLeftDigital);
+  private final DigitalInput angleCenterPos = new DigitalInput(DigitalIOConstants.kCenterDigital);
 
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry tx = table.getEntry("tx");
@@ -219,7 +219,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean getAngleLeftLimit() {
-    return angleLeftLimit.get();
+    return angleMotor.getSensorCollection().isFwdLimitSwitchClosed();
   }
 
   public boolean getAngleCenterPos() {
@@ -227,7 +227,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean getAngleRightLimit() {
-    return angleRightLimit.get();
+    return angleMotor.getSensorCollection().isRevLimitSwitchClosed();
   }
 
   public void setAngleZeroPos() {

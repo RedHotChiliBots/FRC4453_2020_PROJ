@@ -19,9 +19,12 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.CANidConstants;
+import frc.robot.Constants.DigitalIOConstants;
 import frc.robot.Constants.EjectorConstants;
 import frc.robot.Constants.HopperConstants;
 
@@ -33,10 +36,9 @@ public class Hopper extends SubsystemBase {
   // here. Call these from Commands.
 
   // Define the Hopper motors, master and follower
-  private final CANSparkMax topMaster = new CANSparkMax(HopperConstants.kTopMasterMotor, MotorType.kBrushless);
+  private final CANSparkMax topMaster = new CANSparkMax(CANidConstants.kTopMasterMotor, MotorType.kBrushless);
   private final SpeedController m_topMaster = topMaster;
-  private final CANSparkMax bottomFollower = new CANSparkMax(HopperConstants.kBottomFollowerMotor,
-      MotorType.kBrushless);
+  private final CANSparkMax bottomFollower = new CANSparkMax(CANidConstants.kBottomFollowerMotor, MotorType.kBrushless);
   private final SpeedController m_bottomFollower = bottomFollower;
 
   // Group the top and bottom motors
@@ -49,8 +51,11 @@ public class Hopper extends SubsystemBase {
   private final CANPIDController m_topPIDController = new CANPIDController(topMaster);
 
   // Define the Ejector motors, master and follower
-  private final TalonSRX leftEjector = new TalonSRX(EjectorConstants.kLeftEjectorMotor);
-  private final TalonSRX rightEjector = new TalonSRX(EjectorConstants.kRightEjectorMotor);
+  private final TalonSRX leftEjector = new TalonSRX(CANidConstants.kLeftEjectorMotor);
+  private final TalonSRX rightEjector = new TalonSRX(CANidConstants.kRightEjectorMotor);
+
+  private final DigitalInput upperSensor = new DigitalInput(DigitalIOConstants.kUpperSensor);
+  private final DigitalInput lowerSensor = new DigitalInput(DigitalIOConstants.kLowerSensor);
 
   private double hopperSetPoint;
   private double ejectorSetPoint;
@@ -121,9 +126,9 @@ public class Hopper extends SubsystemBase {
   // Called once per Robot execution loop - 50Hz
   public void periodic() {
     SmartDashboard.putNumber("Hopper SetPoint (rpm)", hopperSetPoint);
-    SmartDashboard.putNumber("Hopper Target (rpm)", getHopperRPMs());
+    SmartDashboard.putNumber("Hopper Target (rpm)", getHopperVelocity());
     SmartDashboard.putNumber("Ejector SetPoint (rpm)", ejectorSetPoint);
-    SmartDashboard.putNumber("Ejector Target (rpm)", getEjectorRPMs());
+    SmartDashboard.putNumber("Ejector Target (rpm)", getEjectorVelocity());
   }
 
   /**
@@ -131,7 +136,7 @@ public class Hopper extends SubsystemBase {
    * 
    * @return rpm - scaled speed to rpms
    */
-  public double getHopperRPMs() {
+  public double getHopperVelocity() {
     return m_topEncoder.getVelocity();
   }
 
@@ -140,7 +145,7 @@ public class Hopper extends SubsystemBase {
    * 
    * @param rpm - desired speed (rpms) of motor/gearbox
    */
-  public void setHopperRPMs(double rpm) {
+  public void setHopperVelocity(double rpm) {
     hopperSetPoint = rpm;
     m_topPIDController.setReference(rpm, ControlType.kVelocity);
   }
@@ -154,7 +159,7 @@ public class Hopper extends SubsystemBase {
    * 
    * @return rpm - scaled speed to rpms
    */
-  public double getEjectorRPMs() {
+  public double getEjectorVelocity() {
     return leftEjector.getSelectedSensorVelocity(EjectorConstants.kPIDLoopIdx) / EjectorConstants.kVelFactor;
   }
 
@@ -163,12 +168,20 @@ public class Hopper extends SubsystemBase {
    * 
    * @param rpm - desired speed (rpms) of motor/gearbox
    */
-  public void setEjectorRPMs(double rpm) {
+  public void setEjectorVelocity(double rpm) {
     ejectorSetPoint = rpm;
     leftEjector.set(ControlMode.Velocity, rpm * EjectorConstants.kVelFactor);
   }
 
   public void stopEjector() {
     leftEjector.set(ControlMode.PercentOutput, 0.0);
+  }
+
+  public boolean getUpperSensor() {
+    return upperSensor.get();
+  }
+
+  public boolean getLowerSensor() {
+    return lowerSensor.get();
   }
 }
