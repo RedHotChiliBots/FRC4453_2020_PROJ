@@ -28,6 +28,7 @@ public class Collector extends SubsystemBase {
 	private final TalonSRX collectorMotor = new TalonSRX(CollectorConstants.kCollectorMotor);
 
 	private double collectorSetPoint;
+
 	// climberSolenoid.set(kOff);
 	// climberSolenoid.set(kForward);
 	// climberSolenoid.set(kReverse);
