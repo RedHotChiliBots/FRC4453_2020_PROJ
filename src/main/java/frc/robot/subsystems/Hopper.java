@@ -8,12 +8,21 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.EjectorConstants;
 import frc.robot.Constants.HopperConstants;
 
 /**
@@ -23,45 +32,98 @@ public class Hopper extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  private final TalonSRX hopperMotor = new TalonSRX(HopperConstants.kHopperMotor);
+  // Define the Hopper motors, master and follower
+  private final CANSparkMax topMaster = new CANSparkMax(HopperConstants.kTopMasterMotor, MotorType.kBrushless);
+  private final SpeedController m_topMaster = topMaster;
+  private final CANSparkMax bottomFollower = new CANSparkMax(HopperConstants.kBottomFollowerMotor,
+      MotorType.kBrushless);
+  private final SpeedController m_bottomFollower = bottomFollower;
+
+  // Group the top and bottom motors
+  private final SpeedControllerGroup m_hopperGroup = new SpeedControllerGroup(m_topMaster, m_bottomFollower);
+
+  // Identify top encoder
+  public final CANEncoder m_topEncoder = new CANEncoder(topMaster);
+
+  // Identify top PID controller
+  private final CANPIDController m_topPIDController = new CANPIDController(topMaster);
+
+  // Define the Ejector motors, master and follower
+  private final TalonSRX leftEjector = new TalonSRX(EjectorConstants.kLeftEjectorMotor);
+  private final TalonSRX rightEjector = new TalonSRX(EjectorConstants.kRightEjectorMotor);
+
   private double hopperSetPoint;
+  private double ejectorSetPoint;
 
   public Hopper() {
     System.out.println("+++++ Spinner Constructor starting ...");
 
-    /* Factory Default all hardware to prevent unexpected behaviour */
-    hopperMotor.configFactoryDefault();
-    hopperMotor.clearStickyFaults();
+    // Define Shooter motor
+    topMaster.restoreFactoryDefaults();
+    topMaster.clearFaults();
+
+    topMaster.setIdleMode(IdleMode.kBrake);
+
+    bottomFollower.restoreFactoryDefaults();
+    bottomFollower.clearFaults();
+
+    bottomFollower.setIdleMode(IdleMode.kBrake);
+
+    m_hopperGroup.setInverted(false);
+
+    m_topPIDController.setP(HopperConstants.kP);
+    m_topPIDController.setI(HopperConstants.kI);
+    m_topPIDController.setD(HopperConstants.kD);
+    m_topPIDController.setIZone(HopperConstants.kIz);
+    m_topPIDController.setFF(HopperConstants.kFF);
+
+    // Set the distance per pulse for the drive encoders. We can simply use the
+    // distance traveled for one rotation of the wheel divided by the encoder
+    // resolution.
+    m_topEncoder.setPositionConversionFactor(HopperConstants.kVelFactor);
+
+    // Define Angle motor
+    leftEjector.configFactoryDefault();
+    leftEjector.clearStickyFaults();
+
+    // Configure Motor
+    leftEjector.setNeutralMode(NeutralMode.Brake);
+    leftEjector.setInverted(false);
+    leftEjector.setSensorPhase(false);
 
     /* Config sensor used for Primary PID [Velocity] */
-    hopperMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, HopperConstants.kPIDLoopIdx,
-        HopperConstants.kTimeoutMs);
+    leftEjector.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, EjectorConstants.kPIDLoopIdx,
+        EjectorConstants.kTimeoutMs);
 
-    // Conifigure motor controller
-    hopperMotor.setSensorPhase(false); // Positive Sensor Reading should match Green (blinking) Leds on Talon
-    hopperMotor.setNeutralMode(NeutralMode.Brake); // Brake motor on neutral input
-    hopperMotor.setInverted(false); // Run motor in normal rotation with positive input
+    // Define Angle motor
+    rightEjector.configFactoryDefault();
+    rightEjector.clearStickyFaults();
 
-    /* Config the peak and nominal outputs */
-    hopperMotor.configNominalOutputForward(0, HopperConstants.kTimeoutMs);
-    hopperMotor.configNominalOutputReverse(0, HopperConstants.kTimeoutMs);
-    hopperMotor.configPeakOutputForward(1, HopperConstants.kTimeoutMs);
-    hopperMotor.configPeakOutputReverse(-1, HopperConstants.kTimeoutMs);
+    // Configure Motor
+    rightEjector.setNeutralMode(NeutralMode.Brake);
+    rightEjector.setInverted(false);
+    rightEjector.setSensorPhase(false);
+
+    rightEjector.follow(leftEjector);
 
     /* Config the Velocity closed loop gains in slot0 */
-    hopperMotor.config_kF(HopperConstants.kPIDLoopIdx, HopperConstants.kFF, HopperConstants.kTimeoutMs);
-    hopperMotor.config_kP(HopperConstants.kPIDLoopIdx, HopperConstants.kP, HopperConstants.kTimeoutMs);
-    hopperMotor.config_kI(HopperConstants.kPIDLoopIdx, HopperConstants.kI, HopperConstants.kTimeoutMs);
-    hopperMotor.config_kD(HopperConstants.kPIDLoopIdx, HopperConstants.kD, HopperConstants.kTimeoutMs);
-    setRPMs(HopperConstants.kStopRPMs);
+    leftEjector.config_kF(EjectorConstants.kPIDLoopIdx, EjectorConstants.kFF, EjectorConstants.kTimeoutMs);
+    leftEjector.config_kP(EjectorConstants.kPIDLoopIdx, EjectorConstants.kP, EjectorConstants.kTimeoutMs);
+    leftEjector.config_kI(EjectorConstants.kPIDLoopIdx, EjectorConstants.kI, EjectorConstants.kTimeoutMs);
+    leftEjector.config_kD(EjectorConstants.kPIDLoopIdx, EjectorConstants.kD, EjectorConstants.kTimeoutMs);
+
+    stopHopper();
+    stopEjector();
 
     System.out.println("----- Spinner Constructor finished ...");
   }
 
   // Called once per Robot execution loop - 50Hz
   public void periodic() {
-    SmartDashboard.putNumber("Spin SetPoint (rpm)", hopperSetPoint);
-    SmartDashboard.putNumber("Spin Target (rpm)", getRPMs());
+    SmartDashboard.putNumber("Hopper SetPoint (rpm)", hopperSetPoint);
+    SmartDashboard.putNumber("Hopper Target (rpm)", getHopperRPMs());
+    SmartDashboard.putNumber("Ejector SetPoint (rpm)", ejectorSetPoint);
+    SmartDashboard.putNumber("Ejector Target (rpm)", getEjectorRPMs());
   }
 
   /**
@@ -69,8 +131,8 @@ public class Hopper extends SubsystemBase {
    * 
    * @return rpm - scaled speed to rpms
    */
-  public double getRPMs() {
-    return hopperMotor.getSelectedSensorVelocity(HopperConstants.kPIDLoopIdx) / HopperConstants.kVelFactor;
+  public double getHopperRPMs() {
+    return m_topEncoder.getVelocity();
   }
 
   /**
@@ -78,12 +140,35 @@ public class Hopper extends SubsystemBase {
    * 
    * @param rpm - desired speed (rpms) of motor/gearbox
    */
-  public void setRPMs(double rpm) {
+  public void setHopperRPMs(double rpm) {
     hopperSetPoint = rpm;
-    hopperMotor.set(ControlMode.Velocity, rpm * HopperConstants.kVelFactor);
+    m_topPIDController.setReference(rpm, ControlType.kVelocity);
   }
 
-  public void stopSpin() {
-    hopperMotor.set(ControlMode.PercentOutput, 0.0);
+  public void stopHopper() {
+    m_hopperGroup.set(0.0);
+  }
+
+  /**
+   * Get current speed (rpms) of the Spinner motor
+   * 
+   * @return rpm - scaled speed to rpms
+   */
+  public double getEjectorRPMs() {
+    return leftEjector.getSelectedSensorVelocity(EjectorConstants.kPIDLoopIdx) / EjectorConstants.kVelFactor;
+  }
+
+  /**
+   * Set speed (rpms) of Spinner motor/gearbox.
+   * 
+   * @param rpm - desired speed (rpms) of motor/gearbox
+   */
+  public void setEjectorRPMs(double rpm) {
+    ejectorSetPoint = rpm;
+    leftEjector.set(ControlMode.Velocity, rpm * EjectorConstants.kVelFactor);
+  }
+
+  public void stopEjector() {
+    leftEjector.set(ControlMode.PercentOutput, 0.0);
   }
 }
