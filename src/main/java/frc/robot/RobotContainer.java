@@ -32,6 +32,11 @@ import frc.robot.commands.ShooterStop;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStop;
 import frc.robot.commands.SpinnerStopOnColor;
+<<<<<<< HEAD
+import frc.robot.commands.SpinnerStow;
+import frc.robot.commands.AutoShooterAim;
+=======
+>>>>>>> b87ad72594b9a268a1a8b9b116bceffdef72bf7c
 import frc.robot.commands.AutonDrive;
 import frc.robot.commands.ClimberExtend;
 import frc.robot.commands.ClimberRetract;
@@ -129,6 +134,9 @@ public class RobotContainer {
     new JoystickButton(m_operator, Button.kY.value).whenHeld(new ShooterShoot(shooter));
 
     new JoystickButton(m_operator, Button.kStart.value).whenPressed(new SpinnerStop(spinner));
+
+    new JoystickButton(m_driver, Button.kY.value)
+        .whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()));
 
     for (int i = 0; i < 8; i++) {
       new POVButton(m_operator, i * 45).whenHeld(new ShooterAim(shooter, i));

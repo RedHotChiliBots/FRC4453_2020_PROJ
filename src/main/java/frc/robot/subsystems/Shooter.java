@@ -59,9 +59,9 @@ public class Shooter extends SubsystemBase {
   NetworkTableEntry ta = table.getEntry("ta");
 
   // read values periodically
-  double x = tx.getDouble(0.0);
-  double y = ty.getDouble(0.0);
-  double area = ta.getDouble(0.0);
+  public double x = tx.getDouble(0.0);
+  public double y = ty.getDouble(0.0);
+  public double area = ta.getDouble(0.0);
 
   private double shootSetPoint = 0.0;
   private double tiltSetPoint = 0.0;
@@ -247,6 +247,19 @@ public class Shooter extends SubsystemBase {
     tiltMotor.set(ControlMode.PercentOutput, spd);
   }
 
+<<<<<<< HEAD
+  public double getX() {
+    return tx.getDouble(0.0);
+  }
+
+  public double getY() {
+    return ty.getDouble(0.0);
+  }
+
+  // public boolean isLimit() {
+  // return
+  // }
+=======
   public void setTiltZeroPos() {
     tiltMotor.getSensorCollection().setQuadraturePosition(0, TiltConstants.kTimeoutMs);
   }
@@ -254,6 +267,7 @@ public class Shooter extends SubsystemBase {
   public double getTiltAmps() {
     return pdp.getCurrent(TiltConstants.kTiltPowerIndex);
   }
+>>>>>>> b87ad72594b9a268a1a8b9b116bceffdef72bf7c
 
   public void moveToAngle(double angle, double speed) {
     // angleMotor.set(speed);
