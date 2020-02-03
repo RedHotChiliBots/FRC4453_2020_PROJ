@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,22 +23,30 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Collector;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spinner;
 
-import frc.robot.commands.ShooterMoveToAngle;
 import frc.robot.commands.ShooterShoot;
 import frc.robot.commands.ShooterStop;
 import frc.robot.commands.SpinnerCountRevs;
+import frc.robot.commands.SpinnerStop;
 import frc.robot.commands.SpinnerStopOnColor;
+<<<<<<< HEAD
 import frc.robot.commands.SpinnerStow;
 import frc.robot.commands.AutoShooterAim;
+=======
+>>>>>>> b87ad72594b9a268a1a8b9b116bceffdef72bf7c
 import frc.robot.commands.AutonDrive;
 import frc.robot.commands.ClimberExtend;
 import frc.robot.commands.ClimberRetract;
 import frc.robot.commands.CollectorExtend;
 import frc.robot.commands.CollectorRetract;
+import frc.robot.commands.CollectorStop;
+import frc.robot.commands.DriveTeleop;
+import frc.robot.commands.HopperStop;
 import frc.robot.commands.ShooterAim;
+import frc.robot.commands.ShooterInit;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -48,26 +57,30 @@ import frc.robot.commands.ShooterAim;
  */
 public class RobotContainer {
   // Define SubSystems
-  private final Chassis chassis = new Chassis();
-  private final Spinner spinner = new Spinner();
-  private final Shooter shooter = new Shooter();
-  private final Climber climber = new Climber();
-  private final Collector collector = new Collector();
+  public final Chassis chassis = new Chassis();
+  public final Spinner spinner = new Spinner();
+  public final Shooter shooter = new Shooter();
+  public final Climber climber = new Climber();
+  public final Collector collector = new Collector();
+  public final Hopper hopper = new Hopper();
 
   XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
 
   // Define Commands
-  private final SpinnerStow m_spinnerStow = new SpinnerStow(spinner);
-  private final SpinnerStopOnColor m_spinnerStopOnColor = new SpinnerStopOnColor(spinner);
-  private final SpinnerCountRevs m_spinnerCountRevs = new SpinnerCountRevs(spinner);
+  // private final SpinnerStop m_spinnerStop = new SpinnerStop(spinner);
+  // private final SpinnerStopOnColor m_spinnerStopOnColor = new
+  // SpinnerStopOnColor(spinner);
+  // private final SpinnerCountRevs m_spinnerCountRevs = new
+  // SpinnerCountRevs(spinner);
 
-  private final ShooterShoot m_shooterShoot = new ShooterShoot(shooter);
-  private final ShooterStop m_shooterStop = new ShooterStop(shooter);
-  private final ShooterMoveToAngle m_shooterMoveToAngle = new ShooterMoveToAngle(shooter,
-      m_operator.getY(Hand.kLeft) * 35);
+  // private final ShooterShoot m_shooterShoot = new ShooterShoot(shooter);
+  // private final ShooterStop m_shooterStop = new ShooterStop(shooter);
+  // private final ShooterMoveToAngle m_shooterMoveToAngle = new
+  // ShooterMoveToAngle(shooter,
+  // m_operator.getY(Hand.kLeft) * 35);
 
-  private final AutonDrive m_auton = new AutonDrive(chassis, spinner);
+  // private final AutonDrive m_auton = new AutonDrive(chassis, spinner);
 
   // Define chooser for autonomous commands
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -85,19 +98,22 @@ public class RobotContainer {
     SmartDashboard.putData("Climber", climber);
     SmartDashboard.putData("Spinner", spinner);
     SmartDashboard.putData("Collector", collector);
+    SmartDashboard.putData("Hopper", hopper);
 
     // Configure default commands
-    chassis.setDefaultCommand(
-        new RunCommand(() -> chassis.driveTeleop(m_driver.getY(Hand.kLeft), m_driver.getY(Hand.kRight)), chassis));
+    // chassis.setDefaultCommand(
+    // new RunCommand(() -> chassis.driveTeleop(m_driver.getY(Hand.kLeft),
+    // m_driver.getY(Hand.kRight)), chassis));
 
-    spinner.setDefaultCommand(new RunCommand(() -> spinner.setRPMs(Constants.SpinnerConstants.kStopRPMs), spinner));
-
-    shooter.setDefaultCommand(new RunCommand(() -> shooter.stopShoot(), shooter));
-
-    // shooter.setDefaultCommand(new ShooterStop(shooter));
+    chassis
+        .setDefaultCommand(new DriveTeleop(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
+    collector.setDefaultCommand(new CollectorStop(collector));
+    hopper.setDefaultCommand(new HopperStop(hopper));
+    shooter.setDefaultCommand(new ShooterStop(shooter));
+    spinner.setDefaultCommand(new SpinnerStop(spinner));
 
     // A chooser for autonomous commands
-    m_chooser.addOption("Auton", m_auton);
+    m_chooser.addOption("Auton", new AutonDrive(chassis, shooter));
 
     SmartDashboard.putData("Auton Chooser", m_chooser);
   }
@@ -113,11 +129,11 @@ public class RobotContainer {
     // Define Operator controls
     new JoystickButton(m_operator, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));
     new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
-    new JoystickButton(m_operator, Button.kX.value).whenPressed(new SpinnerStow(spinner));
+    new JoystickButton(m_operator, Button.kX.value).whenPressed(new SpinnerStop(spinner));
 
     new JoystickButton(m_operator, Button.kY.value).whenHeld(new ShooterShoot(shooter));
 
-    new JoystickButton(m_operator, Button.kStart.value).whenPressed(new SpinnerStow(spinner));
+    new JoystickButton(m_operator, Button.kStart.value).whenPressed(new SpinnerStop(spinner));
 
     new JoystickButton(m_driver, Button.kY.value)
         .whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()));
@@ -152,6 +168,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_chooser.getSelected();
+    return new SequentialCommandGroup(new ParallelCommandGroup(new ShooterInit(shooter)), m_chooser.getSelected());
   }
 }

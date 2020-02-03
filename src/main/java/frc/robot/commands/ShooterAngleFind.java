@@ -8,36 +8,43 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Chassis;
+import frc.robot.Constants.AngleConstants;
 import frc.robot.subsystems.Shooter;
 
-public class AutonDrive extends CommandBase {
+public class ShooterAngleFind extends CommandBase {
 
-  private final Chassis chassis;
   private final Shooter shooter;
+  private boolean movingLeft = true;
 
-  public AutonDrive(Chassis chassis, Shooter shooter) {
-    this.chassis = chassis;
+  public ShooterAngleFind(Shooter shooter) {
     this.shooter = shooter;
-    addRequirements(chassis, shooter);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+    addRequirements(shooter);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    shooter.moveAngleLeft(AngleConstants.kAngleFindSpeed);
+    movingLeft = true;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
+    if (!shooter.getAngleCenterPos()) {
+      if (movingLeft && shooter.getAngleLeftLimit()) {
+        movingLeft = false;
+        shooter.moveAngleRight(AngleConstants.kAngleFindSpeed);
+      } else if (!movingLeft && shooter.getAngleRightLimit()) {
+        movingLeft = true;
+        shooter.moveAngleLeft(AngleConstants.kAngleFindSpeed);
+      }
+    }
   }
 
-  // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return true;
+    return shooter.getAngleCenterPos();
   }
 
   // Called once after isFinished returns true

@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
 		// and put our
 		// autonomous chooser on the dashboard.
 
-		m_robotContainer = new RobotContainer();
+		this.m_robotContainer = new RobotContainer();
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		// m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+		m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
 		// schedule the autonomous command (example)
 		if (m_autonomousCommand != null) {
@@ -101,10 +101,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		// SmartDashboard.putNumber("Lift Target", Robot.lift.getTgtPosition());
-		// SmartDashboard.putNumber("Lift Current", Robot.lift.getMotorCurrent());
-		// SmartDashboard.putNumber("Lift Temp", Robot.lift.getMotorTemp());
-		// gameData = DriverStation.getInstance().getGameSpecificMessage();
 	}
 
 	@Override

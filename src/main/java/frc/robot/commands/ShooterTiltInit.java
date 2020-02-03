@@ -8,32 +8,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Spinner;
+import frc.robot.Constants.TiltConstants;
+import frc.robot.subsystems.Shooter;
 
-public class SpinnerStow extends CommandBase {
+public class ShooterTiltInit extends CommandBase {
 
-  private final Spinner spinner;
+  private final Shooter shooter;
+  private boolean finished = false;
 
-  public SpinnerStow(Spinner spinner) {
-    this.spinner = spinner;
-    addRequirements(spinner);
+  public ShooterTiltInit(Shooter shooter) {
+    this.shooter = shooter;
+    addRequirements(shooter);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    spinner.stopSpin();
+    shooter.moveTiltDown(TiltConstants.kATiltFindSpeed);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
+    if (shooter.getTiltAmps() > TiltConstants.kTiltAmps) {
+      shooter.setTiltZeroPos();
+      finished = true;
+    }
   }
 
-  // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return true;
+    return finished;
   }
 
   // Called once after isFinished returns true

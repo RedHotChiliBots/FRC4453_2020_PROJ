@@ -8,25 +8,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spinner;
 
-public class AutonDrive extends CommandBase {
+public class SpinnerStop extends CommandBase {
 
-  private final Chassis chassis;
-  private final Shooter shooter;
+  private final Spinner spinner;
 
-  public AutonDrive(Chassis chassis, Shooter shooter) {
-    this.chassis = chassis;
-    this.shooter = shooter;
-    addRequirements(chassis, shooter);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+  public SpinnerStop(Spinner spinner) {
+    this.spinner = spinner;
+    addRequirements(spinner);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    spinner.stopSpin();
   }
 
   // Called repeatedly when this Command is scheduled to run

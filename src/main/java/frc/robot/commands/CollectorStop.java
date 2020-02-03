@@ -8,25 +8,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Collector;
 
-public class AutonDrive extends CommandBase {
+public class CollectorStop extends CommandBase {
 
-  private final Chassis chassis;
-  private final Shooter shooter;
+  Collector collector;
 
-  public AutonDrive(Chassis chassis, Shooter shooter) {
-    this.chassis = chassis;
-    this.shooter = shooter;
-    addRequirements(chassis, shooter);
+  public CollectorStop(Collector collector) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    this.collector = collector;
+    addRequirements(collector);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    collector.collectorStop();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -42,6 +40,7 @@ public class AutonDrive extends CommandBase {
 
   // Called once after isFinished returns true
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean isFinished) {
   }
+
 }

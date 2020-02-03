@@ -91,6 +91,10 @@ public final class Constants {
 		public static final int kPIDLoopIdx = 0;
 		public static final int kTimeoutMs = 30;
 
+		public static final int kLeftDigital = 0;
+		public static final int kCenterDigital = 1;
+		public static final int kRightDigital = 2;
+
 		public static final double kP = 0.05;
 		public static final double kI = 0.0001;
 		public static final double kD = 0;
@@ -99,11 +103,14 @@ public final class Constants {
 		public static final double kMinOutput = 0;
 		public static final double kMaxOutput = 1;
 
+		public static final double kAngleFindSpeed = 0.8;
+		public static final double kAngleCenterSpeed = 0.5;
+
 		public static final double kTicsPerMotorRev = 4096;
 		public static final double kGBRatio = 10;
 		public static final double kTicsPerGBRev = kTicsPerMotorRev * kGBRatio;
 
-		public static final double kRGTeeth = 163.0; // Ring Gear
+		public static final double kRGTeeth = 170.0; // Ring Gear
 		public static final double kGBTeeth = 15.0; // Gear Box
 		public static final double kGBRevPerRGRev = (kRGTeeth / kGBTeeth);
 		public static final double kPosFactor = (kGBRevPerRGRev * kTicsPerGBRev) / 360.0; // Tics / Deg @ Ring Gear
@@ -111,6 +118,9 @@ public final class Constants {
 
 	public final static class TiltConstants {
 		public static final int kTiltMotor = 12;
+
+		public static final int kTiltPowerIndex = 1;
+		public static final double kTiltAmps = 1.0;
 
 		public static final int kSlotIdx = 0;
 		public static final int kPIDLoopIdx = 0;
@@ -138,6 +148,8 @@ public final class Constants {
 		public static final double kInchPerDeg = kInPerRevLS / kTiltDegLS;
 		public static final double kRevPerIn = 1 / kInPerRevLS;
 		public static final double kPosFactor = kInchPerDeg * kRevPerIn * kTicsPerGBRev; // Tic / Deg }
+
+		public static final double kATiltFindSpeed = 0.5;
 	}
 
 	public final static class SpinnerConstants {
@@ -185,14 +197,6 @@ public final class Constants {
 		public static final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
 	}
 
-	public static final class ClimberConstants {
-		public static final int kClimberExtendSolenoid = 0;
-		public static final int kClimberRetractSolenoid = 1;
-
-		public static final DoubleSolenoid.Value ClimberExtend = DoubleSolenoid.Value.kForward;
-		public static final DoubleSolenoid.Value ClimberRetract = DoubleSolenoid.Value.kReverse;
-	}
-
 	public static final class CollectorConstants {
 		public static final int kCollectorExtendSolenoid = 2;
 		public static final int kCollectorRetractSolenoid = 3;
@@ -200,19 +204,165 @@ public final class Constants {
 		public static final DoubleSolenoid.Value CollectorExtend = DoubleSolenoid.Value.kForward;
 		public static final DoubleSolenoid.Value CollectorRetract = DoubleSolenoid.Value.kReverse;
 
-		public static final int kCollectorMotor = 15;
+		public static final int kCollectorMotor = 30;
 
 		public static final int kSlotIdx = 0;
 		public static final int kPIDLoopIdx = 0;
 		public static final int kTimeoutMs = 30;
 
-		// public static final double kP = 1.0;
-		// public static final double kI = 0.05;
-		// public static final double kD = 0;
-		// public static final double kIz = 0;
-		// public static final double kFF = 0;
-		// public static final double kMinOutput = 0;
-		// public static final double kMaxOutput = 1;
+		public static final double kP = 1.0;
+		public static final double kI = 0.05;
+		public static final double kD = 0;
+		public static final double kIz = 0;
+		public static final double kFF = 0;
+		public static final double kMinOutput = 0;
+		public static final double kMaxOutput = 1;
+
+		public static final double kTicsPerRev = 12; // * 4; // RS7 quad encoder on 775 motor
+		public static final double kGearBoxRatio = 16;
+		public static final double k100msPerMin = 600; // constant
+		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
+
+		public static final double kCollectRPMs = 500.0;
+		public static final double kEjectRPMs = -200.0;
+	}
+
+	public final static class HopperConstants {
+		public static final int kTopMasterMotor = 40;
+		public static final int kBottomFollowerMotor = 41;
+
+		public static final int kSlotIdx = 0;
+		public static final int kPIDLoopIdx = 0;
+		public static final int kTimeoutMs = 30;
+
+		public static final double kP = 1.0;
+		public static final double kI = 0.005;
+		public static final double kD = 0.0;
+		public static final double kIz = 0.0;
+		public static final double kFF = 0.0;
+		public static final double kMinOutput = 0.0;
+		public static final double kMaxOutput = 1.0;
+		public static final double kMinRPM = 0;
+		public static final double kMaxRPM = 15000; // 80% of 775 Free Spin RPMs
+
+		public static final double kCPMaxRPM = 60; // Rules limit CP to 1 rps
+		public static final double kCPDiameter = 32; // inches (2' 8")
+		public static final double kWheelDiameter = 2.25;
+		public static final double kWheelRPM = (kCPDiameter / kWheelDiameter) * kCPMaxRPM;
+
+		public static final double kTicsPerRev = 12; // * 4; // RS7 quad encoder on 775 motor
+		public static final double kGearBoxRatio = 16;
+		public static final double k100msPerMin = 600; // constant
+		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
+
+		public static final double kCollectRPMs = 250; // Guess, so far
+		public static final double kLoadRPMs = kWheelRPM; // Given 2.25" wheel
+		public static final double kShootRPMs = 0; // Stop spinning
+		public static final double kStopRPMs = 0; // Stop spinning
+	}
+
+	public final static class EjectorConstants {
+		public static final int kLeftEjectorMotor = 42;
+		public static final int kRightEjectorMotor = 43;
+
+		public static final int kSlotIdx = 0;
+		public static final int kPIDLoopIdx = 0;
+		public static final int kTimeoutMs = 30;
+
+		public static final double kP = 1.0;
+		public static final double kI = 0.005;
+		public static final double kD = 0.0;
+		public static final double kIz = 0.0;
+		public static final double kFF = 0.0;
+		public static final double kMinOutput = 0.0;
+		public static final double kMaxOutput = 1.0;
+		public static final double kMinRPM = 0;
+		public static final double kMaxRPM = 15000; // 80% of 775 Free Spin RPMs
+
+		public static final double kCPMaxRPM = 60; // Rules limit CP to 1 rps
+		public static final double kCPDiameter = 32; // inches (2' 8")
+		public static final double kWheelDiameter = 2.25;
+		public static final double kWheelRPM = (kCPDiameter / kWheelDiameter) * kCPMaxRPM;
+
+		public static final double kTicsPerRev = 12; // * 4; // RS7 quad encoder on 775 motor
+		public static final double kGearBoxRatio = 16;
+		public static final double k100msPerMin = 600; // constant
+		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
+
+		public static final double kCollectRPMs = 250; // Guess, so far
+		public static final double kLoadRPMs = kWheelRPM; // Given 2.25" wheel
+		public static final double kShootRPMs = 0; // Stop spinning
+		public static final double kStopRPMs = 0; // Stop spinning
+	}
+
+	public static final class ClimberConstants {
+		public static final int kClimberMotor = 50;
+
+		public static final int kClimberExtendSolenoid = 0;
+		public static final int kClimberRetractSolenoid = 1;
+
+		public static final DoubleSolenoid.Value ClimberExtend = DoubleSolenoid.Value.kForward;
+		public static final DoubleSolenoid.Value ClimberRetract = DoubleSolenoid.Value.kReverse;
+
+		public static final int kSlotIdx = 0;
+		public static final int kPIDLoopIdx = 0;
+		public static final int kTimeoutMs = 30;
+
+		public static final double kP = 1.0;
+		public static final double kI = 0.005;
+		public static final double kD = 0.0;
+		public static final double kIz = 0.0;
+		public static final double kFF = 0.0;
+		public static final double kMinOutput = 0.0;
+		public static final double kMaxOutput = 1.0;
+		public static final double kMinRPM = 0;
+		public static final double kMaxRPM = 15000; // 80% of 775 Free Spin RPMs
+
+		public static final double kCPMaxRPM = 60; // Rules limit CP to 1 rps
+		public static final double kCPDiameter = 32; // inches (2' 8")
+		public static final double kWheelDiameter = 2.25;
+		public static final double kWheelRPM = (kCPDiameter / kWheelDiameter) * kCPMaxRPM;
+
+		public static final double kTicsPerRev = 12; // * 4; // RS7 quad encoder on 775 motor
+		public static final double kGearBoxRatio = 16;
+		public static final double k100msPerMin = 600; // constant
+		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
+
+		public static final double kStopOnColorRPMs = 250; // Guess, so far
+		public static final double kCountRevRPMs = kWheelRPM; // Given 2.25" wheel
+		public static final double kStopRPMs = 0; // Stop spinning
+	}
+
+	public static final class LevelerConstants {
+		public static final int kLevelerMotor = 50;
+
+		public static final int kSlotIdx = 0;
+		public static final int kPIDLoopIdx = 0;
+		public static final int kTimeoutMs = 30;
+
+		public static final double kP = 1.0;
+		public static final double kI = 0.005;
+		public static final double kD = 0.0;
+		public static final double kIz = 0.0;
+		public static final double kFF = 0.0;
+		public static final double kMinOutput = 0.0;
+		public static final double kMaxOutput = 1.0;
+		public static final double kMinRPM = 0;
+		public static final double kMaxRPM = 15000; // 80% of 775 Free Spin RPMs
+
+		public static final double kCPMaxRPM = 60; // Rules limit CP to 1 rps
+		public static final double kCPDiameter = 32; // inches (2' 8")
+		public static final double kWheelDiameter = 2.25;
+		public static final double kWheelRPM = (kCPDiameter / kWheelDiameter) * kCPMaxRPM;
+
+		public static final double kTicsPerRev = 12; // * 4; // RS7 quad encoder on 775 motor
+		public static final double kGearBoxRatio = 16;
+		public static final double k100msPerMin = 600; // constant
+		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
+
+		public static final double kStopOnColorRPMs = 250; // Guess, so far
+		public static final double kCountRevRPMs = kWheelRPM; // Given 2.25" wheel
+		public static final double kStopRPMs = 0; // Stop spinning
 	}
 
 }

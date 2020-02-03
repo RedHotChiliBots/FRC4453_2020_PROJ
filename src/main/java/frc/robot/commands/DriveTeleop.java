@@ -18,7 +18,7 @@ public class DriveTeleop extends CommandBase {
   private DoubleSupplier left;
   private DoubleSupplier right;
 
-  public DriveTeleop(Chassis chassis, DoubleSupplier left, DoubleSupplier right) {
+  public DriveTeleop(DoubleSupplier left, DoubleSupplier right, Chassis chassis) {
     this.chassis = chassis;
     this.left = left;
     this.right = right;

@@ -8,18 +8,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Hopper;
 
-public class AutonDrive extends CommandBase {
+public class HopperStop extends CommandBase {
 
-  private final Chassis chassis;
-  private final Shooter shooter;
+  private final Hopper hopper;
 
-  public AutonDrive(Chassis chassis, Shooter shooter) {
-    this.chassis = chassis;
-    this.shooter = shooter;
-    addRequirements(chassis, shooter);
+  public HopperStop(Hopper hopper) {
+    this.hopper = hopper;
+    addRequirements(hopper);
+    // super(timeout);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -32,9 +30,9 @@ public class AutonDrive extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
+    hopper.stopHopper();
   }
 
-  // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
     return true;
