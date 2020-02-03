@@ -108,7 +108,7 @@ public class RobotContainer {
     spinner.setDefaultCommand(new SpinnerStop(spinner));
 
     // A chooser for autonomous commands
-    m_chooser.addOption("Auton", new AutonDrive(chassis, spinner));
+    m_chooser.addOption("Auton", new AutonDrive(chassis, shooter));
 
     SmartDashboard.putData("Auton Chooser", m_chooser);
   }

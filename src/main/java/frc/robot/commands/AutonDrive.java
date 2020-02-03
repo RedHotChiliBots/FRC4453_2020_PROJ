@@ -9,17 +9,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Spinner;
+import frc.robot.subsystems.Shooter;
 
 public class AutonDrive extends CommandBase {
 
   private final Chassis chassis;
-  private final Spinner spinner;
+  private final Shooter shooter;
 
-  public AutonDrive(Chassis chassis, Spinner spinner) {
+  public AutonDrive(Chassis chassis, Shooter shooter) {
     this.chassis = chassis;
-    this.spinner = spinner;
-    addRequirements(chassis, spinner);
+    this.shooter = shooter;
+    addRequirements(chassis, shooter);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
