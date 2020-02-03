@@ -7,35 +7,27 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.Spinner;
 
-public class DriveTeleop extends CommandBase {
+public class SpinnerStop extends CommandBase {
 
-  private final Chassis chassis;
-  private DoubleSupplier left;
-  private DoubleSupplier right;
+  private final Spinner spinner;
 
-  public DriveTeleop(DoubleSupplier left, DoubleSupplier right, Chassis chassis) {
-    this.chassis = chassis;
-    this.left = left;
-    this.right = right;
-    addRequirements(chassis);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+  public SpinnerStop(Spinner spinner) {
+    this.spinner = spinner;
+    addRequirements(spinner);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    spinner.stopSpin();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    chassis.driveTeleop(left.getAsDouble(), right.getAsDouble());
   }
 
   // Make this return true when this Command no longer needs to run execute()

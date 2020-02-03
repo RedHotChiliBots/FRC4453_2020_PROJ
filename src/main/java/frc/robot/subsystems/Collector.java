@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -26,6 +27,7 @@ public class Collector extends SubsystemBase {
 
 	private final TalonSRX collectorMotor = new TalonSRX(CollectorConstants.kCollectorMotor);
 
+	private double collectorSetPoint;
 	// climberSolenoid.set(kOff);
 	// climberSolenoid.set(kForward);
 	// climberSolenoid.set(kReverse);
@@ -35,13 +37,30 @@ public class Collector extends SubsystemBase {
 
 		SmartDashboard.putData("Collector Solenoid", collectorSolenoid);
 
+		/* Factory Default all hardware to prevent unexpected behaviour */
 		collectorMotor.configFactoryDefault();
 		collectorMotor.clearStickyFaults();
 
-		// Configure Motor
-		collectorMotor.setNeutralMode(NeutralMode.Brake);
-		collectorMotor.setInverted(false);
-		collectorMotor.setSensorPhase(false);
+		/* Config sensor used for Primary PID [Velocity] */
+		collectorMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,
+				CollectorConstants.kPIDLoopIdx, CollectorConstants.kTimeoutMs);
+
+		// Conifigure motor controller
+		collectorMotor.setSensorPhase(false); // Positive Sensor Reading should match Green (blinking) Leds on Talon
+		collectorMotor.setNeutralMode(NeutralMode.Brake); // Brake motor on neutral input
+		collectorMotor.setInverted(false); // Run motor in normal rotation with positive input
+
+		/* Config the peak and nominal outputs */
+		collectorMotor.configNominalOutputForward(0, CollectorConstants.kTimeoutMs);
+		collectorMotor.configNominalOutputReverse(0, CollectorConstants.kTimeoutMs);
+		collectorMotor.configPeakOutputForward(1, CollectorConstants.kTimeoutMs);
+		collectorMotor.configPeakOutputReverse(-1, CollectorConstants.kTimeoutMs);
+
+		/* Config the Velocity closed loop gains in slot0 */
+		collectorMotor.config_kF(CollectorConstants.kPIDLoopIdx, CollectorConstants.kFF, CollectorConstants.kTimeoutMs);
+		collectorMotor.config_kP(CollectorConstants.kPIDLoopIdx, CollectorConstants.kP, CollectorConstants.kTimeoutMs);
+		collectorMotor.config_kI(CollectorConstants.kPIDLoopIdx, CollectorConstants.kI, CollectorConstants.kTimeoutMs);
+		collectorMotor.config_kD(CollectorConstants.kPIDLoopIdx, CollectorConstants.kD, CollectorConstants.kTimeoutMs);
 
 		System.out.println("----- Collector Constructor finished ...");
 	}
@@ -52,6 +71,29 @@ public class Collector extends SubsystemBase {
 
 	public void collectorRetract() {
 		collectorSolenoid.set(CollectorConstants.CollectorRetract);
+	}
+
+	/**
+	 * Get current speed (rpms) of the Spinner motor
+	 * 
+	 * @return rpm - scaled speed to rpms
+	 */
+	public double getRPMs() {
+		return collectorMotor.getSelectedSensorVelocity(CollectorConstants.kPIDLoopIdx) / CollectorConstants.kVelFactor;
+	}
+
+	/**
+	 * Set speed (rpms) of Spinner motor/gearbox.
+	 * 
+	 * @param rpm - desired speed (rpms) of motor/gearbox
+	 */
+	public void setRPMs(double rpm) {
+		collectorSetPoint = rpm;
+		collectorMotor.set(ControlMode.Velocity, rpm * CollectorConstants.kVelFactor);
+	}
+
+	public void stopSpin() {
+		collectorMotor.set(ControlMode.PercentOutput, 0.0);
 	}
 
 	public void collectorCollect() {
