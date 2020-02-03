@@ -247,7 +247,6 @@ public class Shooter extends SubsystemBase {
     tiltMotor.set(ControlMode.PercentOutput, spd);
   }
 
-<<<<<<< HEAD
   public double getX() {
     return tx.getDouble(0.0);
   }
@@ -259,7 +258,7 @@ public class Shooter extends SubsystemBase {
   // public boolean isLimit() {
   // return
   // }
-=======
+
   public void setTiltZeroPos() {
     tiltMotor.getSensorCollection().setQuadraturePosition(0, TiltConstants.kTimeoutMs);
   }
@@ -267,7 +266,6 @@ public class Shooter extends SubsystemBase {
   public double getTiltAmps() {
     return pdp.getCurrent(TiltConstants.kTiltPowerIndex);
   }
->>>>>>> b87ad72594b9a268a1a8b9b116bceffdef72bf7c
 
   public void moveToAngle(double angle, double speed) {
     // angleMotor.set(speed);

@@ -32,11 +32,7 @@ import frc.robot.commands.ShooterStop;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStop;
 import frc.robot.commands.SpinnerStopOnColor;
-<<<<<<< HEAD
-import frc.robot.commands.SpinnerStow;
 import frc.robot.commands.AutoShooterAim;
-=======
->>>>>>> b87ad72594b9a268a1a8b9b116bceffdef72bf7c
 import frc.robot.commands.AutonDrive;
 import frc.robot.commands.ClimberExtend;
 import frc.robot.commands.ClimberRetract;
