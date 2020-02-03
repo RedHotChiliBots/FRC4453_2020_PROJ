@@ -52,9 +52,9 @@ public class Shooter extends SubsystemBase {
   NetworkTableEntry ta = table.getEntry("ta");
 
   // read values periodically
-  double x = tx.getDouble(0.0);
-  double y = ty.getDouble(0.0);
-  double area = ta.getDouble(0.0);
+  public double x = tx.getDouble(0.0);
+  public double y = ty.getDouble(0.0);
+  public double area = ta.getDouble(0.0);
 
   private double shooterSetPoint = 0.0;
   private double tiltSetPoint = 0.0;
@@ -215,6 +215,14 @@ public class Shooter extends SubsystemBase {
 
   public double getTiltSetPoint() {
     return tiltSetPoint;
+  }
+
+  public double getX() {
+    return tx.getDouble(0.0);
+  }
+
+  public double getY() {
+    return ty.getDouble(0.0);
   }
 
   // public boolean isLimit() {
