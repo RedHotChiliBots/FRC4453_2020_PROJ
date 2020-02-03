@@ -22,7 +22,7 @@ import frc.robot.Constants.CollectorConstants;
  */
 public class Collector extends SubsystemBase {
 
-	DoubleSolenoid collectorSolenoid = new DoubleSolenoid(CollectorConstants.kCollectorExtendSolenoid,
+	private final DoubleSolenoid collectorSolenoid = new DoubleSolenoid(CollectorConstants.kCollectorExtendSolenoid,
 			CollectorConstants.kCollectorRetractSolenoid);
 
 	private final TalonSRX collectorMotor = new TalonSRX(CollectorConstants.kCollectorMotor);
@@ -66,6 +66,12 @@ public class Collector extends SubsystemBase {
 		System.out.println("----- Collector Constructor finished ...");
 	}
 
+	// Called once per Robot execution loop - 50Hz
+	public void periodic() {
+		SmartDashboard.putNumber("Collector SetPoint (rpm)", collectorSetPoint);
+		SmartDashboard.putNumber("Collector Target (rpm)", getCollectorRPMs());
+	}
+
 	public void collectorExtend() {
 		collectorSolenoid.set(CollectorConstants.CollectorExtend);
 	}
@@ -79,7 +85,7 @@ public class Collector extends SubsystemBase {
 	 * 
 	 * @return rpm - scaled speed to rpms
 	 */
-	public double getRPMs() {
+	public double getCollectorRPMs() {
 		return collectorMotor.getSelectedSensorVelocity(CollectorConstants.kPIDLoopIdx) / CollectorConstants.kVelFactor;
 	}
 
@@ -88,7 +94,7 @@ public class Collector extends SubsystemBase {
 	 * 
 	 * @param rpm - desired speed (rpms) of motor/gearbox
 	 */
-	public void setRPMs(double rpm) {
+	public void setCollectorRPMs(double rpm) {
 		collectorSetPoint = rpm;
 		collectorMotor.set(ControlMode.Velocity, rpm * CollectorConstants.kVelFactor);
 	}
