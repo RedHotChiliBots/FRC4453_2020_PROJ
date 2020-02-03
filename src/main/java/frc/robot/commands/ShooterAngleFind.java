@@ -7,41 +7,47 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Chassis;
+import frc.robot.Constants.AngleConstants;
+import frc.robot.subsystems.Shooter;
 
-public class DriveTeleop extends CommandBase {
+public class ShooterAngleFind extends CommandBase {
 
-  private final Chassis chassis;
-  private DoubleSupplier left;
-  private DoubleSupplier right;
+  private final Shooter shooter;
+  private boolean movingLeft = true;
+  private int leftPos = 0;
+  private int rightPos = 0;
+  private int centerPos = 0;
 
-  public DriveTeleop(DoubleSupplier left, DoubleSupplier right, Chassis chassis) {
-    this.chassis = chassis;
-    this.left = left;
-    this.right = right;
-    addRequirements(chassis);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+  public ShooterAngleFind(Shooter shooter) {
+    this.shooter = shooter;
+    addRequirements(shooter);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    shooter.moveAngleLeft(AngleConstants.kAngleFindSpeed);
+    movingLeft = true;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    chassis.driveTeleop(left.getAsDouble(), right.getAsDouble());
+    if (!shooter.getAngleCenterPos()) {
+      if (movingLeft && shooter.getAngleLeftLimit()) {
+        movingLeft = false;
+        shooter.moveAngleRight(AngleConstants.kAngleFindSpeed);
+      } else if (!movingLeft && shooter.getAngleRightLimit()) {
+        movingLeft = true;
+        shooter.moveAngleLeft(AngleConstants.kAngleFindSpeed);
+      }
+    }
   }
 
-  // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return true;
+    return shooter.getAngleCenterPos();
   }
 
   // Called once after isFinished returns true

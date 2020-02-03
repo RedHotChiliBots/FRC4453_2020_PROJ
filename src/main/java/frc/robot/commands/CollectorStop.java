@@ -7,35 +7,29 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.Collector;
 
-public class DriveTeleop extends CommandBase {
+public class CollectorStop extends CommandBase {
 
-  private final Chassis chassis;
-  private DoubleSupplier left;
-  private DoubleSupplier right;
+  Collector collector;
 
-  public DriveTeleop(DoubleSupplier left, DoubleSupplier right, Chassis chassis) {
-    this.chassis = chassis;
-    this.left = left;
-    this.right = right;
-    addRequirements(chassis);
+  public CollectorStop(Collector collector) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    this.collector = collector;
+    addRequirements(collector);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    collector.collectorStop();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    chassis.driveTeleop(left.getAsDouble(), right.getAsDouble());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -46,6 +40,7 @@ public class DriveTeleop extends CommandBase {
 
   // Called once after isFinished returns true
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean isFinished) {
   }
+
 }

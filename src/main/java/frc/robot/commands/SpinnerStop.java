@@ -10,11 +10,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Spinner;
 
-public class SpinnerStow extends CommandBase {
+public class SpinnerStop extends CommandBase {
 
   private final Spinner spinner;
 
-  public SpinnerStow(Spinner spinner) {
+  public SpinnerStop(Spinner spinner) {
     this.spinner = spinner;
     addRequirements(spinner);
   }

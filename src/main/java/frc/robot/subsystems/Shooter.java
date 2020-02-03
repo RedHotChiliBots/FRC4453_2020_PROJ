@@ -9,6 +9,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANEncoder;
@@ -22,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Library;
@@ -42,6 +45,10 @@ public class Shooter extends SubsystemBase {
 
   private final CANPIDController shootPIDController = new CANPIDController(shootMotor);
   private final CANEncoder shootEncoder = new CANEncoder(shootMotor);
+
+  private final DigitalInput angleLeftLimit = new DigitalInput(AngleConstants.kLeftDigital);
+  private final DigitalInput angleCenterPos = new DigitalInput(AngleConstants.kLeftDigital);
+  private final DigitalInput angleRightLimit = new DigitalInput(AngleConstants.kLeftDigital);
 
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry tx = table.getEntry("tx");
@@ -105,6 +112,9 @@ public class Shooter extends SubsystemBase {
     /* Config sensor used for Primary PID [Velocity] */
     angleMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, AngleConstants.kPIDLoopIdx,
         AngleConstants.kTimeoutMs);
+
+    angleMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+    angleMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
 
     /* Config the peak and nominal outputs */
     angleMotor.configNominalOutputForward(0, AngleConstants.kTimeoutMs);
@@ -197,6 +207,30 @@ public class Shooter extends SubsystemBase {
     angleMotor.set(ControlMode.Position, pos * AngleConstants.kPosFactor);
   }
 
+  public void moveAngleLeft(double spd) {
+    angleMotor.set(ControlMode.PercentOutput, spd);
+  }
+
+  public void moveAngleRight(double spd) {
+    angleMotor.set(ControlMode.PercentOutput, -spd);
+  }
+
+  public boolean getAngleLeftLimit() {
+    return angleLeftLimit.get();
+  }
+
+  public boolean getAngleCenterPos() {
+    return angleCenterPos.get();
+  }
+
+  public boolean getAngleRightLimit() {
+    return angleRightLimit.get();
+  }
+
+  public void setAngleZeroPos() {
+    angleMotor.getSensorCollection().setQuadraturePosition(0, TiltConstants.kTimeoutMs);
+  }
+
   public double getTiltPosition() {
     return tiltMotor.getSelectedSensorPosition() / TiltConstants.kPosFactor;
   }
@@ -206,18 +240,10 @@ public class Shooter extends SubsystemBase {
     tiltMotor.set(ControlMode.Position, pos * TiltConstants.kPosFactor);
   }
 
-  // public boolean isLimit() {
-  // return
-  // }
+  public void setTiltZeroPos() {
+    tiltMotor.getSensorCollection().setQuadraturePosition(0, TiltConstants.kTimeoutMs);
+  }
 
-  // public void resetEncoders() {
-  // angleEncoder.rese
-  // }
-  // public void zeroAngle() {
-  // if (isLimit() == true) {
-  // angleEncoder.setPosition(0);
-  // }
-  // }
   public void moveToAngle(double angle, double speed) {
     // angleMotor.set(speed);
     // angleEncoder.setPosition(angle); // TODO set constants to adjust from ticks
