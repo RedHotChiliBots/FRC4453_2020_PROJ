@@ -119,6 +119,9 @@ public final class Constants {
 	public final static class TiltConstants {
 		public static final int kTiltMotor = 12;
 
+		public static final int kTiltPowerIndex = 1;
+		public static final double kTiltAmps = 1.0;
+
 		public static final int kSlotIdx = 0;
 		public static final int kPIDLoopIdx = 0;
 		public static final int kTimeoutMs = 30;
@@ -145,6 +148,8 @@ public final class Constants {
 		public static final double kInchPerDeg = kInPerRevLS / kTiltDegLS;
 		public static final double kRevPerIn = 1 / kInPerRevLS;
 		public static final double kPosFactor = kInchPerDeg * kRevPerIn * kTicsPerGBRev; // Tic / Deg }
+
+		public static final double kATiltFindSpeed = 0.5;
 	}
 
 	public final static class SpinnerConstants {

@@ -23,10 +23,10 @@ public class ShooterAngleInit extends SequentialCommandGroup {
    */
   public ShooterAngleInit(Shooter shooter) {
     addCommands(
-        // Drive forward the specified distance
+        // Find center magnet
         new ShooterAngleFind(shooter),
 
-        // Release the hatch
+        // Center on magnetic field
         new ShooterAngleCenter(shooter));
   }
 }

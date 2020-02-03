@@ -25,6 +25,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Library;
@@ -38,6 +39,8 @@ import frc.robot.Constants.AngleConstants;
 public class Shooter extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
+
+  private final PowerDistributionPanel pdp = new PowerDistributionPanel(0);
 
   private final CANSparkMax shootMotor = new CANSparkMax(ShooterConstants.kShooterMotor, MotorType.kBrushless);
   private final TalonSRX angleMotor = new TalonSRX(AngleConstants.kAngleMotor);
@@ -240,8 +243,16 @@ public class Shooter extends SubsystemBase {
     tiltMotor.set(ControlMode.Position, pos * TiltConstants.kPosFactor);
   }
 
+  public void moveTiltDown(double spd) {
+    tiltMotor.set(ControlMode.PercentOutput, spd);
+  }
+
   public void setTiltZeroPos() {
     tiltMotor.getSensorCollection().setQuadraturePosition(0, TiltConstants.kTimeoutMs);
+  }
+
+  public double getTiltAmps() {
+    return pdp.getCurrent(TiltConstants.kTiltPowerIndex);
   }
 
   public void moveToAngle(double angle, double speed) {
