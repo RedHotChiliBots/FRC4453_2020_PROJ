@@ -22,12 +22,13 @@ public class ShooterShoot extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    shooter.setShootVelocity(ShooterConstants.kShooterShootRPMs);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    shooter.setShootVelocity(ShooterConstants.shootRPMs);
+
   }
 
   // Make this return true when this Command no longer needs to run execute()

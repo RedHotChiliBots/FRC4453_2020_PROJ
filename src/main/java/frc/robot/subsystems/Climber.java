@@ -20,8 +20,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Library;
+import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.LevelerConstants;
+import frc.robot.Constants.PneumaticConstants;
 
 /**
  * Add your docs here.
@@ -29,17 +31,17 @@ import frc.robot.Constants.LevelerConstants;
 
 public class Climber extends SubsystemBase {
 
-	DoubleSolenoid climberSolenoid = new DoubleSolenoid(ClimberConstants.kClimberExtendSolenoid,
-			ClimberConstants.kClimberRetractSolenoid);
+	DoubleSolenoid climberSolenoid = new DoubleSolenoid(PneumaticConstants.kClimberExtendSolenoid,
+			PneumaticConstants.kClimberRetractSolenoid);
 
-	private final CANSparkMax climbMotor = new CANSparkMax(ClimberConstants.kClimberMotor, MotorType.kBrushless);
+	private final CANSparkMax climbMotor = new CANSparkMax(CANidConstants.kClimberMotor, MotorType.kBrushless);
 
 	private final CANPIDController climbPIDController = new CANPIDController(climbMotor);
 	private final CANEncoder climbEncoder = new CANEncoder(climbMotor);
 
 	private double climbSetPoint;
 
-	private final CANSparkMax levelMotor = new CANSparkMax(LevelerConstants.kLevelerMotor, MotorType.kBrushless);
+	private final CANSparkMax levelMotor = new CANSparkMax(CANidConstants.kLevelerMotor, MotorType.kBrushless);
 
 	private final CANPIDController levelPIDController = new CANPIDController(levelMotor);
 	private final CANEncoder levelEncoder = new CANEncoder(levelMotor);

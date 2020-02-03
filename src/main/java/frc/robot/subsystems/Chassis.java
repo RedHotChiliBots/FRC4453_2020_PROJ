@@ -29,7 +29,8 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import frc.robot.Constants;
+import frc.robot.Constants.AnalogIOConstants;
+import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.UnitsConstants;
 
@@ -39,15 +40,15 @@ import frc.robot.Constants.UnitsConstants;
 public class Chassis extends SubsystemBase {
 
 	// Define the left side motors, master and follower
-	private final CANSparkMax leftMaster = new CANSparkMax(ChassisConstants.kLeftMasterMotor, MotorType.kBrushless);
+	private final CANSparkMax leftMaster = new CANSparkMax(CANidConstants.kLeftMasterMotor, MotorType.kBrushless);
 	private final SpeedController m_leftMaster = leftMaster;
-	private final SpeedController m_leftFollower = new CANSparkMax(ChassisConstants.kLeftFollowerMotor,
+	private final SpeedController m_leftFollower = new CANSparkMax(CANidConstants.kLeftFollowerMotor,
 			MotorType.kBrushless);
 
 	// Define the right side motors, master and follower
-	private final CANSparkMax rightMaster = new CANSparkMax(ChassisConstants.kRightMasterMotor, MotorType.kBrushless);
+	private final CANSparkMax rightMaster = new CANSparkMax(CANidConstants.kRightMasterMotor, MotorType.kBrushless);
 	private final SpeedController m_rightMaster = rightMaster;
-	private final SpeedController m_rightFollower = new CANSparkMax(ChassisConstants.kRightFollowerMotor,
+	private final SpeedController m_rightFollower = new CANSparkMax(CANidConstants.kRightFollowerMotor,
 			MotorType.kBrushless);
 
 	// Group the left and right motors
@@ -79,8 +80,8 @@ public class Chassis extends SubsystemBase {
 	private final Compressor compressor = new Compressor();
 
 	// Identify compressor hi and lo sensors
-	private AnalogInput hiPressureSensor = new AnalogInput(Constants.ChassisConstants.kHiPressureChannel);
-	private AnalogInput loPressureSensor = new AnalogInput(Constants.ChassisConstants.kLoPressureChannel);
+	private AnalogInput hiPressureSensor = new AnalogInput(AnalogIOConstants.kHiPressureChannel);
+	private AnalogInput loPressureSensor = new AnalogInput(AnalogIOConstants.kLoPressureChannel);
 
 	/**
 	 * Constructs a differential drive object. Sets the encoder distance per pulse
@@ -251,10 +252,10 @@ public class Chassis extends SubsystemBase {
 	 * Get Hi and Lo pressure sensors in PSI
 	 */
 	public double getLoPressure() {
-		return 250.0 * (loPressureSensor.getVoltage() / Constants.ChassisConstants.kInputVoltage) - 25.0;
+		return 250.0 * (loPressureSensor.getVoltage() / AnalogIOConstants.kInputVoltage) - 25.0;
 	}
 
 	public double getHiPressure() {
-		return 250.0 * (hiPressureSensor.getVoltage() / Constants.ChassisConstants.kInputVoltage) - 25.0;
+		return 250.0 * (hiPressureSensor.getVoltage() / AnalogIOConstants.kInputVoltage) - 25.0;
 	}
 }

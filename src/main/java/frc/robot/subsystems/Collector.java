@@ -15,17 +15,19 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.CollectorConstants;
+import frc.robot.Constants.PneumaticConstants;
 
 /**
  * Add your docs here.
  */
 public class Collector extends SubsystemBase {
 
-	private final DoubleSolenoid collectorSolenoid = new DoubleSolenoid(CollectorConstants.kCollectorExtendSolenoid,
-			CollectorConstants.kCollectorRetractSolenoid);
+	private final DoubleSolenoid collectorSolenoid = new DoubleSolenoid(PneumaticConstants.kCollectorExtendSolenoid,
+			PneumaticConstants.kCollectorRetractSolenoid);
 
-	private final TalonSRX collectorMotor = new TalonSRX(CollectorConstants.kCollectorMotor);
+	private final TalonSRX collectorMotor = new TalonSRX(CANidConstants.kCollectorMotor);
 
 	private double collectorSetPoint;
 
