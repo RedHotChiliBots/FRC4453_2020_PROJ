@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
 public class TalonSRXSendable implements Sendable {
     TalonSRX talon;
+
     public TalonSRXSendable(TalonSRX t) {
         talon = t;
     }
+
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("PIDController");
@@ -44,5 +46,4 @@ public class TalonSRXSendable implements Sendable {
         });
     }
 
-	
 }

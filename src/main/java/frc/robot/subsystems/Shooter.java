@@ -258,7 +258,6 @@ public class Shooter extends SubsystemBase {
   // public boolean isLimit() {
   // return
   // }
-
   public void setTiltZeroPos() {
     tiltMotor.getSensorCollection().setQuadraturePosition(0, TiltConstants.kTimeoutMs);
   }
