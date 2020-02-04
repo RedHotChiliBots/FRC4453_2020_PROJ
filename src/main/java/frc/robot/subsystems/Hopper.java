@@ -97,8 +97,8 @@ public class Hopper extends SubsystemBase {
     leftEjector.setSensorPhase(false);
 
     /* Config sensor used for Primary PID [Velocity] */
-    leftEjector.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, EjectorConstants.kPIDLoopIdx,
-        EjectorConstants.kTimeoutMs);
+    leftEjector.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, CANidConstants.kPIDLoopIdx,
+        CANidConstants.kTimeoutMs);
 
     // Define Angle motor
     rightEjector.configFactoryDefault();
@@ -112,10 +112,10 @@ public class Hopper extends SubsystemBase {
     rightEjector.follow(leftEjector);
 
     /* Config the Velocity closed loop gains in slot0 */
-    leftEjector.config_kF(EjectorConstants.kPIDLoopIdx, EjectorConstants.kFF, EjectorConstants.kTimeoutMs);
-    leftEjector.config_kP(EjectorConstants.kPIDLoopIdx, EjectorConstants.kP, EjectorConstants.kTimeoutMs);
-    leftEjector.config_kI(EjectorConstants.kPIDLoopIdx, EjectorConstants.kI, EjectorConstants.kTimeoutMs);
-    leftEjector.config_kD(EjectorConstants.kPIDLoopIdx, EjectorConstants.kD, EjectorConstants.kTimeoutMs);
+    leftEjector.config_kF(CANidConstants.kPIDLoopIdx, EjectorConstants.kFF, CANidConstants.kTimeoutMs);
+    leftEjector.config_kP(CANidConstants.kPIDLoopIdx, EjectorConstants.kP, CANidConstants.kTimeoutMs);
+    leftEjector.config_kI(CANidConstants.kPIDLoopIdx, EjectorConstants.kI, CANidConstants.kTimeoutMs);
+    leftEjector.config_kD(CANidConstants.kPIDLoopIdx, EjectorConstants.kD, CANidConstants.kTimeoutMs);
 
     stopHopper();
     stopEjector();
@@ -160,7 +160,7 @@ public class Hopper extends SubsystemBase {
    * @return rpm - scaled speed to rpms
    */
   public double getEjectorVelocity() {
-    return leftEjector.getSelectedSensorVelocity(EjectorConstants.kPIDLoopIdx) / EjectorConstants.kVelFactor;
+    return leftEjector.getSelectedSensorVelocity(CANidConstants.kPIDLoopIdx) / EjectorConstants.kVelFactor;
   }
 
   /**

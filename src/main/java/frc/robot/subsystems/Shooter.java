@@ -113,25 +113,25 @@ public class Shooter extends SubsystemBase {
     angleMotor.setSensorPhase(false);
 
     /* Config sensor used for Primary PID [Velocity] */
-    angleMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, AngleConstants.kPIDLoopIdx,
-        AngleConstants.kTimeoutMs);
+    angleMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, CANidConstants.kPIDLoopIdx,
+        CANidConstants.kTimeoutMs);
 
     angleMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
     angleMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
 
     /* Config the peak and nominal outputs */
-    angleMotor.configNominalOutputForward(0, AngleConstants.kTimeoutMs);
-    angleMotor.configNominalOutputReverse(0, AngleConstants.kTimeoutMs);
-    angleMotor.configPeakOutputForward(1, AngleConstants.kTimeoutMs);
-    angleMotor.configPeakOutputReverse(-1, AngleConstants.kTimeoutMs);
+    angleMotor.configNominalOutputForward(0, CANidConstants.kTimeoutMs);
+    angleMotor.configNominalOutputReverse(0, CANidConstants.kTimeoutMs);
+    angleMotor.configPeakOutputForward(1, CANidConstants.kTimeoutMs);
+    angleMotor.configPeakOutputReverse(-1, CANidConstants.kTimeoutMs);
 
     /* Config the PID values */
-    angleMotor.config_kF(ShooterConstants.kPIDLoopIdx, AngleConstants.kFF, AngleConstants.kTimeoutMs);
-    angleMotor.config_kP(ShooterConstants.kPIDLoopIdx, AngleConstants.kP, AngleConstants.kTimeoutMs);
-    angleMotor.config_kI(ShooterConstants.kPIDLoopIdx, AngleConstants.kI, AngleConstants.kTimeoutMs);
-    angleMotor.config_kD(ShooterConstants.kPIDLoopIdx, AngleConstants.kD, AngleConstants.kTimeoutMs);
+    angleMotor.config_kF(CANidConstants.kPIDLoopIdx, AngleConstants.kFF, CANidConstants.kTimeoutMs);
+    angleMotor.config_kP(CANidConstants.kPIDLoopIdx, AngleConstants.kP, CANidConstants.kTimeoutMs);
+    angleMotor.config_kI(CANidConstants.kPIDLoopIdx, AngleConstants.kI, CANidConstants.kTimeoutMs);
+    angleMotor.config_kD(CANidConstants.kPIDLoopIdx, AngleConstants.kD, CANidConstants.kTimeoutMs);
 
-    angleMotor.getSensorCollection().setQuadraturePosition(0, AngleConstants.kTimeoutMs);
+    angleMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
 
     // Define Tilt motor
     tiltMotor.configFactoryDefault();
@@ -143,22 +143,22 @@ public class Shooter extends SubsystemBase {
     tiltMotor.setSensorPhase(false);
 
     /* Config sensor used for Primary PID [Velocity] */
-    tiltMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, TiltConstants.kPIDLoopIdx,
-        TiltConstants.kTimeoutMs);
+    tiltMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, CANidConstants.kPIDLoopIdx,
+        CANidConstants.kTimeoutMs);
 
     /* Config the peak and nominal outputs */
-    tiltMotor.configNominalOutputForward(0, TiltConstants.kTimeoutMs);
-    tiltMotor.configNominalOutputReverse(0, TiltConstants.kTimeoutMs);
-    tiltMotor.configPeakOutputForward(1, TiltConstants.kTimeoutMs);
-    tiltMotor.configPeakOutputReverse(-1, TiltConstants.kTimeoutMs);
+    tiltMotor.configNominalOutputForward(0, CANidConstants.kTimeoutMs);
+    tiltMotor.configNominalOutputReverse(0, CANidConstants.kTimeoutMs);
+    tiltMotor.configPeakOutputForward(1, CANidConstants.kTimeoutMs);
+    tiltMotor.configPeakOutputReverse(-1, CANidConstants.kTimeoutMs);
 
     /* Config PID Values */
-    tiltMotor.config_kF(ShooterConstants.kPIDLoopIdx, TiltConstants.kFF, TiltConstants.kTimeoutMs);
-    tiltMotor.config_kP(ShooterConstants.kPIDLoopIdx, TiltConstants.kP, TiltConstants.kTimeoutMs);
-    tiltMotor.config_kI(ShooterConstants.kPIDLoopIdx, TiltConstants.kI, TiltConstants.kTimeoutMs);
-    tiltMotor.config_kD(ShooterConstants.kPIDLoopIdx, TiltConstants.kD, TiltConstants.kTimeoutMs);
+    tiltMotor.config_kF(CANidConstants.kPIDLoopIdx, TiltConstants.kFF, CANidConstants.kTimeoutMs);
+    tiltMotor.config_kP(CANidConstants.kPIDLoopIdx, TiltConstants.kP, CANidConstants.kTimeoutMs);
+    tiltMotor.config_kI(CANidConstants.kPIDLoopIdx, TiltConstants.kI, CANidConstants.kTimeoutMs);
+    tiltMotor.config_kD(CANidConstants.kPIDLoopIdx, TiltConstants.kD, CANidConstants.kTimeoutMs);
 
-    tiltMotor.getSensorCollection().setQuadraturePosition(0, TiltConstants.kTimeoutMs);
+    tiltMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
 
     setShootVelocity(ShooterConstants.kStopRPMs);
 
@@ -231,7 +231,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setAngleZeroPos() {
-    angleMotor.getSensorCollection().setQuadraturePosition(0, TiltConstants.kTimeoutMs);
+    angleMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
   }
 
   public double getTiltPosition() {
@@ -259,7 +259,7 @@ public class Shooter extends SubsystemBase {
   // return
   // }
   public void setTiltZeroPos() {
-    tiltMotor.getSensorCollection().setQuadraturePosition(0, TiltConstants.kTimeoutMs);
+    tiltMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
   }
 
   public double getTiltAmps() {

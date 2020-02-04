@@ -76,8 +76,8 @@ public class Spinner extends SubsystemBase {
     spinMotor.clearStickyFaults();
 
     /* Config sensor used for Primary PID [Velocity] */
-    spinMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, SpinnerConstants.kPIDLoopIdx,
-        SpinnerConstants.kTimeoutMs);
+    spinMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, CANidConstants.kPIDLoopIdx,
+        CANidConstants.kTimeoutMs);
 
     // Conifigure motor controller
     spinMotor.setSensorPhase(false); // Positive Sensor Reading should match Green (blinking) Leds on Talon
@@ -85,16 +85,16 @@ public class Spinner extends SubsystemBase {
     spinMotor.setInverted(false); // Run motor in normal rotation with positive input
 
     /* Config the peak and nominal outputs */
-    spinMotor.configNominalOutputForward(0, SpinnerConstants.kTimeoutMs);
-    spinMotor.configNominalOutputReverse(0, SpinnerConstants.kTimeoutMs);
-    spinMotor.configPeakOutputForward(1, SpinnerConstants.kTimeoutMs);
-    spinMotor.configPeakOutputReverse(-1, SpinnerConstants.kTimeoutMs);
+    spinMotor.configNominalOutputForward(0, CANidConstants.kTimeoutMs);
+    spinMotor.configNominalOutputReverse(0, CANidConstants.kTimeoutMs);
+    spinMotor.configPeakOutputForward(1, CANidConstants.kTimeoutMs);
+    spinMotor.configPeakOutputReverse(-1, CANidConstants.kTimeoutMs);
 
     /* Config the Velocity closed loop gains in slot0 */
-    spinMotor.config_kF(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kFF, SpinnerConstants.kTimeoutMs);
-    spinMotor.config_kP(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kP, SpinnerConstants.kTimeoutMs);
-    spinMotor.config_kI(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kI, SpinnerConstants.kTimeoutMs);
-    spinMotor.config_kD(SpinnerConstants.kPIDLoopIdx, SpinnerConstants.kD, SpinnerConstants.kTimeoutMs);
+    spinMotor.config_kF(CANidConstants.kPIDLoopIdx, SpinnerConstants.kFF, CANidConstants.kTimeoutMs);
+    spinMotor.config_kP(CANidConstants.kPIDLoopIdx, SpinnerConstants.kP, CANidConstants.kTimeoutMs);
+    spinMotor.config_kI(CANidConstants.kPIDLoopIdx, SpinnerConstants.kI, CANidConstants.kTimeoutMs);
+    spinMotor.config_kD(CANidConstants.kPIDLoopIdx, SpinnerConstants.kD, CANidConstants.kTimeoutMs);
 
     // Initialize color detection
     m_colorMatcher.addColorMatch(SpinnerConstants.kGreenTarget);
@@ -143,7 +143,7 @@ public class Spinner extends SubsystemBase {
    * @return rpm - scaled speed to rpms
    */
   public double getRPMs() {
-    return spinMotor.getSelectedSensorVelocity(SpinnerConstants.kPIDLoopIdx) / SpinnerConstants.kVelFactor;
+    return spinMotor.getSelectedSensorVelocity(CANidConstants.kPIDLoopIdx) / SpinnerConstants.kVelFactor;
   }
 
   /**

@@ -45,8 +45,8 @@ public class Collector extends SubsystemBase {
 		collectorMotor.clearStickyFaults();
 
 		/* Config sensor used for Primary PID [Velocity] */
-		collectorMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,
-				CollectorConstants.kPIDLoopIdx, CollectorConstants.kTimeoutMs);
+		collectorMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, CANidConstants.kPIDLoopIdx,
+				CANidConstants.kTimeoutMs);
 
 		// Conifigure motor controller
 		collectorMotor.setSensorPhase(false); // Positive Sensor Reading should match Green (blinking) Leds on Talon
@@ -54,16 +54,16 @@ public class Collector extends SubsystemBase {
 		collectorMotor.setInverted(false); // Run motor in normal rotation with positive input
 
 		/* Config the peak and nominal outputs */
-		collectorMotor.configNominalOutputForward(0, CollectorConstants.kTimeoutMs);
-		collectorMotor.configNominalOutputReverse(0, CollectorConstants.kTimeoutMs);
-		collectorMotor.configPeakOutputForward(1, CollectorConstants.kTimeoutMs);
-		collectorMotor.configPeakOutputReverse(-1, CollectorConstants.kTimeoutMs);
+		collectorMotor.configNominalOutputForward(0, CANidConstants.kTimeoutMs);
+		collectorMotor.configNominalOutputReverse(0, CANidConstants.kTimeoutMs);
+		collectorMotor.configPeakOutputForward(1, CANidConstants.kTimeoutMs);
+		collectorMotor.configPeakOutputReverse(-1, CANidConstants.kTimeoutMs);
 
 		/* Config the Velocity closed loop gains in slot0 */
-		collectorMotor.config_kF(CollectorConstants.kPIDLoopIdx, CollectorConstants.kFF, CollectorConstants.kTimeoutMs);
-		collectorMotor.config_kP(CollectorConstants.kPIDLoopIdx, CollectorConstants.kP, CollectorConstants.kTimeoutMs);
-		collectorMotor.config_kI(CollectorConstants.kPIDLoopIdx, CollectorConstants.kI, CollectorConstants.kTimeoutMs);
-		collectorMotor.config_kD(CollectorConstants.kPIDLoopIdx, CollectorConstants.kD, CollectorConstants.kTimeoutMs);
+		collectorMotor.config_kF(CANidConstants.kPIDLoopIdx, CollectorConstants.kFF, CANidConstants.kTimeoutMs);
+		collectorMotor.config_kP(CANidConstants.kPIDLoopIdx, CollectorConstants.kP, CANidConstants.kTimeoutMs);
+		collectorMotor.config_kI(CANidConstants.kPIDLoopIdx, CollectorConstants.kI, CANidConstants.kTimeoutMs);
+		collectorMotor.config_kD(CANidConstants.kPIDLoopIdx, CollectorConstants.kD, CANidConstants.kTimeoutMs);
 
 		System.out.println("----- Collector Constructor finished ...");
 	}
@@ -88,7 +88,7 @@ public class Collector extends SubsystemBase {
 	 * @return rpm - scaled speed to rpms
 	 */
 	public double getCollectorRPMs() {
-		return collectorMotor.getSelectedSensorVelocity(CollectorConstants.kPIDLoopIdx) / CollectorConstants.kVelFactor;
+		return collectorMotor.getSelectedSensorVelocity(CANidConstants.kPIDLoopIdx) / CollectorConstants.kVelFactor;
 	}
 
 	/**

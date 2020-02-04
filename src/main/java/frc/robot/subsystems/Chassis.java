@@ -76,8 +76,8 @@ public class Chassis extends SubsystemBase {
 	private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
 	// Identify PDP and PCM
-	private final PowerDistributionPanel pdp = new PowerDistributionPanel(0);
-	private final Compressor compressor = new Compressor();
+	private final PowerDistributionPanel pdp = new PowerDistributionPanel(CANidConstants.kPDP);
+	private final Compressor compressor = new Compressor(CANidConstants.kCompressor);
 
 	// Identify compressor hi and lo sensors
 	private AnalogInput hiPressureSensor = new AnalogInput(AnalogIOConstants.kHiPressureChannel);

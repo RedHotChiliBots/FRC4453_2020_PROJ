@@ -29,6 +29,13 @@ public final class Constants {
 	}
 
 	public static final class CANidConstants {
+		public static final int kPDP = 0;
+		public static final int kCompressor = 0;
+
+		public static final int kSlotIdx = 0;
+		public static final int kPIDLoopIdx = 0;
+		public static final int kTimeoutMs = 30;
+
 		public static final int kLeftMasterMotor = 4;
 		public static final int kLeftFollowerMotor = 3;
 		public static final int kRightMasterMotor = 1;
@@ -52,8 +59,6 @@ public final class Constants {
 	}
 
 	public static final class PneumaticConstants {
-		public static final int kCompressorChannel = 0;
-
 		public static final int kClimberExtendSolenoid = 0;
 		public static final int kClimberRetractSolenoid = 1;
 
@@ -80,7 +85,6 @@ public final class Constants {
 	}
 
 	public static final class ChassisConstants {
-
 		public static final double kMaxSpeedFPS = 10.0; // feet per second
 		public static final double kMaxSpeedMPS = kMaxSpeedFPS * UnitsConstants.kF2M; // meters per second
 		public static final double kMinSpeedMPS = -kMaxSpeedMPS; // meters per second
@@ -100,11 +104,6 @@ public final class Constants {
 	}
 
 	public final static class ShooterConstants {
-
-		public static final int kSlotIdx = 0;
-		public static final int kPIDLoopIdx = 0;
-		public static final int kTimeoutMs = 30;
-
 		public static final double kP = 1.0;
 		public static final double kI = 0.05;
 		public static final double kD = 0;
@@ -121,11 +120,6 @@ public final class Constants {
 	}
 
 	public final static class AngleConstants {
-
-		public static final int kSlotIdx = 0;
-		public static final int kPIDLoopIdx = 0;
-		public static final int kTimeoutMs = 30;
-
 		public static final double kP = 0.05;
 		public static final double kI = 0.0001;
 		public static final double kD = 0;
@@ -148,13 +142,8 @@ public final class Constants {
 	}
 
 	public final static class TiltConstants {
-
 		public static final int kTiltPowerIndex = 1;
 		public static final double kTiltAmps = 1.0;
-
-		public static final int kSlotIdx = 0;
-		public static final int kPIDLoopIdx = 0;
-		public static final int kTimeoutMs = 30;
 
 		public static final double kP = 0.05;
 		public static final double kI = 0.0001;
@@ -183,11 +172,6 @@ public final class Constants {
 	}
 
 	public final static class SpinnerConstants {
-
-		public static final int kSlotIdx = 0;
-		public static final int kPIDLoopIdx = 0;
-		public static final int kTimeoutMs = 30;
-
 		public static final double kP = 1.0;
 		public static final double kI = 0.005;
 		public static final double kD = 0.0;
@@ -230,10 +214,6 @@ public final class Constants {
 		public static final DoubleSolenoid.Value CollectorExtend = DoubleSolenoid.Value.kForward;
 		public static final DoubleSolenoid.Value CollectorRetract = DoubleSolenoid.Value.kReverse;
 
-		public static final int kSlotIdx = 0;
-		public static final int kPIDLoopIdx = 0;
-		public static final int kTimeoutMs = 30;
-
 		public static final double kP = 1.0;
 		public static final double kI = 0.05;
 		public static final double kD = 0;
@@ -252,11 +232,6 @@ public final class Constants {
 	}
 
 	public final static class HopperConstants {
-
-		public static final int kSlotIdx = 0;
-		public static final int kPIDLoopIdx = 0;
-		public static final int kTimeoutMs = 30;
-
 		public static final double kP = 1.0;
 		public static final double kI = 0.005;
 		public static final double kD = 0.0;
@@ -287,11 +262,6 @@ public final class Constants {
 	}
 
 	public final static class EjectorConstants {
-
-		public static final int kSlotIdx = 0;
-		public static final int kPIDLoopIdx = 0;
-		public static final int kTimeoutMs = 30;
-
 		public static final double kP = 1.0;
 		public static final double kI = 0.005;
 		public static final double kD = 0.0;
@@ -324,10 +294,6 @@ public final class Constants {
 		public static final DoubleSolenoid.Value ClimberExtend = DoubleSolenoid.Value.kForward;
 		public static final DoubleSolenoid.Value ClimberRetract = DoubleSolenoid.Value.kReverse;
 
-		public static final int kSlotIdx = 0;
-		public static final int kPIDLoopIdx = 0;
-		public static final int kTimeoutMs = 30;
-
 		public static final double kP = 1.0;
 		public static final double kI = 0.005;
 		public static final double kD = 0.0;
@@ -354,11 +320,6 @@ public final class Constants {
 	}
 
 	public static final class LevelerConstants {
-
-		public static final int kSlotIdx = 0;
-		public static final int kPIDLoopIdx = 0;
-		public static final int kTimeoutMs = 30;
-
 		public static final double kP = 1.0;
 		public static final double kI = 0.005;
 		public static final double kD = 0.0;
@@ -383,5 +344,4 @@ public final class Constants {
 		public static final double kCountRevRPMs = kWheelRPM; // Given 2.25" wheel
 		public static final double kStopRPMs = 0; // Stop spinning
 	}
-
 }
