@@ -17,9 +17,6 @@ public class ShooterAngleStop extends CommandBase {
   public ShooterAngleStop(Shooter shooter) {
     this.shooter = shooter;
     addRequirements(shooter);
-    // super(timeout);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time

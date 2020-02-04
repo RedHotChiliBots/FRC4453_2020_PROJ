@@ -17,9 +17,6 @@ public class HopperStop extends CommandBase {
   public HopperStop(Hopper hopper) {
     this.hopper = hopper;
     addRequirements(hopper);
-    // super(timeout);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time

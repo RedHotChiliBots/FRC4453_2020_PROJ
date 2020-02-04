@@ -15,8 +15,6 @@ public class CollectorStop extends CommandBase {
   Collector collector;
 
   public CollectorStop(Collector collector) {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
     this.collector = collector;
     addRequirements(collector);
   }

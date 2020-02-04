@@ -16,9 +16,6 @@ public class CollectorExtend extends CommandBase {
   public CollectorExtend(Collector collector) {
     this.collector = collector;
     addRequirements(collector);
-    // super(timeout);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time

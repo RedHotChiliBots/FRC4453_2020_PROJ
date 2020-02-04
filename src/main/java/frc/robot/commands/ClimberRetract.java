@@ -16,9 +16,6 @@ public class ClimberRetract extends CommandBase {
   public ClimberRetract(Climber climber) {
     this.climber = climber;
     addRequirements(climber);
-    // super(timeout);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time

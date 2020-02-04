@@ -248,7 +248,7 @@ public final class Constants {
 		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
 
 		public static final double kCollectRPMs = 500.0;
-		public static final double kEjectRPMs = -200.0;
+		public static final double kRejectRPMs = -200.0;
 	}
 
 	public final static class HopperConstants {

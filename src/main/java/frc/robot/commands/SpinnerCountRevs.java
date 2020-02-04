@@ -14,7 +14,6 @@ import frc.robot.subsystems.Spinner;
 public class SpinnerCountRevs extends CommandBase {
 
   private final Spinner spinner;
-  // private final double setPoint = SpinnerConstants.kCountRevRPMs;
 
   public SpinnerCountRevs(Spinner spinner) {
     this.spinner = spinner;

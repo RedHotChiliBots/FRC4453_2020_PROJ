@@ -265,23 +265,4 @@ public class Shooter extends SubsystemBase {
   public double getTiltAmps() {
     return pdp.getCurrent(TiltConstants.kTiltPowerIndex);
   }
-
-  public void moveToAngle(double angle, double speed) {
-    // angleMotor.set(speed);
-    // angleEncoder.setPosition(angle); // TODO set constants to adjust from ticks
-    // anglePIDController.setReference(angle, ControlType.kVelocity);
-  }
-
-  public void moveToTilt(double position, double speed) { // TODO can I just set a postion or do I need to do other
-                                                          // things to?
-    // tiltEncoder.setPosition(position);
-    // tiltMotor.set(speed);
-  }
-
-  public void visionTilt() {
-
-  }
-  // public double tiltAngle(){
-  // return y;
-  // }
 }
