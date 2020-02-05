@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.DigitalIOConstants;
 import frc.robot.Constants.EjectorConstants;
@@ -183,5 +184,16 @@ public class Hopper extends SubsystemBase {
 
   public boolean getLowerSensor() {
     return lowerSensor.get();
+  }
+
+  public void moveBallsUp() {
+    if (getLowerSensor() == true) {
+      setHopperVelocity(Constants.HopperConstants.kLoadRPMs);
+    }
+    if (getUpperSensor() == true) {
+      stopHopper();
+    } else {
+      stopHopper();
+    }
   }
 }

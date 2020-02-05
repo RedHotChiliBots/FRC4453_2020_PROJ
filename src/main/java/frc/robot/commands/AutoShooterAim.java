@@ -18,26 +18,32 @@ public class AutoShooterAim extends CommandBase {
   Shooter shooter = null;
   double x = 0.0;
   double y = 0.0;
+  DoubleSupplier dsx = null;
+  DoubleSupplier dsy = null;
 
   /**
    * Creates a new AimShooter.
    */
   public AutoShooterAim(Shooter shooter, DoubleSupplier x, DoubleSupplier y) {
     this.shooter = shooter;
-    this.x = x.getAsDouble();
-    this.y = y.getAsDouble();
+    this.dsx = x;
+    this.dsy = y;
     addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    shooter.setTiltZeroPos();
+    shooter.setAngleZeroPos();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setTiltPosition(shooter.getTiltPosition() + y);
+    x = dsx.getAsDouble();
+    y = dsy.getAsDouble();
+    shooter.setTiltPosition(y);
     shooter.setAnglePosition(shooter.getAnglePosition() + x);
   }
 

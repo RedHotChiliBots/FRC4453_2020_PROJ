@@ -42,6 +42,7 @@ import frc.robot.commands.CollectorStop;
 import frc.robot.commands.DriveTeleop;
 import frc.robot.commands.HopperStop;
 import frc.robot.commands.ShooterAim;
+import frc.robot.commands.ShooterAimStop;
 import frc.robot.commands.ShooterInit;
 
 /**
@@ -129,10 +130,12 @@ public class RobotContainer {
 
     new JoystickButton(m_operator, Button.kY.value).whenHeld(new ShooterShoot(shooter));
 
-    new JoystickButton(m_operator, Button.kStart.value).whenPressed(new SpinnerStop(spinner));
+    new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterStop(shooter));
 
     new JoystickButton(m_driver, Button.kY.value)
         .whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()));
+
+    new JoystickButton(m_driver, Button.kX.value).whenPressed(new ShooterAimStop(shooter));
 
     for (int i = 0; i < 8; i++) {
       new POVButton(m_operator, i * 45).whenHeld(new ShooterAim(shooter, i));

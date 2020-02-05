@@ -8,26 +8,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Spinner;
+import frc.robot.subsystems.Shooter;;
 
-public class SpinnerStop extends CommandBase {
+public class ShooterAimStop extends CommandBase {
 
-  private final Spinner spinner;
+  private final Shooter shooter;
 
-  public SpinnerStop(Spinner spinner) {
-    this.spinner = spinner;
-    addRequirements(spinner);
+  public ShooterAimStop(Shooter shooter) {
+    this.shooter = shooter;
+    addRequirements(shooter);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    spinner.stopSpin();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
+    shooter.stopTilt();
+    shooter.stopAngle();
   }
 
   // Make this return true when this Command no longer needs to run execute()
