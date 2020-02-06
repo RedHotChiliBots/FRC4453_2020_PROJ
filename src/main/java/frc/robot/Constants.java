@@ -117,6 +117,10 @@ public final class Constants {
 		public static final double kMaxRPM = 4500.0;
 
 		public static final double kShooterShootRPMs = kMaxRPM;
+
+		public static final double kCameraAngle = 0.0;
+		public static final double kCameraHeight = 48.0;
+		public static final double kTargetHeight = 85.0;
 	}
 
 	public final static class AngleConstants {

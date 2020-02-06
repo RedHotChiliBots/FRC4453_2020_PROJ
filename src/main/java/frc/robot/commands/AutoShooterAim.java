@@ -11,6 +11,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter;
 
 public class AutoShooterAim extends CommandBase {
@@ -21,13 +22,15 @@ public class AutoShooterAim extends CommandBase {
   DoubleSupplier dsx = null;
   DoubleSupplier dsy = null;
 
+  private double distance = 0.0;
+
   /**
    * Creates a new AimShooter.
    */
-  public AutoShooterAim(Shooter shooter, DoubleSupplier x, DoubleSupplier y) {
+  public AutoShooterAim(Shooter shooter, DoubleSupplier dsx, DoubleSupplier dsy) {
     this.shooter = shooter;
-    this.dsx = x;
-    this.dsy = y;
+    this.dsx = dsx;
+    this.dsy = dsy;
     addRequirements(shooter);
   }
 
@@ -43,8 +46,15 @@ public class AutoShooterAim extends CommandBase {
   public void execute() {
     x = dsx.getAsDouble();
     y = dsy.getAsDouble();
+    distance = (ShooterConstants.kTargetHeight - ShooterConstants.kCameraHeight)
+        / Math.tan(ShooterConstants.kCameraAngle + y);
     shooter.setTiltPosition(y);
-    shooter.setAnglePosition(shooter.getAnglePosition() + x);
+    shooter.setAnglePosition(x);
+    // shooter.setAnglePosition(shooter.getAnglePosition() + x);
+
+    SmartDashboard.putNumber("Vision X", x);
+    SmartDashboard.putNumber("Vision Y", y);
+    SmartDashboard.putNumber("Vision Dist", distance);
   }
 
   // Called once the command ends or is interrupted.
