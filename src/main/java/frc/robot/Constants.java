@@ -92,9 +92,8 @@ public final class Constants {
 
 		public static final double kTrackWidth = 1.5 * UnitsConstants.kF2M * 2; // meters
 		public static final double kWheelDiameter = 6.0 * UnitsConstants.kF2M;
-		public static final double kWheelRadius = kWheelDiameter / 2.0;
 		public static final int kEncoderResolution = 4096;
-		public static final double kVelFactor = (Math.PI * ChassisConstants.kWheelDiameter) / 4096;
+		public static final double kVelFactor = (Math.PI * kWheelDiameter) / kEncoderResolution;
 
 		public static final double kP = 1;
 		public static final double kI = 0;
