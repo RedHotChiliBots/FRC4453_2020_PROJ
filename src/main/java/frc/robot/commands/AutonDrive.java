@@ -17,6 +17,7 @@ public class AutonDrive extends CommandBase {
 
   public AutonDrive(Chassis chassis, double dist) {
     this.chassis = chassis;
+    this.dist = dist;
     addRequirements(chassis);
   }
 
