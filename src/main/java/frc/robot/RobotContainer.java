@@ -34,6 +34,7 @@ import frc.robot.commands.SpinnerStop;
 import frc.robot.commands.SpinnerStopOnColor;
 import frc.robot.commands.AutoShooterAim;
 import frc.robot.commands.AutonDrive;
+import frc.robot.commands.AutonDriveDistance;
 import frc.robot.commands.ClimberExtend;
 import frc.robot.commands.ClimberRetract;
 import frc.robot.commands.CollectorExtend;
@@ -124,6 +125,17 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // Define Operator controls
+    new JoystickButton(m_driver, Button.kA.value).whenPressed(
+        new AutonDriveDistance(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
+
+    new JoystickButton(m_driver, Button.kY.value)
+        .whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()));
+
+    new JoystickButton(m_driver, Button.kX.value).whenPressed(new ShooterAimStop(shooter));
+
+    new JoystickButton(m_driver, Button.kBumperRight.value).whenPressed(new CollectorExtend(collector));
+    new JoystickButton(m_driver, Button.kBumperLeft.value).whenPressed(new CollectorRetract(collector));
+
     new JoystickButton(m_operator, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));
     new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
     new JoystickButton(m_operator, Button.kX.value).whenPressed(new SpinnerStop(spinner));
@@ -132,20 +144,12 @@ public class RobotContainer {
 
     new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterStop(shooter));
 
-    new JoystickButton(m_driver, Button.kY.value)
-        .whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()));
-
-    new JoystickButton(m_driver, Button.kX.value).whenPressed(new ShooterAimStop(shooter));
-
     for (int i = 0; i < 8; i++) {
       new POVButton(m_operator, i * 45).whenHeld(new ShooterAim(shooter, i));
     }
 
     new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new ClimberExtend(climber));
     new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new ClimberRetract(climber));
-
-    new JoystickButton(m_driver, Button.kBumperRight.value).whenPressed(new CollectorExtend(collector));
-    new JoystickButton(m_driver, Button.kBumperLeft.value).whenPressed(new CollectorRetract(collector));
 
     // new JoystickButton(m_driver, Button.kA.value)
     // .whenPressed(new InstantCommand(m_hatchSubsystem::grabHatch,
