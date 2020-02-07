@@ -22,13 +22,16 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import frc.robot.Robot;
 import frc.robot.Constants.AnalogIOConstants;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.ChassisConstants;
@@ -179,6 +182,11 @@ public class Chassis extends SubsystemBase {
 		// m_rightGroup.set(right);
 	}
 
+	// public void autonDrive(double dist) {
+	// m_leftPIDController.setReference(dist, ControlType.kPosition);
+	// m_rightPIDController.setReference(dist, ControlType.kPosition);
+	// }
+
 	/**
 	 * Returns the angle of the robot as a Rotation2d.
 	 *
@@ -194,16 +202,16 @@ public class Chassis extends SubsystemBase {
 	 *
 	 * @param speeds The desired wheel speeds.
 	 */
-	public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-		// double leftOutput =
-		// m_leftPIDController.calculate(m_leftEncoder.getVelocity(),
-		// speeds.leftMetersPerSecond);
-		// double rightOutput =
-		// m_rightPIDController.calculate(m_rightEncoder.getVelocity(),
-		// speeds.rightMetersPerSecond);
-		// m_leftGroup.set(leftOutput);
-		// m_rightGroup.set(rightOutput);
-	}
+	// public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+	// double leftOutput =
+	// m_leftPIDController.calculate(m_leftEncoder.getVelocity(),
+	// speeds.leftMetersPerSecond);
+	// double rightOutput =
+	// m_rightPIDController.calculate(m_rightEncoder.getVelocity(),
+	// speeds.rightMetersPerSecond);
+	// m_leftGroup.set(leftOutput);
+	// m_rightGroup.set(rightOutput);
+	// }
 
 	/**
 	 * Drives the robot with the given linear velocity and angular velocity.
@@ -224,12 +232,24 @@ public class Chassis extends SubsystemBase {
 		m_odometry.update(getAngle(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 	}
 
+	public void driveDistanceWithHeading(double distance, double angle) {
+		m_leftPIDController.setReference(distance, ControlType.kPosition);
+		// setSetpoint(angle);
+		// getPIDController().enable();
+		// distancePID.enable();
+	}
+
+	public void driveDistance(double distance) {
+		m_leftPIDController.setReference(distance, ControlType.kPosition);
+
+	}
+
 	// public void setLMTgtPosition(double pos) {
 	// tgtPosition = pos;
 	// // pid.setReference(pos * REV_PER_INCH_MOTOR, ControlType.kSmartMotion,
 	// // RobotMap.kSlot_Position);
 	// pid.setReference(pos, ControlType.kSmartMotion, RobotMap.kSlot_Position);
-	// m_leftPIDController.setRefer
+	// // m_leftPIDController.setRefer
 	// }
 
 	/**

@@ -8,15 +8,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Collector;
+import frc.robot.subsystems.Chassis;
 
-public class CollectorCollect extends SequentialCommandGroup {
+public class MoveToTrench extends SequentialCommandGroup {
   /**
    * Add your docs here.
    */
-
-  public CollectorCollect(Collector collector) {
-    addCommands(new CollectorExtend(collector), new CollectorSpin(collector));
+  public MoveToTrench(Chassis chassis) {
+    addCommands(new AutonDrive(chassis, 3.0));
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

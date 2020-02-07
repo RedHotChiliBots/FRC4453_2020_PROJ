@@ -41,6 +41,7 @@ import frc.robot.commands.CollectorRetract;
 import frc.robot.commands.CollectorStop;
 import frc.robot.commands.DriveTeleop;
 import frc.robot.commands.HopperStop;
+import frc.robot.commands.MoveToTrench;
 import frc.robot.commands.ShooterAim;
 import frc.robot.commands.ShooterAimStop;
 import frc.robot.commands.ShooterInit;
@@ -110,7 +111,7 @@ public class RobotContainer {
     spinner.setDefaultCommand(new SpinnerStop(spinner));
 
     // A chooser for autonomous commands
-    m_chooser.addOption("Auton", new AutonDrive(chassis, shooter));
+    m_chooser.addOption("Auton", new AutonDrive(chassis, 0.0));
 
     SmartDashboard.putData("Auton Chooser", m_chooser);
   }
@@ -147,6 +148,9 @@ public class RobotContainer {
     new JoystickButton(m_driver, Button.kBumperRight.value).whenPressed(new CollectorExtend(collector));
     new JoystickButton(m_driver, Button.kBumperLeft.value).whenPressed(new CollectorRetract(collector));
 
+    // new JoystickButton(m_driver, Button.kB.value).whenPressed(new
+    // MoveToTrench(chassis));
+    new JoystickButton(m_driver, Button.kB.value).whenPressed(new AutonDrive(chassis, 100.0));
     // new JoystickButton(m_driver, Button.kA.value)
     // .whenPressed(new InstantCommand(m_hatchSubsystem::grabHatch,
     // m_hatchSubsystem));

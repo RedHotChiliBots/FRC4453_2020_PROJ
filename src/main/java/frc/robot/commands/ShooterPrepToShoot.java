@@ -7,16 +7,19 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Collector;
+import java.util.function.DoubleSupplier;
 
-public class CollectorCollect extends SequentialCommandGroup {
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Shooter;
+
+public class ShooterPrepToShoot extends SequentialCommandGroup {
   /**
    * Add your docs here.
    */
-
-  public CollectorCollect(Collector collector) {
-    addCommands(new CollectorExtend(collector), new CollectorSpin(collector));
+  public ShooterPrepToShoot(Shooter shooter, DoubleSupplier dsx, DoubleSupplier dsy) {
+    addCommands(new AutoShooterAim(shooter, dsx, dsy),
+      new ShooterShoot(shooter)
+    );
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
