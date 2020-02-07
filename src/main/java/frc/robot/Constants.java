@@ -90,12 +90,12 @@ public final class Constants {
 		public static final double kMinSpeedMPS = -kMaxSpeedMPS; // meters per second
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
-		public static final double kTrackWidth = 1.5 * UnitsConstants.kF2M * 2; // meters
-		public static final double kWheelDiameter = 6.0 * UnitsConstants.kF2M;
-		public static final double kWheelCircumference = kWheelDiameter * Math.PI;
+		public static final double kTrackWidth = (26.341 / 12.0) * UnitsConstants.kF2M; // meters
+		public static final double kWheelDiameter = (6.0 / 12.0) * UnitsConstants.kF2M; // meters
 		public static final int kEncoderResolution = 4096;
 		public static final double kVelFactor = (Math.PI * kWheelDiameter) / kEncoderResolution;
-		public static final double kTicksPerInch = kEncoderResolution / kWheelCircumference;
+		// public static final double kTicksPerInch = kEncoderResolution /
+		// kWheelCircumference;
 
 		public static final double kP = 1;
 		public static final double kI = 0;

@@ -7,21 +7,23 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Shooter;
 
-public class AutonDrive extends CommandBase {
+public class AutonDriveDistance extends CommandBase {
 
+  private DoubleSupplier spd;
+  private DoubleSupplier rot;
   private final Chassis chassis;
-  private final double dist;
 
-  public AutonDrive(Chassis chassis, double dist) {
+  public AutonDriveDistance(DoubleSupplier spd, DoubleSupplier rot, Chassis chassis) {
+    this.spd = spd;
+    this.rot = rot;
     this.chassis = chassis;
-    this.dist = dist;
     addRequirements(chassis);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
@@ -32,13 +34,15 @@ public class AutonDrive extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    // chassis.autonDrive(dist);
+    double xSpeed = spd.getAsDouble();
+    double xRot = rot.getAsDouble();
+    chassis.drive(xSpeed, xRot);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true

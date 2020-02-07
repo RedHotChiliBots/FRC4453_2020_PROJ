@@ -10,6 +10,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
@@ -66,13 +68,21 @@ public class Chassis extends SubsystemBase {
 	public final CANEncoder m_rightEncoder = new CANEncoder(rightMaster);
 
 	// Identify left and right PID controllers
-	private final CANPIDController m_leftPIDController = new CANPIDController(leftMaster);
-	private final CANPIDController m_rightPIDController = new CANPIDController(rightMaster);
+	// private final CANPIDController m_leftPIDController = new
+	// CANPIDController(leftMaster);
+	// private final CANPIDController m_rightPIDController = new
+	// CANPIDController(rightMaster);
+	private final PIDController m_leftPIDController = new PIDController(ChassisConstants.kP, ChassisConstants.kI,
+			ChassisConstants.kD);
+	private final PIDController m_rightPIDController = new PIDController(ChassisConstants.kP, ChassisConstants.kI,
+			ChassisConstants.kD);
 
 	private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
 			ChassisConstants.kTrackWidth);
 
 	private final DifferentialDriveOdometry m_odometry;
+
+	private final SimpleMotorFeedforward m_Feedforward = new SimpleMotorFeedforward(1, 3); // (ks, kv)
 
 	// Initialize NavX AHRS board
 	// Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB
@@ -106,19 +116,21 @@ public class Chassis extends SubsystemBase {
 		m_leftGroup.setInverted(true);
 		m_rightGroup.setInverted(true);
 
-		m_leftPIDController.setP(ChassisConstants.kP);
-		m_leftPIDController.setI(ChassisConstants.kI);
-		m_leftPIDController.setD(ChassisConstants.kD);
-		m_leftPIDController.setIZone(ChassisConstants.kIz);
-		m_leftPIDController.setFF(ChassisConstants.kFF);
-		m_leftPIDController.setOutputRange(ChassisConstants.kMinSpeedMPS, ChassisConstants.kMaxSpeedMPS);
+		// m_leftPIDController.setP(ChassisConstants.kP);
+		// m_leftPIDController.setI(ChassisConstants.kI);
+		// m_leftPIDController.setD(ChassisConstants.kD);
+		// m_leftPIDController.setIZone(ChassisConstants.kIz);
+		// m_leftPIDController.setFF(ChassisConstants.kFF);
+		// m_leftPIDController.setOutputRange(ChassisConstants.kMinSpeedMPS,
+		// ChassisConstants.kMaxSpeedMPS);
 
-		m_rightPIDController.setP(ChassisConstants.kP);
-		m_rightPIDController.setI(ChassisConstants.kI);
-		m_rightPIDController.setD(ChassisConstants.kD);
-		m_rightPIDController.setIZone(ChassisConstants.kIz);
-		m_rightPIDController.setFF(ChassisConstants.kFF);
-		m_rightPIDController.setOutputRange(ChassisConstants.kMinSpeedMPS, ChassisConstants.kMaxSpeedMPS);
+		// m_rightPIDController.setP(ChassisConstants.kP);
+		// m_rightPIDController.setI(ChassisConstants.kI);
+		// m_rightPIDController.setD(ChassisConstants.kD);
+		// m_rightPIDController.setIZone(ChassisConstants.kIz);
+		// m_rightPIDController.setFF(ChassisConstants.kFF);
+		// m_rightPIDController.setOutputRange(ChassisConstants.kMinSpeedMPS,
+		// ChassisConstants.kMaxSpeedMPS);
 
 		// Set the distance per pulse for the drive encoders. We can simply use the
 		// distance traveled for one rotation of the wheel divided by the encoder
@@ -126,31 +138,12 @@ public class Chassis extends SubsystemBase {
 		m_leftEncoder.setPositionConversionFactor(ChassisConstants.kVelFactor);
 		m_rightEncoder.setPositionConversionFactor(ChassisConstants.kVelFactor);
 
-		// m_leftEncoder.reset();
-		// m_rightEncoder.reset();
-
 		m_odometry = new DifferentialDriveOdometry(getAngle());
 
-		// compressor.setClosedLoopControl(true);
-
-		// compressor.start();
-
-		// boolean enabled = compressor.enabled();
-		// boolean pressureSwitch = compressor.getPressureSwitchValue();
-		// double current = compressor.getCompressorCurrent();
-
-		// compressor.setClosedLoopControl(false);
-
 		SmartDashboard.putData("AHRS Angle", ahrs);
-		SmartDashboard.putData("Tank Drive", m_tankDrive);
+		// SmartDashboard.putData("Tank Drive", m_tankDrive);
 		SmartDashboard.putData("Left Group", m_leftGroup);
 		SmartDashboard.putData("Right Group", m_rightGroup);
-		// SmartDashboard.putData("Left PID", m_leftPIDController);
-		// SmartDashboard.putData("Right PID", m_rightPIDController);
-		// SmartDashboard.putData("Left Encoder", m_leftEncoder);
-		// SmartDashboard.putData("Right Encoder", m_rightEncoder);
-
-		// SmartDashboard.putData("Compressor", compressor);
 	}
 
 	public void periodic() {
@@ -178,8 +171,6 @@ public class Chassis extends SubsystemBase {
 
 	public void driveTeleop(double left, double right) {
 		m_tankDrive.tankDrive(left, right);
-		// m_leftGroup.set(left);
-		// m_rightGroup.set(right);
 	}
 
 	// public void autonDrive(double dist) {
@@ -203,14 +194,14 @@ public class Chassis extends SubsystemBase {
 	 * @param speeds The desired wheel speeds.
 	 */
 	public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-		// double leftOutput =
-		// m_leftPIDController.calculate(m_leftEncoder.getVelocity(),
-		// speeds.leftMetersPerSecond);
-		// double rightOutput =
-		// m_rightPIDController.calculate(m_rightEncoder.getVelocity(),
-		// speeds.rightMetersPerSecond);
-		// m_leftGroup.set(leftOutput);
-		// m_rightGroup.set(rightOutput);
+		double leftFeedforward = m_Feedforward.calculate(speeds.leftMetersPerSecond);
+		double rightFeedforward = m_Feedforward.calculate(speeds.rightMetersPerSecond);
+
+		double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getVelocity(), speeds.leftMetersPerSecond);
+		double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getVelocity(), speeds.rightMetersPerSecond);
+
+		m_leftGroup.set(leftOutput + leftFeedforward);
+		m_rightGroup.set(rightOutput + rightFeedforward);
 	}
 
 	/**
@@ -220,8 +211,8 @@ public class Chassis extends SubsystemBase {
 	 * @param rot    Angular velocity in rad/s.
 	 */
 	// @SuppressWarnings("ParameterName")
-	public void drive(double xSpeed, double rot) {
-		var wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
+	public void drive(double xSpeed, double xRot) {
+		var wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, xRot));
 		setSpeeds(wheelSpeeds);
 	}
 
@@ -232,22 +223,22 @@ public class Chassis extends SubsystemBase {
 		m_odometry.update(getAngle(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 	}
 
-	public void driveDistanceWithHeading(double distance, double angle) {
-		m_leftPIDController.setReference(distance, ControlType.kPosition);
-		// setSetpoint(angle);
-		// getPIDController().enable();
-		// distancePID.enable();
-	}
+	// public void driveDistanceWithHeading(double distance, double angle) {
+	// m_leftPIDController.setReference(distance, ControlType.kPosition);
+	// // setSetpoint(angle);
+	// // getPIDController().enable();
+	// // distancePID.enable();
+	// }
 
-	public void driveDistance(double distance) {
-		m_leftPIDController.setReference(distance, ControlType.kPosition);
+	// public void driveDistance(double distance) {
+	// m_leftPIDController.setReference(distance, ControlType.kPosition);
 
-	}
+	// }
 
 	// public void setLMTgtPosition(double pos) {
 	// tgtPosition = pos;
-	// // pid.setReference(pos * REV_PER_INCH_MOTOR, ControlType.kSmartMotion,
-	// // RobotMap.kSlot_Position);
+	// pid.setReference(pos * REV_PER_INCH_MOTOR, ControlType.kSmartMotion,
+	// RobotMap.kSlot_Position);
 	// pid.setReference(pos, ControlType.kSmartMotion, RobotMap.kSlot_Position);
 	// // m_leftPIDController.setRefer
 	// }
