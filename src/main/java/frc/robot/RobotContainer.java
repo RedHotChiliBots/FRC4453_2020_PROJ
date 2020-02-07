@@ -42,6 +42,7 @@ import frc.robot.commands.CollectorRetract;
 import frc.robot.commands.CollectorStop;
 import frc.robot.commands.DriveTeleop;
 import frc.robot.commands.HopperStop;
+import frc.robot.commands.MoveToTrench;
 import frc.robot.commands.ShooterAim;
 import frc.robot.commands.ShooterAimStop;
 import frc.robot.commands.ShooterInit;

@@ -28,6 +28,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Robot;
@@ -57,7 +58,12 @@ public class Chassis extends SubsystemBase {
 	private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
 	private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
 
-	// Use differential drive to control chassis - provides tank or arcade
+	/git/
+	Use differential
+	drive to
+	control chassis-
+	provides tank
+	or arcade
 	// private final DifferentialDrive m_tankDrive = new
 	// DifferentialDrive(m_leftGroup, m_rightGroup);
 
@@ -196,16 +202,16 @@ public class Chassis extends SubsystemBase {
 	 *
 	 * @param speeds The desired wheel speeds.
 	 */
-	public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-		double leftFeedforward = m_Feedforward.calculate(speeds.leftMetersPerSecond);
-		double rightFeedforward = m_Feedforward.calculate(speeds.rightMetersPerSecond);
-
-		double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getVelocity(), speeds.leftMetersPerSecond);
-		double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getVelocity(), speeds.rightMetersPerSecond);
-
-		m_leftGroup.set(leftOutput + leftFeedforward);
-		m_rightGroup.set(rightOutput + rightFeedforward);
-	}
+	// public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+	// double leftOutput =
+	// m_leftPIDController.calculate(m_leftEncoder.getVelocity(),
+	// speeds.leftMetersPerSecond);
+	// double rightOutput =
+	// m_rightPIDController.calculate(m_rightEncoder.getVelocity(),
+	// speeds.rightMetersPerSecond);
+	// m_leftGroup.set(leftOutput);
+	// m_rightGroup.set(rightOutput);
+	// }
 
 	/**
 	 * Drives the robot with the given linear velocity and angular velocity.
@@ -226,17 +232,17 @@ public class Chassis extends SubsystemBase {
 		m_odometry.update(getAngle(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 	}
 
-	// public void driveDistanceWithHeading(double distance, double angle) {
-	// m_leftPIDController.setReference(distance, ControlType.kPosition);
-	// // setSetpoint(angle);
-	// // getPIDController().enable();
-	// // distancePID.enable();
-	// }
+	public void driveDistanceWithHeading(double distance, double angle) {
+		m_leftPIDController.setReference(distance, ControlType.kPosition);
+		// setSetpoint(angle);
+		// getPIDController().enable();
+		// distancePID.enable();
+	}
 
-	// public void driveDistance(double distance) {
-	// m_leftPIDController.setReference(distance, ControlType.kPosition);
+	public void driveDistance(double distance) {
+		m_leftPIDController.setReference(distance, ControlType.kPosition);
 
-	// }
+	}
 
 	// public void setLMTgtPosition(double pos) {
 	// tgtPosition = pos;
