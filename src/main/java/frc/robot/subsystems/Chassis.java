@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
@@ -28,9 +27,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
 
 import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Robot;
@@ -61,7 +58,8 @@ public class Chassis extends SubsystemBase {
 	private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
 
 	// Use differential drive to control chassis - provides tank or arcade
-	private final DifferentialDrive m_tankDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
+	// private final DifferentialDrive m_tankDrive = new
+	// DifferentialDrive(m_leftGroup, m_rightGroup);
 
 	// Identify left and rigt encoders
 	public final CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
@@ -82,7 +80,8 @@ public class Chassis extends SubsystemBase {
 
 	private final DifferentialDriveOdometry m_odometry;
 
-	private final SimpleMotorFeedforward m_Feedforward = new SimpleMotorFeedforward(1, 3); // (ks, kv)
+	private final SimpleMotorFeedforward m_Feedforward = new SimpleMotorFeedforward(ChassisConstants.kS,
+			ChassisConstants.kV, ChassisConstants.kA);
 
 	// Initialize NavX AHRS board
 	// Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB
@@ -135,8 +134,12 @@ public class Chassis extends SubsystemBase {
 		// Set the distance per pulse for the drive encoders. We can simply use the
 		// distance traveled for one rotation of the wheel divided by the encoder
 		// resolution.
-		m_leftEncoder.setPositionConversionFactor(ChassisConstants.kVelFactor);
-		m_rightEncoder.setPositionConversionFactor(ChassisConstants.kVelFactor);
+		m_leftEncoder.setPositionConversionFactor(ChassisConstants.kPosFactor);
+		m_rightEncoder.setPositionConversionFactor(ChassisConstants.kPosFactor);
+
+		// Reset the current encoder positions to zero
+		m_leftEncoder.setPosition(0.0);
+		m_rightEncoder.setPosition(0.0);
 
 		m_odometry = new DifferentialDriveOdometry(getAngle());
 
@@ -157,20 +160,20 @@ public class Chassis extends SubsystemBase {
 		SmartDashboard.putNumber("RM Position", m_rightEncoder.getPosition());
 		SmartDashboard.putNumber("RM Velocity", m_rightEncoder.getVelocity());
 
-		// SmartDashboard.putBoolean("Comp Enabled", isCompEnabled());
-		// SmartDashboard.putBoolean("Comp Pressure", isCompSwitch());
-		// SmartDashboard.putNumber("Comp Current", getCompCurrent());
 		SmartDashboard.putNumber("Hi Pressure", getHiPressure());
 		SmartDashboard.putNumber("Lo Pressure", getLoPressure());
-		// SmartDashboard.putData("Compressor", compressor);
-		// SmartDashboard.putNumber("Lo Pressure Voltage",
-		// loPressureSensor.getVoltage());
-		// SmartDashboard.putNumber("Hi Pressure Voltage",
-		// hiPressureSensor.getVoltage());
+
+		// m_odometry.getPoseMeters();
+		// m_odometry.resetPosition(poseMeters, gyroAngle);
+		// m_odometry.update(gyroAngle, leftDistanceMeters, rightDistanceMeters);
+
+		// m_kinematics.trackWidthMeters;
+		// m_kinematics.toChassisSpeeds(wheelSpeeds);
+		// m_kinematics.toWheelSpeeds(chassisSpeeds);
 	}
 
 	public void driveTeleop(double left, double right) {
-		m_tankDrive.tankDrive(left, right);
+		// m_tankDrive.tankDrive(left, right);
 	}
 
 	// public void autonDrive(double dist) {

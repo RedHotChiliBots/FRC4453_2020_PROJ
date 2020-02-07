@@ -10,8 +10,8 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ChassisConstants;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Shooter;
 
 public class AutonDriveDistance extends CommandBase {
 
@@ -34,9 +34,11 @@ public class AutonDriveDistance extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    double xSpeed = spd.getAsDouble();
-    double xRot = rot.getAsDouble();
+    double xSpeed = spd.getAsDouble() * ChassisConstants.kMaxSpeedMPS;
+    double xRot = rot.getAsDouble() * ChassisConstants.kMaxAngularSpeed;
     chassis.drive(xSpeed, xRot);
+
+    chassis.updateOdometry();
   }
 
   // Make this return true when this Command no longer needs to run execute()

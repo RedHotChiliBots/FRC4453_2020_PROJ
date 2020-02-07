@@ -93,6 +93,7 @@ public final class Constants {
 		public static final double kTrackWidth = (26.341 / 12.0) * UnitsConstants.kF2M; // meters
 		public static final double kWheelDiameter = (6.0 / 12.0) * UnitsConstants.kF2M; // meters
 		public static final int kEncoderResolution = 4096;
+		public static final double kPosFactor = (Math.PI * kWheelDiameter) / kEncoderResolution;
 		public static final double kVelFactor = (Math.PI * kWheelDiameter) / kEncoderResolution;
 		// public static final double kTicksPerInch = kEncoderResolution /
 		// kWheelCircumference;
@@ -100,8 +101,10 @@ public final class Constants {
 		public static final double kP = 1;
 		public static final double kI = 0;
 		public static final double kD = 0;
-		public static final double kIz = 0;
-		public static final double kFF = 0;
+
+		public static final double kS = 1;
+		public static final double kV = 3;
+		public static final double kA = 0;
 	}
 
 	public final static class ShooterConstants {

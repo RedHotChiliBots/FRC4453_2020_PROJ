@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Shooter;
 
 public class AutonDrive extends CommandBase {
 
@@ -18,10 +17,7 @@ public class AutonDrive extends CommandBase {
 
   public AutonDrive(Chassis chassis, double dist) {
     this.chassis = chassis;
-    this.dist = dist;
     addRequirements(chassis);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
