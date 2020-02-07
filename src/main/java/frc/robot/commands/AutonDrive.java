@@ -20,8 +20,6 @@ public class AutonDrive extends CommandBase {
     this.chassis = chassis;
     this.shooter = shooter;
     addRequirements(chassis, shooter);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
