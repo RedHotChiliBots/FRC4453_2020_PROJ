@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
@@ -152,6 +154,8 @@ public class Chassis extends SubsystemBase {
 
 		m_odometry = new DifferentialDriveOdometry(getAngle());
 
+		resetFieldPosition(0.0, 0.0);
+
 		SmartDashboard.putData("AHRS Angle", ahrs);
 		// SmartDashboard.putData("Tank Drive", m_tankDrive);
 		SmartDashboard.putData("Left Group", m_leftGroup);
@@ -172,7 +176,12 @@ public class Chassis extends SubsystemBase {
 		SmartDashboard.putNumber("Hi Pressure", getHiPressure());
 		SmartDashboard.putNumber("Lo Pressure", getLoPressure());
 
+		// Update field position - for autonomous
+		updateOdometry();
+
+		calcVector();
 		// m_odometry.getPoseMeters();
+		// new Pose2d(x, y, rotation);
 		// m_odometry.resetPosition(poseMeters, gyroAngle);
 		// m_odometry.update(gyroAngle, leftDistanceMeters, rightDistanceMeters);
 
@@ -189,6 +198,13 @@ public class Chassis extends SubsystemBase {
 	// m_leftPIDController.setReference(dist, ControlType.kPosition);
 	// m_rightPIDController.setReference(dist, ControlType.kPosition);
 	// }
+
+	public void resetFieldPosition(double x, double y) {
+		ahrs.zeroYaw();
+		m_leftEncoder.setPosition(0.0);
+		m_rightEncoder.setPosition(0.0);
+		m_odometry.resetPosition(new Pose2d(x, y, getAngle()), getAngle());
+	}
 
 	/**
 	 * Returns the angle of the robot as a Rotation2d.
@@ -238,6 +254,19 @@ public class Chassis extends SubsystemBase {
 	 */
 	public void updateOdometry() {
 		m_odometry.update(getAngle(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
+	}
+
+	public void calcVector() {
+		Pose2d tgtPose = new Pose2d(new Translation2d(7.0, 7.0), new Rotation2d(0.0));
+		Pose2d robotPose = m_odometry.getPoseMeters();
+
+		double dist = robotPose.getTranslation().getDistance(tgtPose.getTranslation());
+		double dX = robotPose.getTranslation().getX() - tgtPose.getTranslation().getX();
+		double dY = robotPose.getTranslation().getY() - tgtPose.getTranslation().getY();
+		double angle = new Rotation2d(dX, dY).getDegrees();
+
+		SmartDashboard.putNumber("Pose Dist", dist);
+		SmartDashboard.putNumber("Pose Angle", angle);
 	}
 
 	// public void driveDistanceWithHeading(double distance, double angle) {
