@@ -90,21 +90,29 @@ public final class Constants {
 		public static final double kMinSpeedMPS = -kMaxSpeedMPS; // meters per second
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
-		public static final double kTrackWidth = 1.5 * UnitsConstants.kF2M * 2; // meters
-		public static final double kWheelDiameter = 6.0 * UnitsConstants.kF2M;
+		public static final double kTrackWidth = (26.341 / 12.0) * UnitsConstants.kF2M * 2; // meters
+		public static final double kWheelDiameter = (6.0 / 12.0) * UnitsConstants.kF2M;
 		public static final double kWheelCircumference = kWheelDiameter * Math.PI;
 		public static final int kEncoderResolution = 4096;
 		public static final double kPosFactor = (Math.PI * kWheelDiameter) / kEncoderResolution;
 		public static final double kVelFactor = (Math.PI * kWheelDiameter) / kEncoderResolution;
 		public static final double kTicksPerInch = kEncoderResolution / kWheelCircumference;
 
-		public static final double kP = 1;
-		public static final double kI = 0;
+		public static final double kP = 0.8;
+		public static final double kI = 0.001;
 		public static final double kD = 0;
 
 		public static final double kS = 1;
 		public static final double kV = 3;
 		public static final double kA = 0;
+
+		public static final double kDistP = 0.8;
+		public static final double kDistI = 0.001;
+		public static final double kDistD = 0;
+
+		public static final double kRotP = 0.8;
+		public static final double kRotI = 0.001;
+		public static final double kRotD = 0;
 	}
 
 	public final static class ShooterConstants {

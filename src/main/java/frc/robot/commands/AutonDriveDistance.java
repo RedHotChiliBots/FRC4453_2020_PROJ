@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ChassisConstants;
 import frc.robot.subsystems.Chassis;
@@ -34,8 +35,12 @@ public class AutonDriveDistance extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    double xSpeed = spd.getAsDouble() * ChassisConstants.kMaxSpeedMPS;
-    double xRot = rot.getAsDouble() * ChassisConstants.kMaxAngularSpeed;
+    double xSpeed = -spd.getAsDouble();// * ChassisConstants.kMaxSpeedMPS;
+    double xRot = -rot.getAsDouble();// * ChassisConstants.kMaxAngularSpeed;
+    xSpeed = Math.abs(xSpeed) < 0.1 ? 0.0 : xSpeed;
+    xRot = Math.abs(xRot) < 0.1 ? 0.0 : xRot;
+    SmartDashboard.putNumber("Lime Spd", xSpeed);
+    SmartDashboard.putNumber("Lime Rot", xRot);
     chassis.drive(xSpeed, xRot);
 
     chassis.updateOdometry();

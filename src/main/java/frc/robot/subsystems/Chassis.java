@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
@@ -23,15 +24,12 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import frc.robot.Robot;
 import frc.robot.Constants.AnalogIOConstants;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.ChassisConstants;
@@ -58,14 +56,7 @@ public class Chassis extends SubsystemBase {
 	private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
 	private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
 
-	/git/
-	Use differential
-	drive to
-	control chassis-
-	provides tank
-	or arcade
-	// private final DifferentialDrive m_tankDrive = new
-	// DifferentialDrive(m_leftGroup, m_rightGroup);
+	private final DifferentialDrive m_tankDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
 
 	// Identify left and rigt encoders
 	public final CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
@@ -80,6 +71,12 @@ public class Chassis extends SubsystemBase {
 			ChassisConstants.kD);
 	private final PIDController m_rightPIDController = new PIDController(ChassisConstants.kP, ChassisConstants.kI,
 			ChassisConstants.kD);
+
+	private final PIDController m_distPIDController = new PIDController(ChassisConstants.kDistP,
+			ChassisConstants.kDistI, ChassisConstants.kDistD);
+
+	private final PIDController m_rotPIDController = new PIDController(ChassisConstants.kRotP, ChassisConstants.kRotI,
+			ChassisConstants.kRotD);
 
 	private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
 			ChassisConstants.kTrackWidth);
@@ -118,7 +115,7 @@ public class Chassis extends SubsystemBase {
 		// m_leftPIDController.reset();
 		// m_rightPIDController.reset();
 
-		m_leftGroup.setInverted(true);
+		m_leftGroup.setInverted(false);
 		m_rightGroup.setInverted(true);
 
 		// m_leftPIDController.setP(ChassisConstants.kP);
@@ -137,11 +134,17 @@ public class Chassis extends SubsystemBase {
 		// m_rightPIDController.setOutputRange(ChassisConstants.kMinSpeedMPS,
 		// ChassisConstants.kMaxSpeedMPS);
 
+		// m_leftEncoder.setInverted(true);
+		// m_rightEncoder.setInverted(true);
+
 		// Set the distance per pulse for the drive encoders. We can simply use the
 		// distance traveled for one rotation of the wheel divided by the encoder
 		// resolution.
 		m_leftEncoder.setPositionConversionFactor(ChassisConstants.kPosFactor);
 		m_rightEncoder.setPositionConversionFactor(ChassisConstants.kPosFactor);
+
+		m_leftEncoder.setVelocityConversionFactor(ChassisConstants.kVelFactor);
+		m_rightEncoder.setVelocityConversionFactor(ChassisConstants.kVelFactor);
 
 		// Reset the current encoder positions to zero
 		m_leftEncoder.setPosition(0.0);
@@ -179,7 +182,7 @@ public class Chassis extends SubsystemBase {
 	}
 
 	public void driveTeleop(double left, double right) {
-		// m_tankDrive.tankDrive(left, right);
+		m_tankDrive.tankDrive(left, right);
 	}
 
 	// public void autonDrive(double dist) {
@@ -203,14 +206,19 @@ public class Chassis extends SubsystemBase {
 	 * @param speeds The desired wheel speeds.
 	 */
 	public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-		// double leftOutput =
-		// m_leftPIDController.calculate(m_leftEncoder.getVelocity(),
-		// speeds.leftMetersPerSecond);
-		// double rightOutput =
-		// m_rightPIDController.calculate(m_rightEncoder.getVelocity(),
-		// speeds.rightMetersPerSecond);
-		// m_leftGroup.set(leftOutput);
-		// m_rightGroup.set(rightOutput);
+		double leftFeedforward = 0.0;// m_Feedforward.calculate(speeds.leftMetersPerSecond);
+		double rightFeedforward = 0.0;// m_Feedforward.calculate(speeds.rightMetersPerSecond);
+
+		SmartDashboard.putNumber("Lime lVel", m_leftEncoder.getVelocity());
+		SmartDashboard.putNumber("Lime rVel", m_rightEncoder.getVelocity());
+		SmartDashboard.putNumber("Lime lSet", speeds.leftMetersPerSecond);
+		SmartDashboard.putNumber("Lime rSet", speeds.rightMetersPerSecond);
+
+		double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getVelocity(), speeds.leftMetersPerSecond);
+		double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getVelocity(), speeds.rightMetersPerSecond);
+
+		m_leftGroup.set(leftOutput + leftFeedforward);
+		m_rightGroup.set(rightOutput + rightFeedforward);
 	}
 
 	/**
@@ -232,17 +240,17 @@ public class Chassis extends SubsystemBase {
 		m_odometry.update(getAngle(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 	}
 
-	public void driveDistanceWithHeading(double distance, double angle) {
-		m_leftPIDController.setReference(distance, ControlType.kPosition);
-		// setSetpoint(angle);
-		// getPIDController().enable();
-		// distancePID.enable();
-	}
+	// public void driveDistanceWithHeading(double distance, double angle) {
+	// m_leftPIDController.setReference(distance, ControlType.kPosition);
+	// setSetpoint(angle);
+	// getPIDController().enable();
+	// distancePID.enable();
+	// }
 
-	public void driveDistance(double distance) {
-		m_leftPIDController.setReference(distance, ControlType.kPosition);
+	// public void driveDistance(double distance) {
+	// m_leftPIDController.setReference(distance, ControlType.kPosition);
 
-	}
+	// }
 
 	// public void setLMTgtPosition(double pos) {
 	// tgtPosition = pos;
