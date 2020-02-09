@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -34,6 +37,7 @@ import frc.robot.commands.SpinnerStop;
 import frc.robot.commands.SpinnerStopOnColor;
 import frc.robot.commands.AutoShooterAim;
 import frc.robot.commands.AutonDrive;
+import frc.robot.commands.AutonDrive2Point;
 import frc.robot.commands.AutonDriveDistance;
 import frc.robot.commands.ClimberExtend;
 import frc.robot.commands.ClimberRetract;
@@ -127,6 +131,9 @@ public class RobotContainer {
     // Define Operator controls
     new JoystickButton(m_driver, Button.kA.value).whenPressed(
         new AutonDriveDistance(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
+
+    new JoystickButton(m_driver, Button.kB.value)
+        .whenPressed(new AutonDrive2Point(new Pose2d(new Translation2d(7.0, 7.0), new Rotation2d(0.0)), chassis));
 
     new JoystickButton(m_driver, Button.kY.value)
         .whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()));

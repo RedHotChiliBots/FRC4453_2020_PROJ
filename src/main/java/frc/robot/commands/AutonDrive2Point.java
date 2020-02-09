@@ -7,21 +7,21 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import frc.robot.subsystems.Chassis;
 
-public class AutonDriveDistance extends CommandBase {
+public class AutonDrive2Point extends CommandBase {
 
-  private DoubleSupplier spd;
-  private DoubleSupplier rot;
+  private Pose2d tgtPose;
+  private double dist;
   private final Chassis chassis;
 
-  public AutonDriveDistance(DoubleSupplier spd, DoubleSupplier rot, Chassis chassis) {
-    this.spd = spd;
-    this.rot = rot;
+  public AutonDrive2Point(Pose2d tgtPose, Chassis chassis) {
+    this.tgtPose = tgtPose;
     this.chassis = chassis;
     addRequirements(chassis);
   }
@@ -34,19 +34,29 @@ public class AutonDriveDistance extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    double xSpeed = -spd.getAsDouble();// * ChassisConstants.kMaxSpeedMPS;
-    double xRot = -rot.getAsDouble();// * ChassisConstants.kMaxAngularSpeed;
-    xSpeed = Math.abs(xSpeed) < 0.1 ? 0.0 : xSpeed;
-    xRot = Math.abs(xRot) < 0.1 ? 0.0 : xRot;
+    Pose2d robotPose = chassis.getOdometry().getPoseMeters();
+
+    dist = robotPose.getTranslation().getDistance(tgtPose.getTranslation());
+    double dX = tgtPose.getTranslation().getX() - robotPose.getTranslation().getX();
+    double dY = tgtPose.getTranslation().getY() - robotPose.getTranslation().getY();
+    double angle = new Rotation2d(dX, dY).getDegrees();
+
+    double xSpeed = chassis.getDistPID().calculate(dist, 0.0);
+    double xRot = chassis.getRotPID().calculate(angle, 0.0);
+
+    SmartDashboard.putNumber("Pose Dist", dist);
+    SmartDashboard.putNumber("Pose Angle", angle);
+
     SmartDashboard.putNumber("Lime Spd", xSpeed);
     SmartDashboard.putNumber("Lime Rot", xRot);
+
     chassis.drive(xSpeed, xRot);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return false;
+    return dist < 1.0;
   }
 
   // Called once after isFinished returns true

@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.util.Color;
 public final class Constants {
 	public static final class UnitsConstants {
 		public static final double kF2M = 0.3048;
+		public static final double kI2M = kF2M / 12;
 		public static final double kC2F = (9.0 / 5.0) + 32.0;
 	}
 
@@ -85,21 +86,21 @@ public final class Constants {
 	}
 
 	public static final class ChassisConstants {
-		public static final double kMaxSpeedFPS = 10.0; // feet per second
+		public static final double kMaxSpeedFPS = 0.5; // feet per second
 		public static final double kMaxSpeedMPS = kMaxSpeedFPS * UnitsConstants.kF2M; // meters per second
 		public static final double kMinSpeedMPS = -kMaxSpeedMPS; // meters per second
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
-		public static final double kTrackWidth = (26.341 / 12.0) * UnitsConstants.kF2M * 2; // meters
-		public static final double kWheelDiameter = (6.0 / 12.0) * UnitsConstants.kF2M;
-		public static final double kWheelCircumference = kWheelDiameter * Math.PI;
-		public static final int kEncoderResolution = 4096;
-		public static final double kPosFactor = (Math.PI * kWheelDiameter) / kEncoderResolution;
-		public static final double kVelFactor = (Math.PI * kWheelDiameter) / kEncoderResolution;
-		public static final double kTicksPerInch = kEncoderResolution / kWheelCircumference;
+		public static final double kTrackWidth = 26.341 * UnitsConstants.kI2M; // meters
+		public static final double kWheelCirc = Math.PI * 8.0 * UnitsConstants.kI2M;
+		public static final int kEncoderResolution = 42; // not required
+		public static final double kGearBoxRatio = 10.71;
+		// The NEO's native units are rotations.
+		public static final double kPosFactor = kWheelCirc / kGearBoxRatio; // Meters per Motor Revolution
+		public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; //
 
-		public static final double kP = 0.8;
-		public static final double kI = 0.001;
+		public static final double kP = 0.3;
+		public static final double kI = 0.0;
 		public static final double kD = 0;
 
 		public static final double kS = 1;
