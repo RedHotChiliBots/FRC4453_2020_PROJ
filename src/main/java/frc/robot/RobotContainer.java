@@ -38,13 +38,14 @@ import frc.robot.commands.SpinnerStopOnColor;
 import frc.robot.commands.AutoShooterAim;
 import frc.robot.commands.AutonDrive;
 import frc.robot.commands.AutonDrive2Point;
-import frc.robot.commands.AutonDriveDistance;
+import frc.robot.commands.AutonDriveJoystick;
 import frc.robot.commands.ClimberExtend;
 import frc.robot.commands.ClimberRetract;
 import frc.robot.commands.CollectorExtend;
 import frc.robot.commands.CollectorRetract;
 import frc.robot.commands.CollectorStop;
-import frc.robot.commands.DriveTeleop;
+import frc.robot.commands.DriveTank;
+import frc.robot.commands.DriveArcade;
 import frc.robot.commands.HopperStop;
 import frc.robot.commands.ShooterAim;
 import frc.robot.commands.ShooterAimStop;
@@ -108,7 +109,7 @@ public class RobotContainer {
     // m_driver.getY(Hand.kRight)), chassis));
 
     chassis
-        .setDefaultCommand(new DriveTeleop(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
+        .setDefaultCommand(new DriveTank(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
     collector.setDefaultCommand(new CollectorStop(collector));
     hopper.setDefaultCommand(new HopperStop(hopper));
     shooter.setDefaultCommand(new ShooterStop(shooter));
@@ -129,16 +130,24 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // Define Operator controls
-    new JoystickButton(m_driver, Button.kA.value).whenPressed(
-        new AutonDriveDistance(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
+    new JoystickButton(m_driver, Button.kA.value)
+        .whenPressed(new DriveTank(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
 
     new JoystickButton(m_driver, Button.kB.value)
-        .whenPressed(new AutonDrive2Point(new Pose2d(new Translation2d(7.0, 7.0), new Rotation2d(0.0)), chassis));
+        .whenPressed(new DriveArcade(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getX(Hand.kRight), chassis));
+
+    new JoystickButton(m_driver, Button.kX.value).whenPressed(
+        new AutonDriveJoystick(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
 
     new JoystickButton(m_driver, Button.kY.value)
-        .whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()));
+        .whenPressed(new AutonDrive2Point(new Pose2d(new Translation2d(7.0, 7.0), new Rotation2d(0.0)), chassis));
 
-    new JoystickButton(m_driver, Button.kX.value).whenPressed(new ShooterAimStop(shooter));
+    // new JoystickButton(m_driver, Button.kY.value)
+    // .whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () ->
+    // shooter.getY()));
+
+    // new JoystickButton(m_driver, Button.kX.value).whenPressed(new
+    // ShooterAimStop(shooter));
 
     new JoystickButton(m_driver, Button.kBumperRight.value).whenPressed(new CollectorExtend(collector));
     new JoystickButton(m_driver, Button.kBumperLeft.value).whenPressed(new CollectorRetract(collector));

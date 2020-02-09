@@ -208,8 +208,12 @@ public class Chassis extends SubsystemBase {
 		// m_kinematics.toWheelSpeeds(chassisSpeeds);
 	}
 
-	public void driveTeleop(double left, double right) {
+	public void driveTank(double left, double right) {
 		m_tankDrive.tankDrive(left, right);
+	}
+
+	public void driveArcade(double spd, double rot) {
+		m_tankDrive.arcadeDrive(spd, rot);
 	}
 
 	public void resetFieldPosition(double x, double y) {

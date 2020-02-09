@@ -12,13 +12,13 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Chassis;
 
-public class DriveTeleop extends CommandBase {
+public class DriveTank extends CommandBase {
 
   private final Chassis chassis;
   private DoubleSupplier left;
   private DoubleSupplier right;
 
-  public DriveTeleop(DoubleSupplier left, DoubleSupplier right, Chassis chassis) {
+  public DriveTank(DoubleSupplier left, DoubleSupplier right, Chassis chassis) {
     this.chassis = chassis;
     this.left = left;
     this.right = right;
@@ -33,7 +33,7 @@ public class DriveTeleop extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    chassis.driveTeleop(left.getAsDouble(), right.getAsDouble());
+    chassis.driveTank(left.getAsDouble(), right.getAsDouble());
   }
 
   // Make this return true when this Command no longer needs to run execute()
