@@ -117,7 +117,7 @@ public class Chassis extends SubsystemBase {
 		// m_leftPIDController.reset();
 		// m_rightPIDController.reset();
 
-		m_leftGroup.setInverted(false);
+		m_leftGroup.setInverted(true);
 		m_rightGroup.setInverted(true);
 
 		// m_leftPIDController.setP(ChassisConstants.kP);
@@ -148,6 +148,11 @@ public class Chassis extends SubsystemBase {
 		m_leftEncoder.setVelocityConversionFactor(ChassisConstants.kVelFactor);
 		m_rightEncoder.setVelocityConversionFactor(ChassisConstants.kVelFactor);
 
+		SmartDashboard.putNumber("ML Pos Factor", m_leftEncoder.getPositionConversionFactor());
+		SmartDashboard.putNumber("MR Pos Factor", m_rightEncoder.getPositionConversionFactor());
+		SmartDashboard.putNumber("ML Vel Factor", m_leftEncoder.getVelocityConversionFactor());
+		SmartDashboard.putNumber("MR Vel Factor", m_rightEncoder.getVelocityConversionFactor());
+
 		// Reset the current encoder positions to zero
 		m_leftEncoder.setPosition(0.0);
 		m_rightEncoder.setPosition(0.0);
@@ -162,24 +167,37 @@ public class Chassis extends SubsystemBase {
 		SmartDashboard.putData("Right Group", m_rightGroup);
 	}
 
-	public void periodic() {
-		SmartDashboard.putNumber("LM Current", leftMaster.getOutputCurrent());
-		SmartDashboard.putNumber("RM Current", rightMaster.getOutputCurrent());
-		SmartDashboard.putNumber("LM Temp", leftMaster.getMotorTemperature() * UnitsConstants.kC2F);
-		SmartDashboard.putNumber("RM Temp", rightMaster.getMotorTemperature() * UnitsConstants.kC2F);
+	public DifferentialDriveOdometry getOdometry() {
+		return m_odometry;
+	}
 
-		SmartDashboard.putNumber("LM Position", m_leftEncoder.getPosition());
-		SmartDashboard.putNumber("LM Velocity", m_leftEncoder.getVelocity());
-		SmartDashboard.putNumber("RM Position", m_rightEncoder.getPosition());
-		SmartDashboard.putNumber("RM Velocity", m_rightEncoder.getVelocity());
+	public PIDController getDistPID() {
+		return m_distPIDController;
+	}
+
+	public PIDController getRotPID() {
+		return m_rotPIDController;
+	}
+
+	public void periodic() {
+		// SmartDashboard.putNumber("LM Current", leftMaster.getOutputCurrent());
+		// SmartDashboard.putNumber("RM Current", rightMaster.getOutputCurrent());
+		// SmartDashboard.putNumber("LM Temp", leftMaster.getMotorTemperature() *
+		// UnitsConstants.kC2F);
+		// SmartDashboard.putNumber("RM Temp", rightMaster.getMotorTemperature() *
+		// UnitsConstants.kC2F);
+
+		SmartDashboard.putNumber("Robot Angle", -ahrs.getAngle());
+		SmartDashboard.putNumber("ML Position", m_leftEncoder.getPosition());
+		SmartDashboard.putNumber("ML Velocity", m_leftEncoder.getVelocity());
+		SmartDashboard.putNumber("MR Position", m_rightEncoder.getPosition());
+		SmartDashboard.putNumber("MR Velocity", m_rightEncoder.getVelocity());
 
 		SmartDashboard.putNumber("Hi Pressure", getHiPressure());
 		SmartDashboard.putNumber("Lo Pressure", getLoPressure());
 
 		// Update field position - for autonomous
 		updateOdometry();
-
-		calcVector();
 		// m_odometry.getPoseMeters();
 		// new Pose2d(x, y, rotation);
 		// m_odometry.resetPosition(poseMeters, gyroAngle);
@@ -193,11 +211,6 @@ public class Chassis extends SubsystemBase {
 	public void driveTeleop(double left, double right) {
 		m_tankDrive.tankDrive(left, right);
 	}
-
-	// public void autonDrive(double dist) {
-	// m_leftPIDController.setReference(dist, ControlType.kPosition);
-	// m_rightPIDController.setReference(dist, ControlType.kPosition);
-	// }
 
 	public void resetFieldPosition(double x, double y) {
 		ahrs.zeroYaw();
@@ -213,7 +226,7 @@ public class Chassis extends SubsystemBase {
 	 */
 	public Rotation2d getAngle() {
 		// Negating the angle because WPILib gyros are CW positive.
-		return Rotation2d.fromDegrees(-ahrs.getAngle());
+		return Rotation2d.fromDegrees(-ahrs.getYaw());
 	}
 
 	/**
@@ -225,15 +238,13 @@ public class Chassis extends SubsystemBase {
 		double leftFeedforward = 0.0;// m_Feedforward.calculate(speeds.leftMetersPerSecond);
 		double rightFeedforward = 0.0;// m_Feedforward.calculate(speeds.rightMetersPerSecond);
 
-		SmartDashboard.putNumber("Lime lVel", m_leftEncoder.getVelocity());
-		SmartDashboard.putNumber("Lime rVel", m_rightEncoder.getVelocity());
 		SmartDashboard.putNumber("Lime lSet", speeds.leftMetersPerSecond);
 		SmartDashboard.putNumber("Lime rSet", speeds.rightMetersPerSecond);
 
 		double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getVelocity(), speeds.leftMetersPerSecond);
 		double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getVelocity(), speeds.rightMetersPerSecond);
 
-		m_leftGroup.set(leftOutput + leftFeedforward);
+		m_leftGroup.set(-leftOutput + leftFeedforward);
 		m_rightGroup.set(rightOutput + rightFeedforward);
 	}
 
@@ -254,19 +265,6 @@ public class Chassis extends SubsystemBase {
 	 */
 	public void updateOdometry() {
 		m_odometry.update(getAngle(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
-	}
-
-	public void calcVector() {
-		Pose2d tgtPose = new Pose2d(new Translation2d(7.0, 7.0), new Rotation2d(0.0));
-		Pose2d robotPose = m_odometry.getPoseMeters();
-
-		double dist = robotPose.getTranslation().getDistance(tgtPose.getTranslation());
-		double dX = robotPose.getTranslation().getX() - tgtPose.getTranslation().getX();
-		double dY = robotPose.getTranslation().getY() - tgtPose.getTranslation().getY();
-		double angle = new Rotation2d(dX, dY).getDegrees();
-
-		SmartDashboard.putNumber("Pose Dist", dist);
-		SmartDashboard.putNumber("Pose Angle", angle);
 	}
 
 	// public void driveDistanceWithHeading(double distance, double angle) {
