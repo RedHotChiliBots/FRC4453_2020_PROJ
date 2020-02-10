@@ -121,8 +121,9 @@ public class RobotContainer {
       chassis::getPose, new RamseteController(ChassisConstants.kRamseteB, ChassisConstants.kRamseteZeta),
       new SimpleMotorFeedforward(ChassisConstants.ksVolts, ChassisConstants.kvVoltSecondsPerMeter,
           ChassisConstants.kaVoltSecondsSquaredPerMeter),
-      kDriveKinematics, chassis::getWheelSpeeds, new PIDController(ChassisConstants.kP, 0, 0),
-      new PIDController(ChassisConstants.kP, 0, 0),
+      kDriveKinematics, chassis::getWheelSpeeds,
+      new PIDController(ChassisConstants.kP, ChassisConstants.kI, ChassisConstants.kD),
+      new PIDController(ChassisConstants.kP, ChassisConstants.kI, ChassisConstants.kD),
       // RamseteCommand passes volts to the callback
       chassis::driveTankVolts, chassis);
 
