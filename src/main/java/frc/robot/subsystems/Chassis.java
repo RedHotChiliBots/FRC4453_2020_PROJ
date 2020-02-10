@@ -15,12 +15,13 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -35,7 +36,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants.AnalogIOConstants;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.ChassisConstants;
-import frc.robot.Constants.UnitsConstants;
 
 /**
  * Represents a differential drive style drivetrain.
@@ -58,7 +58,7 @@ public class Chassis extends SubsystemBase {
 	private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
 	private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
 
-	private final DifferentialDrive m_tankDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
+	private final DifferentialDrive m_diffDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
 
 	// Identify left and rigt encoders
 	public final CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
@@ -100,6 +100,23 @@ public class Chassis extends SubsystemBase {
 	private AnalogInput hiPressureSensor = new AnalogInput(AnalogIOConstants.kHiPressureChannel);
 	private AnalogInput loPressureSensor = new AnalogInput(AnalogIOConstants.kLoPressureChannel);
 
+	private final ShuffleboardTab chassisTab = Shuffleboard.getTab("Chassis");
+	private NetworkTableEntry sbRobotAngle = chassisTab.addPersistent("Robot Angle", 0).getEntry();
+	private NetworkTableEntry sbLeftPos = chassisTab.addPersistent("ML Position", 0).getEntry();
+	private NetworkTableEntry sbLeftVel = chassisTab.addPersistent("ML Velocity", 0).getEntry();
+	private NetworkTableEntry sbRightPos = chassisTab.addPersistent("MR Position", 0).getEntry();
+	private NetworkTableEntry sbRightVel = chassisTab.addPersistent("MR Velocity", 0).getEntry();
+	private NetworkTableEntry sbLeftPow = chassisTab.addPersistent("ML Power", 0).getEntry();
+	private NetworkTableEntry sbRightPow = chassisTab.addPersistent("MR Power", 0).getEntry();
+
+	private final ShuffleboardTab pneumaticsTab = Shuffleboard.getTab("Pneumatics");
+	private NetworkTableEntry sbHiPressure = pneumaticsTab.addPersistent("Hi Pressure", 0).getEntry();
+	private NetworkTableEntry sbLoPressure = pneumaticsTab.addPersistent("Lo Pressure", 0).getEntry();
+
+	private final ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
+	private NetworkTableEntry sbLimeLSet = visionTab.addPersistent("Lime LSet", 0).getEntry();
+	private NetworkTableEntry sbLimeRSet = visionTab.addPersistent("Lime RSet", 0).getEntry();
+
 	/**
 	 * Constructs a differential drive object. Sets the encoder distance per pulse
 	 * and resets the gyro.
@@ -117,8 +134,8 @@ public class Chassis extends SubsystemBase {
 		// m_leftPIDController.reset();
 		// m_rightPIDController.reset();
 
-		m_leftGroup.setInverted(true);
-		m_rightGroup.setInverted(true);
+		// m_leftGroup.setInverted(true);
+		// m_rightGroup.setInverted(true);
 
 		// m_leftPIDController.setP(ChassisConstants.kP);
 		// m_leftPIDController.setI(ChassisConstants.kI);
@@ -148,10 +165,10 @@ public class Chassis extends SubsystemBase {
 		m_leftEncoder.setVelocityConversionFactor(ChassisConstants.kVelFactor);
 		m_rightEncoder.setVelocityConversionFactor(ChassisConstants.kVelFactor);
 
-		SmartDashboard.putNumber("ML Pos Factor", m_leftEncoder.getPositionConversionFactor());
-		SmartDashboard.putNumber("MR Pos Factor", m_rightEncoder.getPositionConversionFactor());
-		SmartDashboard.putNumber("ML Vel Factor", m_leftEncoder.getVelocityConversionFactor());
-		SmartDashboard.putNumber("MR Vel Factor", m_rightEncoder.getVelocityConversionFactor());
+		chassisTab.addPersistent("ML Pos Factor", m_leftEncoder.getPositionConversionFactor());
+		chassisTab.addPersistent("MR Pos Factor", m_rightEncoder.getPositionConversionFactor());
+		chassisTab.addPersistent("ML Vel Factor", m_leftEncoder.getVelocityConversionFactor());
+		chassisTab.addPersistent("MR Vel Factor", m_rightEncoder.getVelocityConversionFactor());
 
 		// Reset the current encoder positions to zero
 		m_leftEncoder.setPosition(0.0);
@@ -160,11 +177,6 @@ public class Chassis extends SubsystemBase {
 		m_odometry = new DifferentialDriveOdometry(getAngle());
 
 		resetFieldPosition(0.0, 0.0);
-
-		SmartDashboard.putData("AHRS Angle", ahrs);
-		// SmartDashboard.putData("Tank Drive", m_tankDrive);
-		SmartDashboard.putData("Left Group", m_leftGroup);
-		SmartDashboard.putData("Right Group", m_rightGroup);
 	}
 
 	public DifferentialDriveOdometry getOdometry() {
@@ -180,21 +192,16 @@ public class Chassis extends SubsystemBase {
 	}
 
 	public void periodic() {
-		// SmartDashboard.putNumber("LM Current", leftMaster.getOutputCurrent());
-		// SmartDashboard.putNumber("RM Current", rightMaster.getOutputCurrent());
-		// SmartDashboard.putNumber("LM Temp", leftMaster.getMotorTemperature() *
-		// UnitsConstants.kC2F);
-		// SmartDashboard.putNumber("RM Temp", rightMaster.getMotorTemperature() *
-		// UnitsConstants.kC2F);
+		sbRobotAngle.setDouble(-ahrs.getAngle());
+		sbLeftPos.setDouble(m_leftEncoder.getPosition());
+		sbLeftVel.setDouble(m_leftEncoder.getVelocity());
+		sbRightPos.setDouble(m_rightEncoder.getPosition());
+		sbRightVel.setDouble(m_rightEncoder.getVelocity());
+		sbLeftPow.setDouble(m_leftGroup.get());
+		sbRightPow.setDouble(m_rightGroup.get());
 
-		SmartDashboard.putNumber("Robot Angle", -ahrs.getAngle());
-		SmartDashboard.putNumber("ML Position", m_leftEncoder.getPosition());
-		SmartDashboard.putNumber("ML Velocity", m_leftEncoder.getVelocity());
-		SmartDashboard.putNumber("MR Position", m_rightEncoder.getPosition());
-		SmartDashboard.putNumber("MR Velocity", m_rightEncoder.getVelocity());
-
-		SmartDashboard.putNumber("Hi Pressure", getHiPressure());
-		SmartDashboard.putNumber("Lo Pressure", getLoPressure());
+		sbHiPressure.setDouble(getHiPressure());
+		sbLoPressure.setDouble(getLoPressure());
 
 		// Update field position - for autonomous
 		updateOdometry();
@@ -209,11 +216,11 @@ public class Chassis extends SubsystemBase {
 	}
 
 	public void driveTank(double left, double right) {
-		m_tankDrive.tankDrive(left, right);
+		m_diffDrive.tankDrive(-left, -right);
 	}
 
 	public void driveArcade(double spd, double rot) {
-		m_tankDrive.arcadeDrive(spd, rot);
+		m_diffDrive.arcadeDrive(-spd, rot);
 	}
 
 	public void resetFieldPosition(double x, double y) {
@@ -242,13 +249,13 @@ public class Chassis extends SubsystemBase {
 		double leftFeedforward = 0.0;// m_Feedforward.calculate(speeds.leftMetersPerSecond);
 		double rightFeedforward = 0.0;// m_Feedforward.calculate(speeds.rightMetersPerSecond);
 
-		SmartDashboard.putNumber("Lime lSet", speeds.leftMetersPerSecond);
-		SmartDashboard.putNumber("Lime rSet", speeds.rightMetersPerSecond);
+		sbLimeLSet.setDouble(speeds.leftMetersPerSecond);
+		sbLimeRSet.setDouble(-speeds.rightMetersPerSecond);
 
 		double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getVelocity(), speeds.leftMetersPerSecond);
-		double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getVelocity(), speeds.rightMetersPerSecond);
+		double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getVelocity(), -speeds.rightMetersPerSecond);
 
-		m_leftGroup.set(-leftOutput + leftFeedforward);
+		m_leftGroup.set(leftOutput + leftFeedforward);
 		m_rightGroup.set(rightOutput + rightFeedforward);
 	}
 
@@ -260,7 +267,7 @@ public class Chassis extends SubsystemBase {
 	 */
 	// @SuppressWarnings("ParameterName")
 	public void drive(double xSpeed, double xRot) {
-		var wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, xRot));
+		var wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, -xRot));
 		setSpeeds(wheelSpeeds);
 	}
 

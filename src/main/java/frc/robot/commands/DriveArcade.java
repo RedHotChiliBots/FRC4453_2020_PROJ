@@ -33,7 +33,7 @@ public class DriveArcade extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    chassis.driveTank(spd.getAsDouble(), rot.getAsDouble());
+    chassis.driveArcade(spd.getAsDouble(), rot.getAsDouble());
   }
 
   // Make this return true when this Command no longer needs to run execute()

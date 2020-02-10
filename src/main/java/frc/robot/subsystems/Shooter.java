@@ -26,7 +26,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import frc.robot.Library;
 import frc.robot.Constants.ShooterConstants;
@@ -82,6 +83,14 @@ public class Shooter extends SubsystemBase {
   // m_reverseLimit.enableLimitSwitch(false);
 
   Library lib = new Library();
+
+  private final ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+  private NetworkTableEntry sbShootVel = shooterTab.addPersistent("ShootVelocity", 0).getEntry();
+  private NetworkTableEntry sbAnglePos = shooterTab.addPersistent("Angle Position", 0).getEntry();
+  private NetworkTableEntry sbTiltPos = shooterTab.addPersistent("Tilt Position", 0).getEntry();
+  private NetworkTableEntry sbShootSetPoint = shooterTab.addPersistent("Shoot SetPoint", 0).getEntry();
+  private NetworkTableEntry sbAngleSetPoint = shooterTab.addPersistent("Angle SetPoint", 0).getEntry();
+  private NetworkTableEntry sbTiltSetPoint = shooterTab.addPersistent("Tilt SetPoint", 0).getEntry();
 
   public Shooter() {
     System.out.println("+++++ Shooter Constructor starting ...");
@@ -166,12 +175,12 @@ public class Shooter extends SubsystemBase {
   }
 
   public void periodic() {
-    SmartDashboard.putNumber("ShootVelocity", getShootVelocity());
-    SmartDashboard.putNumber("Angle Position", getAnglePosition());
-    SmartDashboard.putNumber("Tilt Position", getTiltPosition());
-    SmartDashboard.putNumber("Angle SetPoint", shootSetPoint);
-    SmartDashboard.putNumber("Angle SetPoint", angleSetPoint);
-    SmartDashboard.putNumber("Tilt SetPoint", tiltSetPoint);
+    sbShootVel.setDouble(getShootVelocity());
+    sbAnglePos.setDouble(getAnglePosition());
+    sbTiltPos.setDouble(getTiltPosition());
+    sbShootSetPoint.setDouble(shootSetPoint);
+    sbAngleSetPoint.setDouble(angleSetPoint);
+    sbTiltSetPoint.setDouble(tiltSetPoint);
   }
 
   public double getShootVelocity() {

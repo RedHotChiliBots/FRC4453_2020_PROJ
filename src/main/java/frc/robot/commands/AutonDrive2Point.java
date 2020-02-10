@@ -7,9 +7,11 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.Chassis;
@@ -19,6 +21,12 @@ public class AutonDrive2Point extends CommandBase {
   private Pose2d tgtPose;
   private double dist;
   private final Chassis chassis;
+
+  private final ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
+  private NetworkTableEntry sbLimeSpd1 = visionTab.addPersistent("Lime Spd1", 0).getEntry();
+  private NetworkTableEntry sbLimeRot1 = visionTab.addPersistent("Lime Rot1", 0).getEntry();
+  private NetworkTableEntry sbLimeDist = visionTab.addPersistent("Lime Dist", 0).getEntry();
+  private NetworkTableEntry sbLimeAngle = visionTab.addPersistent("Lime Angle", 0).getEntry();
 
   public AutonDrive2Point(Pose2d tgtPose, Chassis chassis) {
     this.tgtPose = tgtPose;
@@ -44,11 +52,10 @@ public class AutonDrive2Point extends CommandBase {
     double xSpeed = chassis.getDistPID().calculate(dist, 0.0);
     double xRot = chassis.getRotPID().calculate(angle, 0.0);
 
-    SmartDashboard.putNumber("Pose Dist", dist);
-    SmartDashboard.putNumber("Pose Angle", angle);
-
-    SmartDashboard.putNumber("Lime Spd", xSpeed);
-    SmartDashboard.putNumber("Lime Rot", xRot);
+    sbLimeSpd1.setDouble(xSpeed);
+    sbLimeRot1.setDouble(xRot);
+    sbLimeDist.setDouble(dist);
+    sbLimeAngle.setDouble(angle);
 
     chassis.drive(xSpeed, xRot);
   }

@@ -37,10 +37,10 @@ public final class Constants {
 		public static final int kPIDLoopIdx = 0;
 		public static final int kTimeoutMs = 30;
 
-		public static final int kLeftMasterMotor = 4;
-		public static final int kLeftFollowerMotor = 3;
 		public static final int kRightMasterMotor = 1;
 		public static final int kRightFollowerMotor = 2;
+		public static final int kLeftMasterMotor = 4;
+		public static final int kLeftFollowerMotor = 3;
 
 		public static final int kShooterMotor = 10;
 		public static final int kAngleMotor = 11;
@@ -99,7 +99,7 @@ public final class Constants {
 		public static final double kPosFactor = kWheelCirc / kGearBoxRatio; // Meters per Motor Revolution
 		public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; //
 
-		public static final double kP = 0.3;
+		public static final double kP = 0.15;
 		public static final double kI = 0.0;
 		public static final double kD = 0;
 
@@ -107,12 +107,12 @@ public final class Constants {
 		public static final double kV = 3;
 		public static final double kA = 0;
 
-		public static final double kDistP = 0.8;
-		public static final double kDistI = 0.001;
+		public static final double kDistP = 0.15;
+		public static final double kDistI = 0.0;
 		public static final double kDistD = 0;
 
-		public static final double kRotP = 0.8;
-		public static final double kRotI = 0.001;
+		public static final double kRotP = 0.15;
+		public static final double kRotI = 0.0;
 		public static final double kRotD = 0;
 	}
 

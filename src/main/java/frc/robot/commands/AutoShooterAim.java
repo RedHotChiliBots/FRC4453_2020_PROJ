@@ -9,7 +9,9 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter;
@@ -23,6 +25,11 @@ public class AutoShooterAim extends CommandBase {
   DoubleSupplier dsy = null;
 
   private double distance = 0.0;
+
+  private final ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
+  private NetworkTableEntry sbVisionX = visionTab.addPersistent("Vision X", 0).getEntry();
+  private NetworkTableEntry sbVisionY = visionTab.addPersistent("Vision Y", 0).getEntry();
+  private NetworkTableEntry sbVisionDist = visionTab.addPersistent("Vision Dist", 0).getEntry();
 
   /**
    * Creates a new AimShooter.
@@ -52,9 +59,9 @@ public class AutoShooterAim extends CommandBase {
     shooter.setAnglePosition(x);
     // shooter.setAnglePosition(shooter.getAnglePosition() + x);
 
-    SmartDashboard.putNumber("Vision X", x);
-    SmartDashboard.putNumber("Vision Y", y);
-    SmartDashboard.putNumber("Vision Dist", distance);
+    sbVisionX.setDouble(x);
+    sbVisionY.setDouble(y);
+    sbVisionDist.setDouble(distance);
   }
 
   // Called once the command ends or is interrupted.

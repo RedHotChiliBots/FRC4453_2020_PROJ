@@ -20,7 +20,10 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Constants.CANidConstants;
@@ -67,6 +70,15 @@ public class Spinner extends SubsystemBase {
   private Color detectedColor;
   private ColorMatchResult match;
   private COLOR colorString = COLOR.UNKNOWN;
+
+  private final ShuffleboardTab spinnerTab = Shuffleboard.getTab("Spinner");
+  private NetworkTableEntry sbSpinConf = spinnerTab.addPersistent("Spin Confidence", 0).getEntry();
+  private NetworkTableEntry sbColorDetect = spinnerTab.addPersistent("Spin Color Detected", 0).getEntry();
+  private NetworkTableEntry sbColorCount = spinnerTab.addPersistent("Spin Color Counters", 0).getEntry();
+  private NetworkTableEntry sbSpinSetPoint = spinnerTab.addPersistent("Spin SetPoint (rpm)", 0).getEntry();
+  private NetworkTableEntry sbSpinTarget = spinnerTab.addPersistent("Spin Target (rpm)", 0).getEntry();
+  private NetworkTableEntry sbStopOnColor = spinnerTab.addPersistent("Spin Stop On Color", 0).getEntry();
+  // SmartDashboard.putNumber(color.toString(), num);
 
   public Spinner() {
     System.out.println("+++++ Spinner Constructor starting ...");
@@ -123,18 +135,18 @@ public class Spinner extends SubsystemBase {
     // SmartDashboard.putNumber("Spin Detected Green", detectedColor.green);
     // SmartDashboard.putNumber("Spin Detected Blue", detectedColor.blue);
 
-    SmartDashboard.putNumber("Spin Confidence", match.confidence);
-    SmartDashboard.putString("Spin Color Detected", colorString.toString());
+    sbSpinConf.setDouble(match.confidence);
+    sbColorDetect.setString(colorString.toString());
 
     String cntString = "";
     for (COLOR color : COLOR.values()) {
       cntString += color.toString().charAt(0) + ":" + colorCounter.get(color).toString() + " ";
     }
     cntString += sumColor();
-    SmartDashboard.putString("Spin Color Counters", cntString);
+    sbColorCount.setString(cntString);
 
-    SmartDashboard.putNumber("Spin SetPoint (rpm)", setPoint);
-    SmartDashboard.putNumber("Spin Target (rpm)", getRPMs());
+    sbSpinSetPoint.setDouble(setPoint);
+    sbSpinTarget.setDouble(getRPMs());
   }
 
   /**
@@ -170,7 +182,7 @@ public class Spinner extends SubsystemBase {
   public COLOR getStopOnColor(char gameColor) {
     COLOR color = stopOnColor.get(gameColor);
     String strColor = gameColor + ":" + color.toString();
-    SmartDashboard.putString("Spin Stop On Color", strColor);
+    sbStopOnColor.setString(strColor);
     return color;
   }
 

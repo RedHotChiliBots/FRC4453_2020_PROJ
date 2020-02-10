@@ -19,10 +19,12 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.DigitalIOConstants;
@@ -60,6 +62,12 @@ public class Hopper extends SubsystemBase {
 
   private double hopperSetPoint;
   private double ejectorSetPoint;
+
+  private final ShuffleboardTab hopperTab = Shuffleboard.getTab("Hopper");
+  private NetworkTableEntry sbHopperTgt = hopperTab.addPersistent("Hopper Target (rpm)", 0).getEntry();
+  private NetworkTableEntry sbHopperVel = hopperTab.addPersistent("Hopper Velocity (rpm)", 0).getEntry();
+  private NetworkTableEntry sbEjectorTgt = hopperTab.addPersistent("Ejector Target (rpm)", 0).getEntry();
+  private NetworkTableEntry sbEjectorVel = hopperTab.addPersistent("Ejector Velocity (rpm)", 0).getEntry();
 
   public Hopper() {
     System.out.println("+++++ Spinner Constructor starting ...");
@@ -126,10 +134,10 @@ public class Hopper extends SubsystemBase {
 
   // Called once per Robot execution loop - 50Hz
   public void periodic() {
-    SmartDashboard.putNumber("Hopper SetPoint (rpm)", hopperSetPoint);
-    SmartDashboard.putNumber("Hopper Target (rpm)", getHopperVelocity());
-    SmartDashboard.putNumber("Ejector SetPoint (rpm)", ejectorSetPoint);
-    SmartDashboard.putNumber("Ejector Target (rpm)", getEjectorVelocity());
+    sbHopperTgt.setDouble(hopperSetPoint);
+    sbHopperVel.setDouble(getHopperVelocity());
+    sbEjectorTgt.getDouble(ejectorSetPoint);
+    sbEjectorVel.getDouble(getEjectorVelocity());
   }
 
   /**

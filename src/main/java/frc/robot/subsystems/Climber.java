@@ -14,8 +14,10 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 //import edu.wpi.first.wpilibj2.d
 //import edu.wpi.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -50,14 +52,20 @@ public class Climber extends SubsystemBase {
 
 	private final Library lib = new Library();
 
+	private final ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
+	private NetworkTableEntry sbClimbVel = climberTab.addPersistent("Climb Velocity", 0).getEntry();
+	private NetworkTableEntry sbLevelVel = climberTab.addPersistent("Level Velocity", 0).getEntry();
+	private NetworkTableEntry sbClimbTgt = climberTab.addPersistent("Climb Target", 0).getEntry();
+	private NetworkTableEntry sbLevelTgt = climberTab.addPersistent("Level Target", 0).getEntry();
+
+	private NetworkTableEntry sbClimbSolenoid = climberTab.addPersistent("Climb Solenoid", 0).getEntry();
+
 	// climberSolenoid.set(kOff);
 	// climberSolenoid.set(kForward);
 	// climberSolenoid.set(kReverse);
 
 	public Climber() {
 		System.out.println("+++++ Climber Constructor starting ...");
-
-		SmartDashboard.putData("Climber Solenoid", climberSolenoid);
 
 		// Define Climber motor
 		climbMotor.restoreFactoryDefaults();
@@ -94,8 +102,20 @@ public class Climber extends SubsystemBase {
 	}
 
 	public void periodic() {
-		SmartDashboard.putNumber("ClimbVelocity", getClimbVelocity());
-		SmartDashboard.putNumber("LevelVelocity", getLevelVelocity());
+		sbClimbVel.setDouble(getClimbVelocity());
+		sbLevelVel.setDouble(getLevelVelocity());
+		sbClimbTgt.setDouble(climbSetPoint);
+		sbLevelTgt.setDouble(levelSetPoint);
+
+		String str = "";
+		if (climberSolenoid.get() == ClimberConstants.ClimberExtend) {
+			str = "Extend";
+		} else if (climberSolenoid.get() == ClimberConstants.ClimberRetract) {
+			str = "Retract";
+		} else {
+			str = "Unknown";
+		}
+		sbClimbSolenoid.setString(str);
 	}
 
 	public double getClimbVelocity() {

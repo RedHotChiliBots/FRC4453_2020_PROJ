@@ -12,8 +12,10 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.CollectorConstants;
@@ -35,10 +37,14 @@ public class Collector extends SubsystemBase {
 	// climberSolenoid.set(kForward);
 	// climberSolenoid.set(kReverse);
 
+	private final ShuffleboardTab collectorTab = Shuffleboard.getTab("Collector");
+	private NetworkTableEntry sbCollectorTgt = collectorTab.addPersistent("Collector Target (rpm)", 0).getEntry();
+	private NetworkTableEntry sbCollectorVel = collectorTab.addPersistent("Collector Velocity (rpm)", 0).getEntry();
+
+	private NetworkTableEntry sbCollectSolenoid = collectorTab.addPersistent("Collector Solenoid", 0).getEntry();
+
 	public Collector() {
 		System.out.println("+++++ Collector Constructor starting ...");
-
-		SmartDashboard.putData("Collector Solenoid", collectorSolenoid);
 
 		/* Factory Default all hardware to prevent unexpected behaviour */
 		collectorMotor.configFactoryDefault();
@@ -70,8 +76,18 @@ public class Collector extends SubsystemBase {
 
 	// Called once per Robot execution loop - 50Hz
 	public void periodic() {
-		SmartDashboard.putNumber("Collector SetPoint (rpm)", collectorSetPoint);
-		SmartDashboard.putNumber("Collector Target (rpm)", getCollectorRPMs());
+		sbCollectorTgt.setDouble(collectorSetPoint);
+		sbCollectorVel.setDouble(getCollectorRPMs());
+
+		String str = "";
+		if (collectorSolenoid.get() == CollectorConstants.CollectorExtend) {
+			str = "Extend";
+		} else if (collectorSolenoid.get() == CollectorConstants.CollectorRetract) {
+			str = "Retract";
+		} else {
+			str = "Unknown";
+		}
+		sbCollectSolenoid.setString(str);
 	}
 
 	public void collectorExtend() {
