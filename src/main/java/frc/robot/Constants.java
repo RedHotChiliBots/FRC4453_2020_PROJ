@@ -107,6 +107,10 @@ public final class Constants {
 		public static final double kV = 3;
 		public static final double kA = 0;
 
+		// Ramsete Command constants - same for all robots
+		public static final double kRamseteB = 2.0;
+		public static final double kRamseteZeta = 0.7;
+
 		public static final double kDistP = 0.15;
 		public static final double kDistI = 0.0;
 		public static final double kDistD = 0;

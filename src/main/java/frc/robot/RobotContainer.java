@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -23,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Climber;
@@ -39,6 +40,7 @@ import frc.robot.commands.SpinnerStop;
 import frc.robot.commands.SpinnerStopOnColor;
 import frc.robot.commands.AutonDrive2Point;
 import frc.robot.commands.AutonDriveJoystick;
+import frc.robot.commands.AutonDriveTrajectory;
 import frc.robot.commands.ClimberExtend;
 import frc.robot.commands.ClimberRetract;
 import frc.robot.commands.CollectorExtend;
@@ -74,6 +76,11 @@ public class RobotContainer {
             () -> m_driver.getX(Hand.kRight), chassis);
     private final AutonDrive2Point autonDrive2Point = new AutonDrive2Point(
             new Pose2d(new Translation2d(7.0, 7.0), new Rotation2d(0.0)), chassis);
+
+    private final AutonDriveTrajectory autonDriveTrajectory = new AutonDriveTrajectory(chassis.getTrajectory(),
+            () -> chassis.getPose(), new RamseteController(ChassisConstants.kRamseteB, ChassisConstants.kRamseteZeta),
+            chassis.getKinematics(), () -> chassis.getWheelSpeeds(), chassis.getLeftPID(), chassis.getRightPID(),
+            chassis.driveTrajectory, chassis);
 
     // private final SpinnerStop m_spinnerStop = new SpinnerStop(spinner);
     // private final SpinnerStopOnColor m_spinnerStopOnColor = new
