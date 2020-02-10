@@ -100,7 +100,7 @@ public final class Constants {
 		public static final double kPosFactor = kWheelCirc / kGearBoxRatio; // Meters per Motor Revolution
 		public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; //
 
-		public static final double kP = 8.5;
+		public static final double kP = 0.15;
 		public static final double kI = 0.0;
 		public static final double kD = 0.0;
 

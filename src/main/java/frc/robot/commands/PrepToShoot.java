@@ -10,16 +10,15 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterPrepToShoot extends SequentialCommandGroup {
+public class PrepToShoot extends SequentialCommandGroup {
   /**
    * Add your docs here.
    */
-  public ShooterPrepToShoot(Shooter shooter, DoubleSupplier dsx, DoubleSupplier dsy) {
-    addCommands(new AutoShooterAim(shooter, dsx, dsy),
-      new ShooterShoot(shooter)
-    );
+  public PrepToShoot(Shooter shooter, Hopper hopper, DoubleSupplier dsx, DoubleSupplier dsy) {
+    addCommands(new AutoShooterAim(shooter, dsx, dsy), new HopperShoot(hopper, shooter), new ShooterShoot(shooter));
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

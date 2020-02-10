@@ -146,6 +146,10 @@ public class Climber extends SubsystemBase {
 		climbMotor.set(0);
 	}
 
+	public void stopLevel() {
+		levelMotor.set(0);
+	}
+
 	public void climberExtend() {
 		climberSolenoid.set(ClimberConstants.ClimberExtend);
 	}
