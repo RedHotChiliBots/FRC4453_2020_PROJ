@@ -11,6 +11,7 @@ import com.revrobotics.ColorMatch;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -87,25 +88,25 @@ public final class Constants {
 
 	public static final class ChassisConstants {
 		public static final double kMaxSpeedFPS = 0.5; // feet per second
-		public static final double kMaxSpeedMPS = kMaxSpeedFPS * UnitsConstants.kF2M; // meters per second
+		public static final double kMaxSpeedMPS = Units.feetToMeters(kMaxSpeedFPS); // meters per second
 		public static final double kMinSpeedMPS = -kMaxSpeedMPS; // meters per second
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
-		public static final double kTrackWidth = 26.341 * UnitsConstants.kI2M; // meters
-		public static final double kWheelCirc = Math.PI * 8.0 * UnitsConstants.kI2M;
+		public static final double kTrackWidth = Units.feetToMeters(26.341); // meters
+		public static final double kWheelCirc = Units.inchesToMeters(Math.PI * 8.0);
 		public static final int kEncoderResolution = 42; // not required
 		public static final double kGearBoxRatio = 10.71;
 		// The NEO's native units are rotations.
 		public static final double kPosFactor = kWheelCirc / kGearBoxRatio; // Meters per Motor Revolution
 		public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; //
 
-		public static final double kP = 0.15;
+		public static final double kP = 8.5;
 		public static final double kI = 0.0;
-		public static final double kD = 0;
+		public static final double kD = 0.0;
 
-		public static final double kS = 1;
-		public static final double kV = 3;
-		public static final double kA = 0;
+		// Ramsete Command constants - same for all robots
+		public static final double kRamseteB = 2.0;
+		public static final double kRamseteZeta = 0.7;
 
 		public static final double kDistP = 0.15;
 		public static final double kDistI = 0.0;
@@ -114,6 +115,28 @@ public final class Constants {
 		public static final double kRotP = 0.15;
 		public static final double kRotI = 0.0;
 		public static final double kRotD = 0;
+
+		public static final int kEncoderCPR = 1024;
+		public static final double kWheelDiameterMeters = 0.15;
+		public static final double kEncoderDistancePerPulse =
+				// Assumes the encoders are directly mounted on the wheel shafts
+				(kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
+
+		public static final boolean kGyroReversed = true;
+
+		// These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
+		// These characterization values MUST be determined either experimentally or
+		// theoretically for *your* robot's drive.
+		// The Robot Characterization Toolsuite provides a convenient tool for obtaining
+		// these values for your robot.
+		public static final double ksVolts = 0.22;
+		public static final double kvVoltSecondsPerMeter = 1.98;
+		public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+
+		public static final double kMaxSpeedMetersPerSecond = 3;
+		public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+
+		// Example value only - as above, this must be tuned for your drive!
 	}
 
 	public final static class ShooterConstants {
