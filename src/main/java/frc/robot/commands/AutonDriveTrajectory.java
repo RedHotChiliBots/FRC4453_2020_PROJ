@@ -58,19 +58,6 @@ public class AutonDriveTrajectory extends RamseteCommand {
     super(trajectory, pose, controller, feedforward, kinematics, wheelSpeeds, leftController, rightController,
         outputVolts, chassis);
 
-    // public AutonDriveTrajectory autonDriveTrajectory = new
-    // AutonDriveTrajectory(exampleTrajectory,
-    // chassis::getPose, new RamseteController(ChassisConstants.kRamseteB,
-    // ChassisConstants.kRamseteZeta),
-    // new SimpleMotorFeedforward(ChassisConstants.ksVolts,
-    // ChassisConstants.kvVoltSecondsPerMeter,
-    // ChassisConstants.kaVoltSecondsSquaredPerMeter),
-    // ChassisConstants.kDriveKinematics, chassis::getWheelSpeeds,
-    // new PIDController(ChassisConstants.kPDriveVel, 0, 0), new
-    // PIDController(ChassisConstants.kPDriveVel, 0, 0),
-    // // RamseteCommand passes volts to the callback
-    // chassis::tankDriveVolts, chassis);
-
     this.chassis = chassis;
     addRequirements(chassis);
   }

@@ -11,9 +11,11 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
@@ -21,11 +23,16 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.List;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -80,10 +87,35 @@ public class Chassis extends SubsystemBase {
 	private final PIDController m_rotPIDController = new PIDController(ChassisConstants.kRotP, ChassisConstants.kRotI,
 			ChassisConstants.kRotD);
 
-	private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
+	public final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
 			ChassisConstants.kTrackWidth);
 
-	private final DifferentialDriveOdometry m_odometry;
+	public final DifferentialDriveOdometry m_odometry;
+
+	// Create a voltage constraint to ensure we don't accelerate too fast
+	private final DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+			new SimpleMotorFeedforward(ChassisConstants.ksVolts, ChassisConstants.kvVoltSecondsPerMeter,
+					ChassisConstants.kaVoltSecondsSquaredPerMeter),
+			m_kinematics, 10);
+
+	// Create config for trajectory
+	private final TrajectoryConfig config = new TrajectoryConfig(ChassisConstants.kMaxSpeedMetersPerSecond,
+			ChassisConstants.kMaxAccelerationMetersPerSecondSquared)
+					// Add kinematics to ensure max speed is actually obeyed
+					.setKinematics(m_kinematics)
+					// Apply the voltage constraint
+					.addConstraint(autoVoltageConstraint);
+
+	// An example trajectory to follow. All units in meters.
+	public final Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+			// Start at the origin facing the +X direction
+			new Pose2d(0, 0, new Rotation2d(0)),
+			// Pass through these two interior waypoints, making an 's' curve path
+			List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+			// End 3 meters straight ahead of where we started, facing forward
+			new Pose2d(3, 0, new Rotation2d(0)),
+			// Pass config
+			config);
 
 	// Initialize NavX AHRS board
 	// Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB

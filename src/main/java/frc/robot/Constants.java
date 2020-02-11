@@ -24,12 +24,6 @@ import edu.wpi.first.wpilibj.util.Units;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
-	public static final class UnitsConstants {
-		public static final double kF2M = 0.3048;
-		public static final double kI2M = kF2M / 12;
-		public static final double kC2F = (9.0 / 5.0) + 32.0;
-	}
-
 	public static final class CANidConstants {
 		public static final int kPDP = 0;
 		public static final int kCompressor = 0;
@@ -92,14 +86,14 @@ public final class Constants {
 		public static final double kMinSpeedMPS = -kMaxSpeedMPS; // meters per second
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
-		public static final double kTrackWidth = Units.feetToMeters(26.341); // meters
-		public static final double kWheelCirc = Units.inchesToMeters(Math.PI * 8.0);
-		public static final int kEncoderResolution = 42; // not required
+		public static final double kTrackWidth = Units.inchesToMeters(26.341); // meters
+		public static final double kWheelCirc = Units.inchesToMeters(Math.PI * 8.0); // meters
+		public static final int kEncoderResolution = 42; // not used, NEO's native units are rotations
 		public static final double kGearBoxRatio = 10.71;
-		// The NEO's native units are rotations.
 		public static final double kPosFactor = kWheelCirc / kGearBoxRatio; // Meters per Motor Revolution
-		public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; //
+		public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; // Meters per Second
 
+		// Constants for Drive PIDs
 		public static final double kP = 0.15;
 		public static final double kI = 0.0;
 		public static final double kD = 0.0;
@@ -116,14 +110,6 @@ public final class Constants {
 		public static final double kRotI = 0.0;
 		public static final double kRotD = 0;
 
-		public static final int kEncoderCPR = 1024;
-		public static final double kWheelDiameterMeters = 0.15;
-		public static final double kEncoderDistancePerPulse =
-				// Assumes the encoders are directly mounted on the wheel shafts
-				(kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
-
-		public static final boolean kGyroReversed = true;
-
 		// These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
 		// These characterization values MUST be determined either experimentally or
 		// theoretically for *your* robot's drive.
@@ -135,8 +121,6 @@ public final class Constants {
 
 		public static final double kMaxSpeedMetersPerSecond = 3;
 		public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-
-		// Example value only - as above, this must be tuned for your drive!
 	}
 
 	public final static class ShooterConstants {
