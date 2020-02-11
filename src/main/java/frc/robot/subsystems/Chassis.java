@@ -49,6 +49,7 @@ import frc.robot.Constants.ChassisConstants;
  */
 public class Chassis extends SubsystemBase {
 
+	// ==============================================================
 	// Define the left side motors, master and follower
 	private final CANSparkMax leftMaster = new CANSparkMax(CANidConstants.kLeftMasterMotor, MotorType.kBrushless);
 	private final SpeedController m_leftMaster = leftMaster;
@@ -67,7 +68,8 @@ public class Chassis extends SubsystemBase {
 
 	private final DifferentialDrive m_diffDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
 
-	// Identify left and rigt encoders
+	// ==============================================================
+	// Identify encoders and PID controllers
 	public final CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
 	public final CANEncoder m_rightEncoder = new CANEncoder(rightMaster);
 
@@ -81,12 +83,8 @@ public class Chassis extends SubsystemBase {
 	private final PIDController m_rightPIDController = new PIDController(ChassisConstants.kP, ChassisConstants.kI,
 			ChassisConstants.kD);
 
-	private final PIDController m_distPIDController = new PIDController(ChassisConstants.kDistP,
-			ChassisConstants.kDistI, ChassisConstants.kDistD);
-
-	private final PIDController m_rotPIDController = new PIDController(ChassisConstants.kRotP, ChassisConstants.kRotI,
-			ChassisConstants.kRotD);
-
+	// ==============================================================
+	// Define autonomous support functions
 	public final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
 			ChassisConstants.kTrackWidth);
 
@@ -117,10 +115,12 @@ public class Chassis extends SubsystemBase {
 			// Pass config
 			config);
 
+	// ==============================================================
 	// Initialize NavX AHRS board
 	// Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB
 	private final AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
+	// ==============================================================
 	// Identify PDP and PCM
 	private final PowerDistributionPanel pdp = new PowerDistributionPanel(CANidConstants.kPDP);
 	private final Compressor compressor = new Compressor(CANidConstants.kCompressor);
@@ -129,6 +129,15 @@ public class Chassis extends SubsystemBase {
 	private AnalogInput hiPressureSensor = new AnalogInput(AnalogIOConstants.kHiPressureChannel);
 	private AnalogInput loPressureSensor = new AnalogInput(AnalogIOConstants.kLoPressureChannel);
 
+	// Not using, but left here to support other code
+	private final PIDController m_distPIDController = new PIDController(ChassisConstants.kDistP,
+			ChassisConstants.kDistI, ChassisConstants.kDistD);
+
+	private final PIDController m_rotPIDController = new PIDController(ChassisConstants.kRotP, ChassisConstants.kRotI,
+			ChassisConstants.kRotD);
+
+	// ==============================================================
+	// Define Shuffleboard data
 	private final ShuffleboardTab chassisTab = Shuffleboard.getTab("Chassis");
 	private NetworkTableEntry sbRobotAngle = chassisTab.addPersistent("Robot Angle", 0).getEntry();
 	private NetworkTableEntry sbLeftPos = chassisTab.addPersistent("ML Position", 0).getEntry();
