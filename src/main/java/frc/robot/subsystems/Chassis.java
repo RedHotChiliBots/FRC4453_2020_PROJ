@@ -85,8 +85,7 @@ public class Chassis extends SubsystemBase {
 
 	// ==============================================================
 	// Define autonomous support functions
-	public final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
-			ChassisConstants.kTrackWidth);
+	public final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(ChassisConstants.kTrackWidth);
 
 	public final DifferentialDriveOdometry m_odometry;
 
@@ -109,7 +108,8 @@ public class Chassis extends SubsystemBase {
 			// Start at the origin facing the +X direction
 			new Pose2d(0, 0, new Rotation2d(0)),
 			// Pass through these two interior waypoints, making an 's' curve path
-			List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+			// List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+			List.of(),
 			// End 3 meters straight ahead of where we started, facing forward
 			new Pose2d(3, 0, new Rotation2d(0)),
 			// Pass config
@@ -130,8 +130,8 @@ public class Chassis extends SubsystemBase {
 	private AnalogInput loPressureSensor = new AnalogInput(AnalogIOConstants.kLoPressureChannel);
 
 	// Not using, but left here to support other code
-	private final PIDController m_distPIDController = new PIDController(ChassisConstants.kDistP,
-			ChassisConstants.kDistI, ChassisConstants.kDistD);
+	private final PIDController m_distPIDController = new PIDController(ChassisConstants.kDistP, ChassisConstants.kDistI,
+			ChassisConstants.kDistD);
 
 	private final PIDController m_rotPIDController = new PIDController(ChassisConstants.kRotP, ChassisConstants.kRotI,
 			ChassisConstants.kRotD);
@@ -146,6 +146,10 @@ public class Chassis extends SubsystemBase {
 	private NetworkTableEntry sbRightVel = chassisTab.addPersistent("MR Velocity", 0).getEntry();
 	private NetworkTableEntry sbLeftPow = chassisTab.addPersistent("ML Power", 0).getEntry();
 	private NetworkTableEntry sbRightPow = chassisTab.addPersistent("MR Power", 0).getEntry();
+
+	private NetworkTableEntry sbX = chassisTab.addPersistent("Pose X", 0).getEntry();
+	private NetworkTableEntry sbY = chassisTab.addPersistent("Pose Y", 0).getEntry();
+	private NetworkTableEntry sbDeg = chassisTab.addPersistent("Pose Deg", 0).getEntry();
 
 	private final ShuffleboardTab pneumaticsTab = Shuffleboard.getTab("Pneumatics");
 	private NetworkTableEntry sbHiPressure = pneumaticsTab.addPersistent("Hi Pressure", 0).getEntry();
@@ -267,6 +271,18 @@ public class Chassis extends SubsystemBase {
 
 		// Update field position - for autonomous
 		updateOdometry();
+
+		Pose2d pose = m_odometry.getPoseMeters();
+		Translation2d trans = pose.getTranslation();
+		double x = trans.getX();
+		double y = trans.getY();
+		Rotation2d rot = pose.getRotation();
+		double deg = rot.getDegrees();
+
+		sbX.setDouble(x);
+		sbY.setDouble(y);
+		sbDeg.setDouble(deg);
+
 		// m_odometry.getPoseMeters();
 		// new Pose2d(x, y, rotation);
 		// m_odometry.resetPosition(poseMeters, gyroAngle);
@@ -278,7 +294,7 @@ public class Chassis extends SubsystemBase {
 	}
 
 	public void driveTankVolts(double left, double right) {
-		m_diffDrive.tankDrive(-left, -right);
+		m_diffDrive.tankDrive(left, right);
 	}
 
 	public void driveTank(double left, double right) {
@@ -341,7 +357,7 @@ public class Chassis extends SubsystemBase {
 	 * Updates the field-relative position.
 	 */
 	public void updateOdometry() {
-		m_odometry.update(getAngle(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
+		m_odometry.update(getAngle(), m_leftEncoder.getPosition(), -m_rightEncoder.getPosition());
 	}
 
 	public void driveTrajectory(double left, double right) {

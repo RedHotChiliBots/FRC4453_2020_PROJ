@@ -67,142 +67,142 @@ import frc.robot.commands.ShooterInit;
  */
 public class RobotContainer {
 
-  // =============================================================
-  // Initialize SubSystems
-  public final Chassis chassis = new Chassis();
-  public final Spinner spinner = new Spinner();
-  public final Shooter shooter = new Shooter();
-  public final Climber climber = new Climber();
-  public final Collector collector = new Collector();
-  public final Hopper hopper = new Hopper();
-
-  // =============================================================
-  // Define Joysticks
-  XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
-
-  // =============================================================
-  // Define Commands here to avoid multiple instantiations
-  // If commands use Shuffleboard and are instantiated multiple time, an error
-  // is thrown on the second instantiation becuase the "title" already exists.
-  private final AutonDriveJoystick autonDriveJoystick = new AutonDriveJoystick(() -> -m_driver.getY(Hand.kLeft),
-      () -> m_driver.getX(Hand.kRight), chassis);
-
-  private final AutonDrive2Point autonDrive2Point = new AutonDrive2Point(
-      new Pose2d(new Translation2d(7.0, 7.0), new Rotation2d(0.0)), chassis);
-
-  private final AutonDriveTrajectory autonDriveTrajectory = new AutonDriveTrajectory(chassis.exampleTrajectory,
-      chassis::getPose, new RamseteController(ChassisConstants.kRamseteB, ChassisConstants.kRamseteZeta),
-      new SimpleMotorFeedforward(ChassisConstants.ksVolts, ChassisConstants.kvVoltSecondsPerMeter,
-          ChassisConstants.kaVoltSecondsSquaredPerMeter),
-      chassis.m_kinematics, chassis::getWheelSpeeds,
-      new PIDController(ChassisConstants.kP, ChassisConstants.kI, ChassisConstants.kD),
-      new PIDController(ChassisConstants.kP, ChassisConstants.kI, ChassisConstants.kD),
-      // RamseteCommand passes volts to the callback
-      chassis::driveTankVolts, chassis);
-
-  // Define chooser for autonomous commands
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
-
-  //
-  ShuffleboardTab chassisTab = Shuffleboard.getTab("Chassis");
-  ShuffleboardTab pneumaticsTab = Shuffleboard.getTab("Pneumatics");
-  ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
-  ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
-  ShuffleboardTab spinnerTab = Shuffleboard.getTab("Spinner");
-  ShuffleboardTab collectorTab = Shuffleboard.getTab("Collector");
-  ShuffleboardTab hopperTab = Shuffleboard.getTab("Hopper");
-  ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
-
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-  public RobotContainer() {
-
-    // Configure the button bindings
-    configureButtonBindings();
-
-    // Add subsystems to dashboard
-    SmartDashboard.putData("Chassis", chassis);
-    SmartDashboard.putData("Shooter", shooter);
-    SmartDashboard.putData("Climber", climber);
-    SmartDashboard.putData("Spinner", spinner);
-    SmartDashboard.putData("Collector", collector);
-    SmartDashboard.putData("Hopper", hopper);
+    // =============================================================
+    // Initialize SubSystems
+    public final Chassis chassis = new Chassis();
+    public final Spinner spinner = new Spinner();
+    public final Shooter shooter = new Shooter();
+    public final Climber climber = new Climber();
+    public final Collector collector = new Collector();
+    public final Hopper hopper = new Hopper();
 
     // =============================================================
-    // Configure default commands for each subsystem
-    chassis
-        .setDefaultCommand(new DriveTank(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
-    climber.setDefaultCommand(new ClimberStop(climber));
-    collector.setDefaultCommand(new CollectorStop(collector));
-    hopper.setDefaultCommand(new HopperStop(hopper));
-    shooter.setDefaultCommand(new ShooterStop(shooter));
-    spinner.setDefaultCommand(new SpinnerStop(spinner));
+    // Define Joysticks
+    XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
+    XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
 
     // =============================================================
-    // Build chooser for autonomous commands
-    m_chooser.addOption("Auton Joystick", autonDriveJoystick);
-    m_chooser.addOption("Auton Drive to Point", autonDrive2Point);
-    m_chooser.addOption("Auton DriveTrajectory", autonDriveTrajectory.andThen(() -> chassis.driveTank(0, 0)));
+    // Define Commands here to avoid multiple instantiations
+    // If commands use Shuffleboard and are instantiated multiple time, an error
+    // is thrown on the second instantiation becuase the "title" already exists.
+    private final AutonDriveJoystick autonDriveJoystick = new AutonDriveJoystick(() -> -m_driver.getY(Hand.kLeft),
+            () -> m_driver.getX(Hand.kRight), chassis);
 
-    SmartDashboard.putData("Auton Chooser", m_chooser);
-  }
+    private final AutonDrive2Point autonDrive2Point = new AutonDrive2Point(
+            new Pose2d(new Translation2d(7.0, 7.0), new Rotation2d(0.0)), chassis);
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by instantiating a {@link GenericHID} or one of its subclasses
-   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
+    private final AutonDriveTrajectory autonDriveTrajectory = new AutonDriveTrajectory(chassis.exampleTrajectory,
+            chassis::getPose, new RamseteController(ChassisConstants.kRamseteB, ChassisConstants.kRamseteZeta),
+            new SimpleMotorFeedforward(ChassisConstants.ksVolts, ChassisConstants.kvVoltSecondsPerMeter,
+                    ChassisConstants.kaVoltSecondsSquaredPerMeter),
+            chassis.m_kinematics, chassis::getWheelSpeeds,
+            new PIDController(ChassisConstants.kP, ChassisConstants.kI, ChassisConstants.kD),
+            new PIDController(ChassisConstants.kP, ChassisConstants.kI, ChassisConstants.kD),
+            // RamseteCommand passes volts to the callback
+            chassis::driveTankVolts, chassis);
 
-    // =============================================================
-    // Define Operator controls, buttons, bumpers, etc.
-    new JoystickButton(m_driver, Button.kA.value)
-        .whenPressed(new DriveTank(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
+    // Define chooser for autonomous commands
+    SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-    new JoystickButton(m_driver, Button.kB.value)
-        .whenPressed(new DriveArcade(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getX(Hand.kRight), chassis));
+    //
+    ShuffleboardTab chassisTab = Shuffleboard.getTab("Chassis");
+    ShuffleboardTab pneumaticsTab = Shuffleboard.getTab("Pneumatics");
+    ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+    ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
+    ShuffleboardTab spinnerTab = Shuffleboard.getTab("Spinner");
+    ShuffleboardTab collectorTab = Shuffleboard.getTab("Collector");
+    ShuffleboardTab hopperTab = Shuffleboard.getTab("Hopper");
+    ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
 
-    new JoystickButton(m_driver, Button.kX.value).whenPressed(autonDriveJoystick);
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
 
-    new JoystickButton(m_driver, Button.kY.value)
-        .whenPressed(autonDriveTrajectory.andThen(() -> chassis.driveTank(0, 0)));
+        // Configure the button bindings
+        configureButtonBindings();
 
-    // new JoystickButton(m_driver, Button.kY.value)
-    // .whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () ->
-    // shooter.getY()));
+        // Add subsystems to dashboard
+        SmartDashboard.putData("Chassis", chassis);
+        SmartDashboard.putData("Shooter", shooter);
+        SmartDashboard.putData("Climber", climber);
+        SmartDashboard.putData("Spinner", spinner);
+        SmartDashboard.putData("Collector", collector);
+        SmartDashboard.putData("Hopper", hopper);
 
-    // new JoystickButton(m_driver, Button.kX.value).whenPressed(new
-    // ShooterAimStop(shooter));
+        // =============================================================
+        // Configure default commands for each subsystem
+        chassis.setDefaultCommand(
+                new DriveTank(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
+        climber.setDefaultCommand(new ClimberStop(climber));
+        collector.setDefaultCommand(new CollectorStop(collector));
+        hopper.setDefaultCommand(new HopperStop(hopper));
+        shooter.setDefaultCommand(new ShooterStop(shooter));
+        spinner.setDefaultCommand(new SpinnerStop(spinner));
 
-    new JoystickButton(m_driver, Button.kBumperRight.value).whenPressed(new CollectorExtend(collector));
-    new JoystickButton(m_driver, Button.kBumperLeft.value).whenPressed(new CollectorRetract(collector));
+        // =============================================================
+        // Build chooser for autonomous commands
+        m_chooser.addOption("Auton Joystick", autonDriveJoystick);
+        m_chooser.addOption("Auton Drive to Point", autonDrive2Point);
+        m_chooser.addOption("Auton DriveTrajectory", autonDriveTrajectory);
 
-    new JoystickButton(m_operator, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));
-    new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
-    new JoystickButton(m_operator, Button.kX.value).whenPressed(new SpinnerStop(spinner));
-
-    new JoystickButton(m_operator, Button.kY.value).whenHeld(new ShooterShoot(shooter));
-
-    new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterStop(shooter));
-
-    for (int i = 0; i < 8; i++) {
-      new POVButton(m_operator, i * 45).whenHeld(new ShooterAim(shooter, i));
+        SmartDashboard.putData("Auton Chooser", m_chooser);
     }
 
-    new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new ClimberExtend(climber));
-    new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new ClimberRetract(climber));
-  }
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by instantiating a {@link GenericHID} or one of its subclasses
+     * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+     * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
+    private void configureButtonBindings() {
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return new SequentialCommandGroup(new ParallelCommandGroup(new ShooterInit(shooter)), m_chooser.getSelected());
-  }
+        // =============================================================
+        // Define Operator controls, buttons, bumpers, etc.
+        new JoystickButton(m_driver, Button.kA.value)
+                .whenPressed(new DriveTank(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
+
+        new JoystickButton(m_driver, Button.kB.value).whenPressed(
+                new DriveArcade(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getX(Hand.kRight), chassis));
+
+        new JoystickButton(m_driver, Button.kX.value).whenPressed(autonDriveJoystick);
+
+        new JoystickButton(m_driver, Button.kY.value)
+                .whenPressed(autonDriveTrajectory.andThen(() -> chassis.driveTank(0, 0)));
+
+        // new JoystickButton(m_driver, Button.kY.value)
+        // .whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () ->
+        // shooter.getY()));
+
+        // new JoystickButton(m_driver, Button.kX.value).whenPressed(new
+        // ShooterAimStop(shooter));
+
+        new JoystickButton(m_driver, Button.kBumperRight.value).whenPressed(new CollectorExtend(collector));
+        new JoystickButton(m_driver, Button.kBumperLeft.value).whenPressed(new CollectorRetract(collector));
+
+        new JoystickButton(m_operator, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));
+        new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
+        new JoystickButton(m_operator, Button.kX.value).whenPressed(new SpinnerStop(spinner));
+
+        new JoystickButton(m_operator, Button.kY.value).whenHeld(new ShooterShoot(shooter));
+
+        new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterStop(shooter));
+
+        for (int i = 0; i < 8; i++) {
+            new POVButton(m_operator, i * 45).whenHeld(new ShooterAim(shooter, i));
+        }
+
+        new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new ClimberExtend(climber));
+        new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new ClimberRetract(climber));
+    }
+
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        // An ExampleCommand will run in autonomous
+        return new SequentialCommandGroup(new ParallelCommandGroup(new ShooterInit(shooter)), m_chooser.getSelected());
+    }
 }

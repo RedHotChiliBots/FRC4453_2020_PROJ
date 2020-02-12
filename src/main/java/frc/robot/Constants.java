@@ -81,8 +81,7 @@ public final class Constants {
 	}
 
 	public static final class ChassisConstants {
-		public static final double kMaxSpeedFPS = 0.5; // feet per second
-		public static final double kMaxSpeedMPS = Units.feetToMeters(kMaxSpeedFPS); // meters per second
+		public static final double kMaxSpeedMPS = Units.feetToMeters(0.5); // meters per second
 		public static final double kMinSpeedMPS = -kMaxSpeedMPS; // meters per second
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
@@ -90,7 +89,7 @@ public final class Constants {
 		public static final double kWheelCirc = Units.inchesToMeters(Math.PI * 8.0); // meters
 		public static final int kEncoderResolution = 42; // not used, NEO's native units are rotations
 		public static final double kGearBoxRatio = 10.71;
-		public static final double kPosFactor = kWheelCirc / kGearBoxRatio; // Meters per Motor Revolution
+		public static final double kPosFactor = kWheelCirc / kGearBoxRatio; // Meters per Revolution Revolution
 		public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; // Meters per Second
 
 		// Constants for Drive PIDs
@@ -104,11 +103,11 @@ public final class Constants {
 
 		public static final double kDistP = 0.15;
 		public static final double kDistI = 0.0;
-		public static final double kDistD = 0;
+		public static final double kDistD = 0.0;
 
 		public static final double kRotP = 0.15;
 		public static final double kRotI = 0.0;
-		public static final double kRotD = 0;
+		public static final double kRotD = 0.0;
 
 		// These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
 		// These characterization values MUST be determined either experimentally or
@@ -119,8 +118,8 @@ public final class Constants {
 		public static final double kvVoltSecondsPerMeter = 1.98;
 		public static final double kaVoltSecondsSquaredPerMeter = 0.2;
 
-		public static final double kMaxSpeedMetersPerSecond = 3;
-		public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+		public static final double kMaxSpeedMetersPerSecond = 1; // 3;
+		public static final double kMaxAccelerationMetersPerSecondSquared = 1; // 3;
 	}
 
 	public final static class ShooterConstants {
