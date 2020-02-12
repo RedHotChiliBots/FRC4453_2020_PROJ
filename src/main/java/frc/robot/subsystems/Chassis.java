@@ -85,7 +85,8 @@ public class Chassis extends SubsystemBase {
 
 	// ==============================================================
 	// Define autonomous support functions
-	public final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(ChassisConstants.kTrackWidth);
+	public final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
+			ChassisConstants.kTrackWidth);
 
 	public final DifferentialDriveOdometry m_odometry;
 
@@ -130,8 +131,8 @@ public class Chassis extends SubsystemBase {
 	private AnalogInput loPressureSensor = new AnalogInput(AnalogIOConstants.kLoPressureChannel);
 
 	// Not using, but left here to support other code
-	private final PIDController m_distPIDController = new PIDController(ChassisConstants.kDistP, ChassisConstants.kDistI,
-			ChassisConstants.kDistD);
+	private final PIDController m_distPIDController = new PIDController(ChassisConstants.kDistP,
+			ChassisConstants.kDistI, ChassisConstants.kDistD);
 
 	private final PIDController m_rotPIDController = new PIDController(ChassisConstants.kRotP, ChassisConstants.kRotI,
 			ChassisConstants.kRotD);
@@ -195,8 +196,11 @@ public class Chassis extends SubsystemBase {
 		// m_rightPIDController.setOutputRange(ChassisConstants.kMinSpeedMPS,
 		// ChassisConstants.kMaxSpeedMPS);
 
-		// m_leftEncoder.setInverted(true);
-		// m_rightEncoder.setInverted(true);
+		// Config right side to be inverted,
+		// causes encoder to count positive in forward direction
+		// SDS 2/12/29 - testing with inverted group
+		m_leftGroup.setInverted(false);
+		m_rightGroup.setInverted(true);
 
 		// Set the distance per pulse for the drive encoders. We can simply use the
 		// distance traveled for one rotation of the wheel divided by the encoder
@@ -357,7 +361,10 @@ public class Chassis extends SubsystemBase {
 	 * Updates the field-relative position.
 	 */
 	public void updateOdometry() {
-		m_odometry.update(getAngle(), m_leftEncoder.getPosition(), -m_rightEncoder.getPosition());
+		// SDS 2/12/29 - testing with inverted group rather than inverting encoder here
+		// m_odometry.update(getAngle(), m_leftEncoder.getPosition(),
+		// -m_rightEncoder.getPosition());
+		m_odometry.update(getAngle(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 	}
 
 	public void driveTrajectory(double left, double right) {
