@@ -51,70 +51,50 @@ public class Chassis extends SubsystemBase {
 
 	// ==============================================================
 	// Define the left side motors, master and follower
-	private final CANSparkMax leftMaster = new CANSparkMax(CANidConstants.kLeftMasterMotor, MotorType.kBrushless);
-	private final SpeedController m_leftMaster = leftMaster;
-	private final SpeedController m_leftFollower = new CANSparkMax(CANidConstants.kLeftFollowerMotor,
-			MotorType.kBrushless);
+	private CANSparkMax leftMaster;
+	private SpeedController m_leftMaster;
+	private CANSparkMax leftFollower;
+	private SpeedController m_leftFollower;
 
 	// Define the right side motors, master and follower
-	private final CANSparkMax rightMaster = new CANSparkMax(CANidConstants.kRightMasterMotor, MotorType.kBrushless);
-	private final SpeedController m_rightMaster = rightMaster;
-	private final SpeedController m_rightFollower = new CANSparkMax(CANidConstants.kRightFollowerMotor,
-			MotorType.kBrushless);
+	private CANSparkMax rightMaster;
+	private SpeedController m_rightMaster;
+	private CANSparkMax rightFollower;
+	private SpeedController m_rightFollower;
 
 	// Group the left and right motors
-	private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
-	private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
+	private SpeedControllerGroup m_leftGroup;
+	private SpeedControllerGroup m_rightGroup;
 
-	private final DifferentialDrive m_diffDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
+	private DifferentialDrive m_diffDrive;
 
 	// ==============================================================
 	// Identify encoders and PID controllers
-	public final CANEncoder m_leftEncoder = new CANEncoder(leftMaster);
-	public final CANEncoder m_rightEncoder = new CANEncoder(rightMaster);
+	public CANEncoder m_leftEncoder;
+	public CANEncoder m_rightEncoder;
 
 	// Identify left and right PID controllers
 	// private final CANPIDController m_leftPIDController = new
 	// CANPIDController(leftMaster);
 	// private final CANPIDController m_rightPIDController = new
 	// CANPIDController(rightMaster);
-	private final PIDController m_leftPIDController = new PIDController(ChassisConstants.kP, ChassisConstants.kI,
-			ChassisConstants.kD);
-	private final PIDController m_rightPIDController = new PIDController(ChassisConstants.kP, ChassisConstants.kI,
-			ChassisConstants.kD);
+	private PIDController m_leftPIDController;
+	private PIDController m_rightPIDController;
 
 	// ==============================================================
 	// Define autonomous support functions
-	public final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
-			ChassisConstants.kTrackWidth);
+	public DifferentialDriveKinematics m_kinematics;
 
-	public final DifferentialDriveOdometry m_odometry;
+	public DifferentialDriveOdometry m_odometry;
 
 	// Create a voltage constraint to ensure we don't accelerate too fast
-	private final DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
-			new SimpleMotorFeedforward(ChassisConstants.ksVolts, ChassisConstants.kvVoltSecondsPerMeter,
-					ChassisConstants.kaVoltSecondsSquaredPerMeter),
-			m_kinematics, 10);
+	private DifferentialDriveVoltageConstraint autoVoltageConstraint;
 
 	// Create config for trajectory
-	private final TrajectoryConfig config = new TrajectoryConfig(ChassisConstants.kMaxSpeedMetersPerSecond,
-			ChassisConstants.kMaxAccelerationMetersPerSecondSquared)
-					// Add kinematics to ensure max speed is actually obeyed
-					.setKinematics(m_kinematics)
-					// Apply the voltage constraint
-					.addConstraint(autoVoltageConstraint);
+	private TrajectoryConfig config;
 
 	// An example trajectory to follow. All units in meters.
-	public final Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-			// Start at the origin facing the +X direction
-			new Pose2d(0, 0, new Rotation2d(0)),
-			// Pass through these two interior waypoints, making an 's' curve path
-			// List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-			List.of(),
-			// End 3 meters straight ahead of where we started, facing forward
-			new Pose2d(3, 0, new Rotation2d(0)),
-			// Pass config
-			config);
+	public Trajectory exampleTrajectory;
 
 	// ==============================================================
 	// Initialize NavX AHRS board
@@ -127,8 +107,8 @@ public class Chassis extends SubsystemBase {
 	private final Compressor compressor = new Compressor(CANidConstants.kCompressor);
 
 	// Identify compressor hi and lo sensors
-	private AnalogInput hiPressureSensor = new AnalogInput(AnalogIOConstants.kHiPressureChannel);
-	private AnalogInput loPressureSensor = new AnalogInput(AnalogIOConstants.kLoPressureChannel);
+	private final AnalogInput hiPressureSensor = new AnalogInput(AnalogIOConstants.kHiPressureChannel);
+	private final AnalogInput loPressureSensor = new AnalogInput(AnalogIOConstants.kLoPressureChannel);
 
 	// Not using, but left here to support other code
 	private final PIDController m_distPIDController = new PIDController(ChassisConstants.kDistP,
@@ -174,6 +154,76 @@ public class Chassis extends SubsystemBase {
 		ahrs.reset();
 		ahrs.zeroYaw();
 
+		// ==============================================================
+		// Define the left side motors, master and follower
+		leftMaster = new CANSparkMax(CANidConstants.kLeftMasterMotor, MotorType.kBrushless);
+		m_leftMaster = leftMaster;
+		leftFollower = new CANSparkMax(CANidConstants.kLeftFollowerMotor, MotorType.kBrushless);
+		m_leftFollower = leftFollower;
+
+		// Define the right side motors, master and follower
+		rightMaster = new CANSparkMax(CANidConstants.kRightMasterMotor, MotorType.kBrushless);
+		m_rightMaster = rightMaster;
+		rightFollower = new CANSparkMax(CANidConstants.kRightFollowerMotor, MotorType.kBrushless);
+		m_rightFollower = rightFollower;
+
+		// Config right side to be inverted,
+		// causes encoder to count positive in forward direction
+		// SDS 2/12/29 - testing with inverted group
+		rightMaster.setInverted(true);
+		rightFollower.setInverted(true);
+
+		// Group the left and right motors
+		m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
+		m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
+
+		m_diffDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
+
+		// ==============================================================
+		// Identify encoders and PID controllers
+		m_leftEncoder = new CANEncoder(leftMaster);
+		m_rightEncoder = new CANEncoder(rightMaster);
+
+		// Identify left and right PID controllers
+		// private final CANPIDController m_leftPIDController = new
+		// CANPIDController(leftMaster);
+		// private final CANPIDController m_rightPIDController = new
+		// CANPIDController(rightMaster);
+		m_leftPIDController = new PIDController(ChassisConstants.kP, ChassisConstants.kI, ChassisConstants.kD);
+		m_rightPIDController = new PIDController(ChassisConstants.kP, ChassisConstants.kI, ChassisConstants.kD);
+
+		// ==============================================================
+		// Define autonomous support functions
+		m_kinematics = new DifferentialDriveKinematics(ChassisConstants.kTrackWidth);
+
+		m_odometry = new DifferentialDriveOdometry(getAngle());
+
+		// Create a voltage constraint to ensure we don't accelerate too fast
+		autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+				new SimpleMotorFeedforward(ChassisConstants.ksVolts, ChassisConstants.kvVoltSecondsPerMeter,
+						ChassisConstants.kaVoltSecondsSquaredPerMeter),
+				m_kinematics, 10);
+
+		// Create config for trajectory
+		config = new TrajectoryConfig(ChassisConstants.kMaxSpeedMetersPerSecond,
+				ChassisConstants.kMaxAccelerationMetersPerSecondSquared)
+						// Add kinematics to ensure max speed is actually obeyed
+						.setKinematics(m_kinematics)
+						// Apply the voltage constraint
+						.addConstraint(autoVoltageConstraint);
+
+		// An example trajectory to follow. All units in meters.
+		exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+				// Start at the origin facing the +X direction
+				new Pose2d(0, 0, new Rotation2d(0)),
+				// Pass through these two interior waypoints, making an 's' curve path
+				// List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+				List.of(),
+				// End 3 meters straight ahead of where we started, facing forward
+				new Pose2d(3, 0, new Rotation2d(0)),
+				// Pass config
+				config);
+
 		// m_leftPIDController.reset();
 		// m_rightPIDController.reset();
 
@@ -196,12 +246,6 @@ public class Chassis extends SubsystemBase {
 		// m_rightPIDController.setOutputRange(ChassisConstants.kMinSpeedMPS,
 		// ChassisConstants.kMaxSpeedMPS);
 
-		// Config right side to be inverted,
-		// causes encoder to count positive in forward direction
-		// SDS 2/12/29 - testing with inverted group
-		m_leftGroup.setInverted(false);
-		m_rightGroup.setInverted(true);
-
 		// Set the distance per pulse for the drive encoders. We can simply use the
 		// distance traveled for one rotation of the wheel divided by the encoder
 		// resolution.
@@ -219,8 +263,6 @@ public class Chassis extends SubsystemBase {
 		// Reset the current encoder positions to zero
 		m_leftEncoder.setPosition(0.0);
 		m_rightEncoder.setPosition(0.0);
-
-		m_odometry = new DifferentialDriveOdometry(getAngle());
 
 		resetFieldPosition(0.0, 0.0);
 	}
