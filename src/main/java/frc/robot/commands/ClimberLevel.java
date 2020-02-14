@@ -7,38 +7,42 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Chassis;
+import frc.robot.Constants.ClimberConstants;
+import frc.robot.subsystems.Climber;
 
-public class AutonDrive extends CommandBase {
+public class ClimberLevel extends CommandBase {
 
-  private final Chassis chassis;
-  private final double dist;
+  private Climber climber;
+  private DoubleSupplier dsspeed = null;
+  private double speed = 0.0;
 
-  public AutonDrive(Chassis chassis, double dist) {
-    this.chassis = chassis;
-    this.dist = dist;
-    addRequirements(chassis);
+  public ClimberLevel(Climber climber, DoubleSupplier dsspeed) {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
+    this.climber = climber;
+    this.dsspeed = dsspeed;
+    addRequirements(climber);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    // System.out.println("AutonDrive running");
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    // chassis.autonDrive(dist);
-    chassis.driveDistance(dist);
+    speed = dsspeed.getAsDouble();
+    climber.levelTeleop(speed);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return chassis.distanceOnTarget();
+    return false;
   }
 
   // Called once after isFinished returns true

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -38,6 +39,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Constants.AnalogIOConstants;
@@ -181,8 +183,8 @@ public class Chassis extends SubsystemBase {
 		// Config right side to be inverted,
 		// causes encoder to count positive in forward direction
 		// SDS 2/12/29 - testing with inverted group
-		m_leftGroup.setInverted(false);
-		m_rightGroup.setInverted(true);
+		// m_leftGroup.setInverted(false);
+		// m_rightGroup.setInverted(true);
 
 		m_diffDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
 
@@ -308,6 +310,10 @@ public class Chassis extends SubsystemBase {
 		return t.getTotalTimeSeconds();
 	}
 
+	public double getPitch() {
+		return ahrs.getPitch();
+	}
+
 	public void periodic() {
 		sbRobotAngle.setDouble(-ahrs.getAngle());
 		sbLeftPos.setDouble(m_leftEncoder.getPosition());
@@ -386,7 +392,7 @@ public class Chassis extends SubsystemBase {
 		sbLimeRSet.setDouble(-speeds.rightMetersPerSecond);
 
 		double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getVelocity(), speeds.leftMetersPerSecond);
-		double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getVelocity(), -speeds.rightMetersPerSecond);
+		double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getVelocity(), speeds.rightMetersPerSecond);
 
 		m_leftGroup.set(leftOutput + leftFeedforward);
 		m_rightGroup.set(rightOutput + rightFeedforward);
@@ -419,17 +425,22 @@ public class Chassis extends SubsystemBase {
 		m_rightGroup.set(right);
 	}
 
-	// public void driveDistanceWithHeading(double distance, double angle) {
-	// m_leftPIDController.setReference(distance, ControlType.kPosition);
-	// setSetpoint(angle);
-	// getPIDController().enable();
-	// distancePID.enable();
-	// }
+	public void driveDistanceWithHeading(double distance, double angle) {
+		m_rotPIDController.setSetpoint(angle);
+		m_distPIDController.setSetpoint(distance);
+	}
 
-	// public void driveDistance(double distance) {
-	// m_leftPIDController.setReference(distance, ControlType.kPosition);
+	public void driveDistance(double distance) {
+		// m_distPIDController.setSetpoint(distance * ChassisConstants.kPosFactor);
+		SmartDashboard.putNumber("distPIDSetpoint", m_distPIDController.getSetpoint());
+		m_rightGroup
+				.set(m_distPIDController.calculate(m_rightEncoder.getPosition(), distance * ChassisConstants.kPosFactor));
+		m_leftGroup.set(m_distPIDController.calculate(m_leftEncoder.getPosition(), distance * ChassisConstants.kPosFactor));
+	}
 
-	// }
+	public boolean distanceOnTarget() {
+		return m_distPIDController.atSetpoint();
+	}
 
 	// public void setLMTgtPosition(double pos) {
 	// tgtPosition = pos;

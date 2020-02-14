@@ -93,7 +93,7 @@ public final class Constants {
 		public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; // Meters per Second
 
 		// Constants for Drive PIDs
-		public static final double kP = 0.15;
+		public static final double kP = 0.008;
 		public static final double kI = 0.0;
 		public static final double kD = 0.0;
 
@@ -340,6 +340,9 @@ public final class Constants {
 		public static final double kStopOnColorRPMs = 250; // Guess, so far
 		public static final double kCountRevRPMs = kWheelRPM; // Given 2.25" wheel
 		public static final double kStopRPMs = 0; // Stop spinning
+
+		public static final double kClimbVelocity = 200.0;
+		public static final double kLevelVelocity = 200.0;
 	}
 
 	public static final class LevelerConstants {
