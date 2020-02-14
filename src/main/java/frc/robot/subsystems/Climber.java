@@ -10,9 +10,9 @@ package frc.robot.subsystems;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ControlType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -21,12 +21,11 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 //import edu.wpi.first.wpilibj2.d
 //import edu.wpi.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Library;
-import frc.robot.Robot;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.LevelerConstants;
 import frc.robot.Constants.PneumaticConstants;
+import frc.robot.Library;
 
 /**
  * Add your docs here.
