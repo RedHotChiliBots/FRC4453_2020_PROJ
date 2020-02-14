@@ -231,12 +231,6 @@ public class Chassis extends SubsystemBase {
 				// Pass config
 				config);
 
-		// m_leftPIDController.reset();
-		// m_rightPIDController.reset();
-
-		// m_leftGroup.setInverted(true);
-		// m_rightGroup.setInverted(true);
-
 		// m_leftPIDController.setP(ChassisConstants.kP);
 		// m_leftPIDController.setI(ChassisConstants.kI);
 		// m_leftPIDController.setD(ChassisConstants.kD);
@@ -315,7 +309,7 @@ public class Chassis extends SubsystemBase {
 	}
 
 	public void periodic() {
-		sbRobotAngle.setDouble(-ahrs.getAngle());
+		sbRobotAngle.setDouble(getAngle().getDegrees());
 		sbLeftPos.setDouble(m_leftEncoder.getPosition());
 		sbLeftVel.setDouble(m_leftEncoder.getVelocity());
 		sbRightPos.setDouble(m_rightEncoder.getPosition());
@@ -389,7 +383,7 @@ public class Chassis extends SubsystemBase {
 		double rightFeedforward = 0.0;// m_Feedforward.calculate(speeds.rightMetersPerSecond);
 
 		sbLimeLSet.setDouble(speeds.leftMetersPerSecond);
-		sbLimeRSet.setDouble(-speeds.rightMetersPerSecond);
+		sbLimeRSet.setDouble(speeds.rightMetersPerSecond);
 
 		double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getVelocity(), speeds.leftMetersPerSecond);
 		double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getVelocity(), speeds.rightMetersPerSecond);

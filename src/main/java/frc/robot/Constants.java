@@ -97,7 +97,7 @@ public final class Constants {
 		public static final double kI = 0.0;
 		public static final double kD = 0.0;
 
-		// Ramsete Command constants - same for all robots
+		// Ramsete Command constants - same for all robots - do not change
 		public static final double kRamseteB = 2.0;
 		public static final double kRamseteZeta = 0.7;
 
@@ -293,7 +293,7 @@ public final class Constants {
 		public static final double kMinOutput = 0.0;
 		public static final double kMaxOutput = 1.0;
 		public static final double kMinRPM = 0;
-		public static final double kMaxRPM = 15000; // 80% of 775 Free Spin RPMs
+		public static final double kMaxRPM = 11200; // 80% of Bag Free Spin RPMs
 
 		public static final double kCPMaxRPM = 60; // Rules limit CP to 1 rps
 		public static final double kCPDiameter = 32; // inches (2' 8")
@@ -351,23 +351,17 @@ public final class Constants {
 		public static final double kD = 0.0;
 		public static final double kIz = 0.0;
 		public static final double kFF = 0.0;
-		public static final double kMinOutput = 0.0;
+		public static final double kMinOutput = -1.0;
 		public static final double kMaxOutput = 1.0;
 		public static final double kMinRPM = 0;
-		public static final double kMaxRPM = 15000; // 80% of 775 Free Spin RPMs
+		public static final double kMaxRPM = 4500; // 80% of Neo Free Spin RPMs
 
-		public static final double kCPMaxRPM = 60; // Rules limit CP to 1 rps
-		public static final double kCPDiameter = 32; // inches (2' 8")
-		public static final double kWheelDiameter = 2.25;
-		public static final double kWheelRPM = (kCPDiameter / kWheelDiameter) * kCPMaxRPM;
+		public static final double kWheelCirc = 2.5 * Math.PI; // inches
+		public static final int kEncoderResolution = 42; // not used, NEO's native units are rotations
+		public static final double kGearBoxRatio = 20.0;
+		public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; // Meters per Second
 
-		public static final double kTicsPerRev = 12; // * 4; // RS7 quad encoder on 775 motor
-		public static final double kGearBoxRatio = 16;
-		public static final double k100msPerMin = 600; // constant
-		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
-
-		public static final double kStopOnColorRPMs = 250; // Guess, so far
-		public static final double kCountRevRPMs = kWheelRPM; // Given 2.25" wheel
-		public static final double kStopRPMs = 0; // Stop spinning
+		public static final double kMaxVelocity = 35.0 / 3.0; // inches per second
+		public static final double kStopRPMs = 0.0; // inches per second
 	}
 }

@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 //import edu.wpi.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Library;
-import frc.robot.Robot;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.LevelerConstants;
