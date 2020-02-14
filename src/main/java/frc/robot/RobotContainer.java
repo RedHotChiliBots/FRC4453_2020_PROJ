@@ -8,11 +8,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -21,29 +21,13 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
 import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.OIConstants;
-
-import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Collector;
-import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Spinner;
-
-import frc.robot.commands.ShooterShoot;
-import frc.robot.commands.ShooterStop;
-import frc.robot.commands.SpinnerCountRevs;
-import frc.robot.commands.SpinnerStop;
-import frc.robot.commands.SpinnerStopOnColor;
-import frc.robot.commands.AutonDrive;
 import frc.robot.commands.AutonDrive2Point;
 import frc.robot.commands.AutonDriveJoystick;
 import frc.robot.commands.AutonDriveTrajectory;
@@ -54,15 +38,23 @@ import frc.robot.commands.ClimberRetract;
 import frc.robot.commands.ClimberStop;
 import frc.robot.commands.CollectorExtend;
 import frc.robot.commands.CollectorRetract;
-import frc.robot.commands.CollectorSpin;
 import frc.robot.commands.CollectorStop;
-import frc.robot.commands.DriveTank;
-import frc.robot.commands.HopperLoad;
-import frc.robot.commands.HopperShoot;
 import frc.robot.commands.DriveArcade;
+import frc.robot.commands.DriveTank;
 import frc.robot.commands.HopperStop;
 import frc.robot.commands.ShooterAim;
 import frc.robot.commands.ShooterInit;
+import frc.robot.commands.ShooterShoot;
+import frc.robot.commands.ShooterStop;
+import frc.robot.commands.SpinnerCountRevs;
+import frc.robot.commands.SpinnerStop;
+import frc.robot.commands.SpinnerStopOnColor;
+import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Collector;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spinner;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
