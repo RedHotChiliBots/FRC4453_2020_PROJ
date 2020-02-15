@@ -184,6 +184,7 @@ public class Chassis extends SubsystemBase {
 		// m_rightGroup.setInverted(true);
 
 		m_diffDrive = new DifferentialDrive(m_leftGroup, m_rightGroup);
+		m_diffDrive.setRightSideInverted(false);
 
 		// ==============================================================
 		// Identify encoders and PID controllers
