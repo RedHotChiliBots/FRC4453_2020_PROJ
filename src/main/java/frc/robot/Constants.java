@@ -93,7 +93,7 @@ public final class Constants {
 		public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; // Meters per Second
 
 		// Constants for Drive PIDs
-		public static final double kP = 0.008;
+		public static final double kP = 0.2;
 		public static final double kI = 0.0;
 		public static final double kD = 0.0;
 
@@ -115,11 +115,11 @@ public final class Constants {
 		// The Robot Characterization Toolsuite provides a convenient tool for obtaining
 		// these values for your robot.
 		public static final double ksVolts = 0.22;
-		public static final double kvVoltSecondsPerMeter = 1.98;
-		public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+		public static final double kvVoltSecondsPerMeter = 0.3;
+		public static final double kaVoltSecondsSquaredPerMeter = 0.01; // 0.2;
 
-		public static final double kMaxSpeedMetersPerSecond = 1; // 3;
-		public static final double kMaxAccelerationMetersPerSecondSquared = 1; // 3;
+		public static final double kMaxSpeedMetersPerSecond = 1;
+		public static final double kMaxAccelerationMetersPerSecondSquared = 1;
 	}
 
 	public final static class ShooterConstants {

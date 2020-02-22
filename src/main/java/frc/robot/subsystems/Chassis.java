@@ -170,8 +170,8 @@ public class Chassis extends SubsystemBase {
 		// Config right side to be inverted,
 		// causes encoder to count positive in forward direction
 		// SDS 2/12/29 - testing with inverted group
-		// rightMaster.setInverted(true);
-		// rightFollower.setInverted(true);
+		rightMaster.setInverted(true);
+		rightFollower.setInverted(true);
 
 		// Group the left and right motors
 		m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
@@ -222,8 +222,8 @@ public class Chassis extends SubsystemBase {
 				// Start at the origin facing the +X direction
 				new Pose2d(0, 0, new Rotation2d(0)),
 				// Pass through these two interior waypoints, making an 's' curve path
-				// List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-				List.of(),
+				List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+				// List.of(),
 				// End 3 meters straight ahead of where we started, facing forward
 				new Pose2d(3, 0, new Rotation2d(0)),
 				// Pass config
@@ -378,7 +378,7 @@ public class Chassis extends SubsystemBase {
 	 */
 	public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
 		double leftFeedforward = 0.0;// m_Feedforward.calculate(speeds.leftMetersPerSecond);
-		double rightFeedforward = 0.0;// m_Feedforward.calculate(speeds.rightMetersPerSecond);
+		double rightFeedforward = 0.0; // m_Feedforward.calculate(speeds.rightMetersPerSecond);
 
 		sbLimeLSet.setDouble(speeds.leftMetersPerSecond);
 		sbLimeRSet.setDouble(speeds.rightMetersPerSecond);
