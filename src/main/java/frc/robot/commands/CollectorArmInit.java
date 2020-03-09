@@ -8,32 +8,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hopper;
+import frc.robot.Constants.CollectArmConstants;
+import frc.robot.subsystems.Collector;
 
-public class HopperStop extends CommandBase {
+public class CollectorArmInit extends CommandBase {
 
-  private final Hopper hopper;
+  private final Collector collector;
+  private boolean finished = false;
 
-  public HopperStop(Hopper hopper) {
-    this.hopper = hopper;
-    addRequirements(hopper);
+  public CollectorArmInit(Collector collector) {
+    this.collector = collector;
+    addRequirements(collector);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    collector.moveArmUp(CollectArmConstants.kArmFindSpeed);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    hopper.stopHopper();
-    hopper.stopEjector();
+    if (collector.getArmAmps() > CollectArmConstants.kCollectArmAmps) {
+      collector.setArmZeroPos();
+      finished = true;
+    }
   }
 
   @Override
   public boolean isFinished() {
-    return false;
+    return finished;
   }
 
   // Called once after isFinished returns true

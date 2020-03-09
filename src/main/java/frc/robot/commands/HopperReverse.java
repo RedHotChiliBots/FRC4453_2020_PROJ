@@ -8,16 +8,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.CollectorConstants;
-import frc.robot.subsystems.Collector;
+import frc.robot.Constants.HopperConstants;
+import frc.robot.subsystems.Hopper;
 
-public class CollectorSpin extends CommandBase {
+public class HopperReverse extends CommandBase {
+  private final Hopper hopper;
 
-  private final Collector collector;
-
-  public CollectorSpin(Collector collector) {
-    this.collector = collector;
-    addRequirements(collector);
+  public HopperReverse(Hopper hopper) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.hopper = hopper;
+    addRequirements(hopper);
   }
 
   // Called just before this Command runs the first time
@@ -28,7 +28,7 @@ public class CollectorSpin extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    collector.setCollectorRPMs(CollectorConstants.kCollectRPMs);
+    hopper.setHopperVelocity(HopperConstants.kReverseRPMS);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -39,7 +39,6 @@ public class CollectorSpin extends CommandBase {
 
   // Called once after isFinished returns true
   @Override
-  public void end(boolean isFinished) {
+  public void end(boolean interrupted) {
   }
-
 }

@@ -12,41 +12,43 @@ import frc.robot.Constants.HopperConstants;
 import frc.robot.subsystems.Hopper;
 
 public class HopperLoad extends CommandBase {
-  /**
-   * Creates a new HopperLoad.
-   */
-  private final Hopper hopper;
-  private boolean force;
+	/**
+	 * Creates a new HopperLoad.
+	 */
+	private final Hopper hopper;
+	private boolean force;
 
-  public HopperLoad(Hopper hopper, boolean force) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.hopper = hopper;
-    this.force = force;
-    addRequirements(hopper);
-  }
+	public HopperLoad(Hopper hopper, boolean force) {
+		// Use addRequirements() here to declare subsystem dependencies.
+		this.hopper = hopper;
+		this.force = force;
+		addRequirements(hopper);
+	}
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
+	// Called when the command is initially scheduled.
+	@Override
+	public void initialize() {
+	}
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    if (force || hopper.getLowerSensor()) {
-      hopper.setHopperVelocity(HopperConstants.kHopperLoadRPMs);
-    }
-  }
+	// Called every time the scheduler runs while the command is scheduled.
+	@Override
+	public void execute() {
+		if (force || hopper.getLowerSensor()) {
+			hopper.setHopperVelocity(HopperConstants.kLoadRPMs);
+		} else {
+			hopper.stopHopper();
+		}
+	}
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    hopper.stopHopper();
-  }
+	// Called once the command ends or is interrupted.
+	@Override
+	public void end(boolean interrupted) {
+		hopper.stopHopper();
+	}
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return hopper.getUpperSensor();
-  }
+	// Returns true when the command should end.
+	@Override
+	public boolean isFinished() {
+		return hopper.getUpperSensor();
+	}
 }

@@ -94,7 +94,13 @@ public class Chassis extends SubsystemBase {
 	private TrajectoryConfig config;
 
 	// An example trajectory to follow. All units in meters.
-	public Trajectory exampleTrajectory;
+	// public Trajectory exampleTrajectory;
+	public Trajectory lineToRendezvousTrajectory;
+	public Trajectory lineToTrenchTrajectory;
+	public Trajectory rendezvousToTrenchTrajectory;
+	public Trajectory rendezvousPickUpTrajectory;
+	public Trajectory trenchPickUpTrajectory;
+	public Trajectory trenchToRendezvousTrajectory;
 
 	// ==============================================================
 	// Initialize NavX AHRS board
@@ -217,18 +223,71 @@ public class Chassis extends SubsystemBase {
 						// Apply the voltage constraint
 						.addConstraint(autoVoltageConstraint);
 
-		// An example trajectory to follow. All units in meters.
-		exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+		lineToRendezvousTrajectory = TrajectoryGenerator.generateTrajectory(
 				// Start at the origin facing the +X direction
-				new Pose2d(0, 0, new Rotation2d(0)),
+				new Pose2d(0, 1.7, new Rotation2d(0)),
 				// Pass through these two interior waypoints, making an 's' curve path
-				List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-				// List.of(),
+				// List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+				List.of(),
 				// End 3 meters straight ahead of where we started, facing forward
-				new Pose2d(3, 0, new Rotation2d(0)),
+				new Pose2d(2.9, 3.9, new Rotation2d(0)),
 				// Pass config
 				config);
 
+		lineToTrenchTrajectory = TrajectoryGenerator.generateTrajectory(
+				// Start at the origin facing the +X direction
+				new Pose2d(0, 0.7, new Rotation2d(0)),
+				// Pass through these two interior waypoints, making an 's' curve path
+				// List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+				List.of(),
+				// End 3 meters straight ahead of where we started, facing forward
+				new Pose2d(3.1, 0.7, new Rotation2d(0)),
+				// Pass config
+				config);
+
+		rendezvousToTrenchTrajectory = TrajectoryGenerator.generateTrajectory(
+				// Start at the origin facing the +X direction
+				new Pose2d(2.6, 2.4, new Rotation2d(0)),
+				// Pass through these two interior waypoints, making an 's' curve path
+				// List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+				List.of(),
+				// End 3 meters straight ahead of where we started, facing forward
+				new Pose2d(3.1, 0.7, new Rotation2d(0)),
+				// Pass config
+				config);
+
+		trenchToRendezvousTrajectory = TrajectoryGenerator.generateTrajectory(
+				// Start at the origin facing the +X direction
+				new Pose2d(3.1, 0.7, new Rotation2d(0)),
+				// Pass through these two interior waypoints, making an 's' curve path
+				// List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+				List.of(),
+				// End 3 meters straight ahead of where we started, facing forward
+				new Pose2d(2.6, 2.4, new Rotation2d(0)),
+				// Pass config
+				config);
+
+		trenchPickUpTrajectory = TrajectoryGenerator.generateTrajectory(
+				// Start at the origin facing the +X direction
+				new Pose2d(3.1, 0.7, new Rotation2d(0)),
+				// Pass through these two interior waypoints, making an 's' curve path
+				// List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+				List.of(new Translation2d(4, 0.7)),
+				// End 3 meters straight ahead of where we started, facing forward
+				new Pose2d(4.9, 0.7, new Rotation2d(0)),
+				// Pass config
+				config);
+
+		rendezvousPickUpTrajectory = TrajectoryGenerator.generateTrajectory(
+				// Start at the origin facing the +X direction
+				new Pose2d(2.9, 3.9, new Rotation2d(0)),
+				// Pass through these two interior waypoints, making an 's' curve path
+				// List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+				List.of(new Translation2d(2.6, 3.9), new Translation2d(2.3, 3.3), new Translation2d(2.3, 2.7)),
+				// End 3 meters straight ahead of where we started, facing forward
+				new Pose2d(2.6, 2.4, new Rotation2d(0)),
+				// Pass config
+				config);
 		// m_leftPIDController.setP(ChassisConstants.kP);
 		// m_leftPIDController.setI(ChassisConstants.kI);
 		// m_leftPIDController.setD(ChassisConstants.kD);

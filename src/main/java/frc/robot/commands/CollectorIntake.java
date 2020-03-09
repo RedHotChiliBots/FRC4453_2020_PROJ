@@ -8,15 +8,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hopper;
+import frc.robot.Constants.CollectorConstants;
+import frc.robot.subsystems.Collector;
 
-public class HopperStop extends CommandBase {
+public class CollectorIntake extends CommandBase {
 
-  private final Hopper hopper;
+  private final Collector collector;
 
-  public HopperStop(Hopper hopper) {
-    this.hopper = hopper;
-    addRequirements(hopper);
+  public CollectorIntake(Collector collector) {
+    this.collector = collector;
+    addRequirements(collector);
   }
 
   // Called just before this Command runs the first time
@@ -27,10 +28,10 @@ public class HopperStop extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    hopper.stopHopper();
-    hopper.stopEjector();
+    collector.setCollectorRPMs(CollectorConstants.kCollectRPMs);
   }
 
+  // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
     return false;
@@ -38,6 +39,7 @@ public class HopperStop extends CommandBase {
 
   // Called once after isFinished returns true
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean isFinished) {
   }
+
 }

@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Library;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TiltConstants;
@@ -181,6 +181,9 @@ public class Shooter extends SubsystemBase {
     sbShootSetPoint.setDouble(shootSetPoint);
     sbAngleSetPoint.setDouble(angleSetPoint);
     sbTiltSetPoint.setDouble(tiltSetPoint);
+    SmartDashboard.putBoolean("Left Limit Switch", getAngleLeftLimit());
+    SmartDashboard.putBoolean("Right Limit Switch", getAngleRightLimit());
+    SmartDashboard.putBoolean("Center Limit Switch", getAngleCenterPos());
   }
 
   public double getShootVelocity() {
@@ -188,7 +191,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShootVelocity(double rpm) {
-    this.shootSetPoint = lib.Clip(rpm, ShooterConstants.kMaxRPM, ShooterConstants.kMinRPM);
+    this.shootSetPoint = lib.Clip(-rpm, ShooterConstants.kMaxRPM, ShooterConstants.kMinRPM);
     shootPIDController.setReference(shootSetPoint, ControlType.kVelocity);
   }
 
@@ -220,22 +223,22 @@ public class Shooter extends SubsystemBase {
   }
 
   public void moveAngleLeft(double spd) {
-    angleMotor.set(ControlMode.PercentOutput, spd);
-  }
-
-  public void moveAngleRight(double spd) {
     angleMotor.set(ControlMode.PercentOutput, -spd);
   }
 
-  public boolean getAngleLeftLimit() {
+  public void moveAngleRight(double spd) {
+    angleMotor.set(ControlMode.PercentOutput, spd);
+  }
+
+  public boolean getAngleRightLimit() {
     return angleMotor.getSensorCollection().isFwdLimitSwitchClosed();
   }
 
   public boolean getAngleCenterPos() {
-    return angleCenterPos.get();
+    return !angleCenterPos.get();
   }
 
-  public boolean getAngleRightLimit() {
+  public boolean getAngleLeftLimit() {
     return angleMotor.getSensorCollection().isRevLimitSwitchClosed();
   }
 

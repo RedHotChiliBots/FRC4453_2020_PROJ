@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.CollectArmConstants;
 import frc.robot.subsystems.Collector;
 
 /**
@@ -24,7 +25,8 @@ public class CollectorRetract extends CommandBase {
 	// Called just before this Command runs the first time
 	@Override
 	public void initialize() {
-		collector.collectorRetract();
+		// collector.collectorRetract();
+		collector.setCollectArmPosition(CollectArmConstants.kRetractPos);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -35,7 +37,8 @@ public class CollectorRetract extends CommandBase {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	public boolean isFinished() {
-		return true;
+		return false;// 0.4 < Math.abs(collector.collectArmSetPoint -
+									// collector.getCollectArmPosition());
 	}
 
 	// Called once after isFinished returns true
