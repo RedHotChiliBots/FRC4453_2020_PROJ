@@ -11,14 +11,22 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Library;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.CollectorConstants;
+import frc.robot.Constants.CollectArmConstants;
 import frc.robot.Constants.PneumaticConstants;
 
 /**
@@ -29,8 +37,14 @@ public class Collector extends SubsystemBase {
 	private final DoubleSolenoid collectorSolenoid = new DoubleSolenoid(PneumaticConstants.kCollectorExtendSolenoid,
 			PneumaticConstants.kCollectorRetractSolenoid);
 
+	private final CANSparkMax CollectArmMotor = new CANSparkMax(CANidConstants.kCollectArmMotor, MotorType.kBrushless);
+
+	private final CANPIDController CollectArmPIDController = new CANPIDController(CollectArmMotor);
+	private final CANEncoder CollectArmEncoder = new CANEncoder(CollectArmMotor);
+
 	private final TalonSRX collectorMotor = new TalonSRX(CANidConstants.kCollectorMotor);
 
+	private double collectArmSetPoint;
 	private double collectorSetPoint;
 
 	// climberSolenoid.set(kOff);
@@ -38,13 +52,30 @@ public class Collector extends SubsystemBase {
 	// climberSolenoid.set(kReverse);
 
 	private final ShuffleboardTab collectorTab = Shuffleboard.getTab("Collector");
+	private NetworkTableEntry sbCollectArmVel = collectorTab.addPersistent("CollectArmVelocity", 0).getEntry();
+	private NetworkTableEntry sbCollectArmSetPoint = collectorTab.addPersistent("CollectArm SetPoint", 0).getEntry();
 	private NetworkTableEntry sbCollectorTgt = collectorTab.addPersistent("Collector Target (rpm)", 0).getEntry();
 	private NetworkTableEntry sbCollectorVel = collectorTab.addPersistent("Collector Velocity (rpm)", 0).getEntry();
 
 	private NetworkTableEntry sbCollectSolenoid = collectorTab.addPersistent("Collector Solenoid", 0).getEntry();
 
+	private Library lib = new Library();
+
 	public Collector() {
 		System.out.println("+++++ Collector Constructor starting ...");
+
+		CollectArmMotor.restoreFactoryDefaults();
+		CollectArmMotor.clearFaults();
+
+		CollectArmMotor.setIdleMode(IdleMode.kBrake);
+		CollectArmMotor.setInverted(true);
+
+		CollectArmPIDController.setP(CollectArmConstants.kP);
+		CollectArmPIDController.setI(CollectArmConstants.kI);
+		CollectArmPIDController.setD(CollectArmConstants.kD);
+		CollectArmPIDController.setIZone(CollectArmConstants.kIz);
+		CollectArmPIDController.setFF(CollectArmConstants.kFF);
+		CollectArmPIDController.setOutputRange(CollectArmConstants.kMinOutput, CollectArmConstants.kMaxOutput);
 
 		/* Factory Default all hardware to prevent unexpected behaviour */
 		collectorMotor.configFactoryDefault();
@@ -57,7 +88,7 @@ public class Collector extends SubsystemBase {
 		// Conifigure motor controller
 		collectorMotor.setSensorPhase(false); // Positive Sensor Reading should match Green (blinking) Leds on Talon
 		collectorMotor.setNeutralMode(NeutralMode.Brake); // Brake motor on neutral input
-		collectorMotor.setInverted(false); // Run motor in normal rotation with positive input
+		collectorMotor.setInverted(true); // Run motor in normal rotation with positive input
 
 		/* Config the peak and nominal outputs */
 		collectorMotor.configNominalOutputForward(0, CANidConstants.kTimeoutMs);
@@ -76,6 +107,9 @@ public class Collector extends SubsystemBase {
 
 	// Called once per Robot execution loop - 50Hz
 	public void periodic() {
+
+		sbCollectArmVel.setDouble(getCollectArmPosition());
+		sbCollectArmSetPoint.setDouble(collectArmSetPoint);
 		sbCollectorTgt.setDouble(collectorSetPoint);
 		sbCollectorVel.setDouble(getCollectorRPMs());
 
@@ -96,6 +130,15 @@ public class Collector extends SubsystemBase {
 
 	public void collectorRetract() {
 		collectorSolenoid.set(CollectorConstants.CollectorRetract);
+	}
+
+	public double getCollectArmPosition() {
+		return CollectArmEncoder.getPosition();
+	}
+
+	public void setCollectArmPosition(double pos) {
+		this.collectArmSetPoint = lib.Clip(pos, CollectArmConstants.kMaxPos, CollectArmConstants.kMinPos);
+		CollectArmPIDController.setReference(collectArmSetPoint, ControlType.kPosition);
 	}
 
 	/**

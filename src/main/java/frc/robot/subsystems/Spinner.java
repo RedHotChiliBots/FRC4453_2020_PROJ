@@ -73,11 +73,11 @@ public class Spinner extends SubsystemBase {
 
   private final ShuffleboardTab spinnerTab = Shuffleboard.getTab("Spinner");
   private NetworkTableEntry sbSpinConf = spinnerTab.addPersistent("Spin Confidence", 0).getEntry();
-  private NetworkTableEntry sbColorDetect = spinnerTab.addPersistent("Spin Color Detected", 0).getEntry();
-  private NetworkTableEntry sbColorCount = spinnerTab.addPersistent("Spin Color Counters", 0).getEntry();
+  private NetworkTableEntry sbColorDetect = spinnerTab.addPersistent("Spin Color Detected", "").getEntry();
+  private NetworkTableEntry sbColorCount = spinnerTab.addPersistent("Spin Color Counters", "").getEntry();
   private NetworkTableEntry sbSpinSetPoint = spinnerTab.addPersistent("Spin SetPoint (rpm)", 0).getEntry();
   private NetworkTableEntry sbSpinTarget = spinnerTab.addPersistent("Spin Target (rpm)", 0).getEntry();
-  private NetworkTableEntry sbStopOnColor = spinnerTab.addPersistent("Spin Stop On Color", 0).getEntry();
+  private NetworkTableEntry sbStopOnColor = spinnerTab.addPersistent("Spin Stop On Color", "").getEntry();
   // SmartDashboard.putNumber(color.toString(), num);
 
   public Spinner() {

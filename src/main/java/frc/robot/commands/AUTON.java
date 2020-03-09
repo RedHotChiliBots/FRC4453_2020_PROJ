@@ -9,14 +9,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Collector;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Shooter;
 
-public class CollectorCollect extends SequentialCommandGroup {
+public class AUTON extends SequentialCommandGroup {
   /**
    * Add your docs here.
    */
 
-  public CollectorCollect(Collector collector) {
-    addCommands(new CollectorExtend(collector), new CollectorSpin(collector));
+  public AUTON(Shooter shooter, Collector collector, Hopper hopper) {
+    addCommands(new ShooterInit(shooter), new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()),
+        new SHOOT(collector, hopper, shooter) /* , new AutonDriveTrajectory() */);
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

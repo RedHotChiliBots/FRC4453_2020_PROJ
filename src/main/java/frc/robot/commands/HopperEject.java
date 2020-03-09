@@ -1,40 +1,40 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018 FIRST. All Rights Reserved. */
-/* Open Source Software - may be modified and shared by FRC teams. The code */
+/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project. */
+/* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.*;
+import frc.robot.Constants.EjectorConstants;
+import frc.robot.subsystems.Hopper;
 
-public class ShooterShoot extends CommandBase {
-  private final Shooter shooter;
+public class HopperEject extends CommandBase {
+  private final Hopper hopper;
 
-  public ShooterShoot(Shooter shooter) {
-    this.shooter = shooter;
-    addRequirements(shooter);
+  public HopperEject(Hopper hopper) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.hopper = hopper;
+    addRequirements(hopper);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    shooter.setShootVelocity(ShooterConstants.kShooterShootRPMs);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-
+    hopper.setEjectorVelocity(EjectorConstants.kShootRPMs);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return shooter.getShootVelocity() > ShooterConstants.kShooterShootRPMs * 0.9;
+    return false;
   }
 
   // Called once after isFinished returns true
@@ -42,9 +42,4 @@ public class ShooterShoot extends CommandBase {
   public void end(boolean interrupted) {
   }
 
-  // // Called when another command which requires one or more of the same
-  // // subsystems is scheduled to run
-  // @Override
-  // public void interrupted() {
-  // }
 }

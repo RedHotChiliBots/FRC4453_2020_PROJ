@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AutoShooterAim;
 import frc.robot.commands.AutonDrive2Point;
 import frc.robot.commands.AutonDriveJoystick;
 import frc.robot.commands.AutonDriveTrajectory;
@@ -37,15 +38,23 @@ import frc.robot.commands.ClimberLevel;
 import frc.robot.commands.ClimberRetract;
 import frc.robot.commands.ClimberStop;
 import frc.robot.commands.CollectorExtend;
+import frc.robot.commands.CollectorIntake;
+import frc.robot.commands.CollectorReject;
 import frc.robot.commands.CollectorRetract;
 import frc.robot.commands.CollectorStop;
 import frc.robot.commands.DriveArcade;
 import frc.robot.commands.DriveTank;
+import frc.robot.commands.HopperEject;
+import frc.robot.commands.HopperLoad;
+import frc.robot.commands.HopperShoot;
 import frc.robot.commands.HopperStop;
 import frc.robot.commands.ShooterAim;
+import frc.robot.commands.ShooterAimStop;
+import frc.robot.commands.ShooterAngleInit;
 import frc.robot.commands.ShooterInit;
 import frc.robot.commands.ShooterShoot;
 import frc.robot.commands.ShooterStop;
+import frc.robot.commands.ShooterTiltInit;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStop;
 import frc.robot.commands.SpinnerStopOnColor;
@@ -78,6 +87,8 @@ public class RobotContainer {
         // Define Joysticks
         XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
         XboxController m_operator = new XboxController(OIConstants.kOperatorControllerPort);
+
+        private static final double DEADZONE = 0.2;
 
         // =============================================================
         // Define Commands here to avoid multiple instantiations
@@ -158,16 +169,17 @@ public class RobotContainer {
 
                 // =============================================================
                 // Define Operator controls, buttons, bumpers, etc.
-                new JoystickButton(m_driver, Button.kA.value).whenPressed(new DriveTank(() -> m_driver.getY(Hand.kLeft),
-                                () -> m_driver.getY(Hand.kRight), chassis));
+                new JoystickButton(m_driver, Button.kA.value).whenPressed(
+                                new DriveTank(() -> m_driver.getY(Hand.kLeft), () -> getDriveLX(), chassis));
 
                 new JoystickButton(m_driver, Button.kB.value).whenPressed(new DriveArcade(
                                 () -> m_driver.getY(Hand.kLeft), () -> m_driver.getX(Hand.kRight), chassis));
 
-                new JoystickButton(m_driver, Button.kX.value).whenPressed(autonDriveJoystick);
+                // new JoystickButton(m_driver,
+                // Button.kX.value).whenPressed(autonDriveJoystick);
 
-                new JoystickButton(m_driver, Button.kY.value)
-                                .whenPressed(autonDriveTrajectory.andThen(() -> chassis.driveTank(0, 0)));
+                // new JoystickButton(m_driver, Button.kY.value)
+                // .whenPressed(autonDriveTrajectory.andThen(() -> //chassis.driveTank(0, 0)));
 
                 // new JoystickButton(m_driver, Button.kY.value)
                 // .whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () ->
@@ -183,16 +195,14 @@ public class RobotContainer {
                 new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
                 new JoystickButton(m_operator, Button.kX.value).whenPressed(new SpinnerStop(spinner));
 
-                new JoystickButton(m_operator, Button.kY.value).whenHeld(new ShooterShoot(shooter));
-
-                new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterStop(shooter));
-
                 for (int i = 0; i < 8; i++) {
                         new POVButton(m_operator, i * 45).whenHeld(new ShooterAim(shooter, i));
                 }
 
-                new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new ClimberExtend(climber));
-                new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new ClimberRetract(climber));
+                // new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new
+                // ClimberExtend(climber));
+                // new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new
+                // ClimberRetract(climber));
                 new JoystickButton(m_operator, Button.kBack.value).whenHeld(new ClimberClimb(climber));
                 new JoystickButton(m_operator, Button.kStickRight.value)
                                 .whenPressed(new ClimberLevel(climber, () -> m_operator.getY(Hand.kRight)));
@@ -200,15 +210,70 @@ public class RobotContainer {
                 // new JoystickButton(m_driver, Button.kBack.value).whenPressed(new
                 // AutonDrive(chassis, 20.0));
 
-                // new JoystickButton(m_driver, Button.kBack.value).whenPressed(new
-                // HopperLoad(hopper, true));
+                new JoystickButton(m_driver, Button.kBack.value).whenPressed(new HopperLoad(hopper, false));
 
                 // new JoystickButton(m_operator, Button.kB.value).whenPressed(new
                 // HopperShoot(hopper, shooter));
 
-                // new JoystickButton(m_driver, Button.kBack.value).whenPressed(new
-                // CollectorSpin(collector));
+                // new JoystickButton(m_driver, Button.kY.value).whenPressed(new
+                // CollectorIntake(collector));
 
+                new JoystickButton(m_driver, Button.kStart.value).whenPressed(new HopperShoot(hopper, shooter));
+
+                // new JoystickButton(m_driver, Button.kBack.value).whenPressed(new
+                // CollectorStop(collector));
+
+                // new JoystickButton(m_driver, Button.kX.value).whenPressed(new
+                // CollectorReject(collector));
+
+                new JoystickButton(m_driver, Button.kY.value)
+                                .whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()));
+
+                new JoystickButton(m_driver, Button.kX.value).whenPressed(new ShooterAimStop(shooter));
+
+                new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new ShooterAngleInit(shooter));
+                new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new ShooterTiltInit(shooter));
+
+                new JoystickButton(m_operator, Button.kY.value).whenPressed(new ShooterShoot(shooter));
+
+                new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterStop(shooter));
+
+        }
+
+        public void setDriverRumble(GenericHID.RumbleType t) {
+                m_driver.setRumble(t, 1);
+        }
+
+        public void resetDriverRumble(GenericHID.RumbleType t) {
+                m_driver.setRumble(t, 0);
+        }
+
+        public void setOperatorRumble(GenericHID.RumbleType t) {
+                m_operator.setRumble(t, 1);
+        }
+
+        public void resetOperatorRumble(GenericHID.RumbleType t) {
+                m_operator.setRumble(t, 0);
+        }
+
+        public double getDriveLX() {
+                double v = m_driver.getX(Hand.kLeft);
+                return Math.abs(v) < DEADZONE ? 0.0 : v;
+        }
+
+        public double getDriveLY() {
+                double v = m_driver.getY(Hand.kLeft);
+                return Math.abs(v) < DEADZONE ? 0.0 : v;
+        }
+
+        public double getDriveRX() {
+                double v = m_driver.getX(Hand.kRight);
+                return Math.abs(v) < DEADZONE ? 0.0 : v;
+        }
+
+        public double getDriverRY() {
+                double v = m_driver.getY(Hand.kRight);
+                return Math.abs(v) < DEADZONE ? 0.0 : v;
         }
 
         /**

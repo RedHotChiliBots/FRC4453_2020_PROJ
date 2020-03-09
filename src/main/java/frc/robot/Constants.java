@@ -44,6 +44,7 @@ public final class Constants {
 		public static final int kSpinnerMotor = 20;
 
 		public static final int kCollectorMotor = 30;
+		public static final int kCollectArmMotor = 31;
 
 		public static final int kTopMasterMotor = 40;
 		public static final int kBottomFollowerMotor = 41;
@@ -123,17 +124,19 @@ public final class Constants {
 	}
 
 	public final static class ShooterConstants {
-		public static final double kP = 1.0;
-		public static final double kI = 0.05;
+		public static final double kP = 0.00008;
+		// public static final double kI = 0.0;
+		public static final double kI = 0.0000004;
+
 		public static final double kD = 0;
 		public static final double kIz = 0;
 		public static final double kFF = 0;
-		public static final double kMinOutput = 0;
+		public static final double kMinOutput = -1;
 		public static final double kMaxOutput = 1;
 
 		public static final double kStopRPMs = 0.0;
-		public static final double kMinRPM = 0.0;
-		public static final double kMaxRPM = 4500.0;
+		public static final double kMinRPM = -4540.0;
+		public static final double kMaxRPM = 4540.8;
 
 		public static final double kShooterShootRPMs = kMaxRPM;
 
@@ -143,8 +146,8 @@ public final class Constants {
 	}
 
 	public final static class AngleConstants {
-		public static final double kP = 0.05;
-		public static final double kI = 0.0001;
+		public static final double kP = 0.0005;
+		public static final double kI = 0.0;
 		public static final double kD = 0;
 		public static final double kIz = 0;
 		public static final double kFF = 0;
@@ -165,31 +168,30 @@ public final class Constants {
 	}
 
 	public final static class TiltConstants {
-		public static final int kTiltPowerIndex = 1;
-		public static final double kTiltAmps = 1.0;
+		public static final int kTiltPowerIndex = 5;
+		public static final double kTiltAmps = 0.5;
 
 		public static final double kP = 0.05;
 		public static final double kI = 0.0001;
 		public static final double kD = 0;
 		public static final double kIz = 0;
 		public static final double kFF = 0;
-		public static final double kMinOutput = 0;
-		public static final double kMaxOutput = 1;
+		public static final double kMinOutput = -1.0;
+		public static final double kMaxOutput = 1.0;
+		public static final double kMinPos = 10.0;
+		public static final double kMaxPos = 45.0;
 
 		public static final double kTicsPerMotorRev = 4096;
-		public static final double kGBRatio = 10;
-		public static final double kTicsPerGBRev = kTicsPerMotorRev * kGBRatio;
+		public static final double kGBRatio = 28;
+		public static final double kTicsPerPinionRev = kTicsPerMotorRev * kGBRatio;
+		public static final double kTicsPerPinionDeg = kTicsPerPinionRev / 360.0;
 
-		public static final double kInPerRevLS = 0.2; // Lead Screw (inches/rev)
-		public static final double kLengthLS = 5.55; // Lead Screw max travel inches
-		public static final double kTiltDegLS = 35.0; // Tilt Degrees by max Lead Screw travel
-		public static final double kInchPerTic = kInPerRevLS / kTicsPerGBRev;
-		public static final double kDegPerInch = kTiltDegLS / kLengthLS;
-		// public static final double kPosFactor = kInchPerDeg * kInchPerTic; // Tic /
-		// Deg }
-		public static final double kInchPerDeg = kInPerRevLS / kTiltDegLS;
-		public static final double kRevPerIn = 1 / kInPerRevLS;
-		public static final double kPosFactor = kInchPerDeg * kRevPerIn * kTicsPerGBRev; // Tic / Deg }
+		public static final double kPinionPitchDia = 2.5; // inches
+		public static final double kRackPitchDia = 19.0; // inches
+		public static final double kRackPinionRatio = kRackPitchDia / kPinionPitchDia;
+		public static final double kPinonDegPerRackDeg = kRackPinionRatio / 360.0;
+
+		public static final double kPosFactor = kTicsPerPinionDeg * kPinonDegPerRackDeg;
 
 		public static final double kATiltFindSpeed = 0.5;
 	}
@@ -250,43 +252,95 @@ public final class Constants {
 		public static final double k100msPerMin = 600; // constant
 		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
 
-		public static final double kCollectRPMs = 500.0;
+		public static final double kCollectRPMs = 200.0;
 		public static final double kRejectRPMs = -200.0;
 	}
 
+	public static final class CollectArmConstants {
+		public static final double kP = 0.00008;
+		// public static final double kI = 0.0;
+		public static final double kI = 0.0000004;
+
+		public static final double kD = 0;
+		public static final double kIz = 0;
+		public static final double kFF = 0;
+		public static final double kMinOutput = -1;
+		public static final double kMaxOutput = 1;
+
+		public static final double kStopPos = 0.0;
+		public static final double kMinPos = 0.0;
+		public static final double kMaxPos = 4540.8;
+
+		public static final double kWheelCirc = 2.5 * Math.PI; // inches
+		public static final int kEncoderResolution = 42; // not used, NEO's native units are rotations
+		public static final double kGearBoxRatio = 100.0;
+		public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; // Meters per Second
+
+		public static final double kMaxVelocity = 35.0 / 3.0; // inches per second
+		public static final double kStopRPMs = 0.0; // inches per second
+		public static final double kShooterShootRPMs = kMaxPos;
+
+		public static final double kExtendPos = kMaxPos;
+		public static final double kRetractPos = 0.0;
+	}
+
 	public final static class HopperConstants {
-		public static final double kP = 1.0;
-		public static final double kI = 0.005;
+		public static final double kP = 0.00008;
+		// public static final double kI = 0.0;
+		public static final double kI = 0.0000004;
 		public static final double kD = 0.0;
 		public static final double kIz = 0.0;
 		public static final double kFF = 0.0;
-		public static final double kMinOutput = 0.0;
+		public static final double kMinOutput = -1.0;
 		public static final double kMaxOutput = 1.0;
-		public static final double kMinRPM = 0;
-		public static final double kMaxRPM = 15000; // 80% of 775 Free Spin RPMs
+		public static final double kMinRPM = -4540.8;
+		public static final double kMaxRPM = 4540.8; // 80% of Neo Free Spin RPMs
 
-		public static final double kCPMaxRPM = 60; // Rules limit CP to 1 rps
-		public static final double kCPDiameter = 32; // inches (2' 8")
-		public static final double kWheelDiameter = 2.25;
-		public static final double kWheelRPM = (kCPDiameter / kWheelDiameter) * kCPMaxRPM;
+		// public static final double kCPMaxRPM = 60; // Rules limit CP to 1 rps
+		// public static final double kCPDiameter = 32; // inches (2' 8")
+		// public static final double kWheelDiameter = 2.25;
+		// public static final double kWheelRPM = (kCPDiameter / kWheelDiameter) *
+		// kCPMaxRPM;
 
-		public static final double kTicsPerRev = 12; // * 4; // RS7 quad encoder on 775 motor
-		public static final double kGearBoxRatio = 16;
-		public static final double k100msPerMin = 600; // constant
-		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
+		// public static final double kTicsPerRev = 12; // * 4; // RS7 quad encoder on
+		// 775 motor
+		// public static final double kGearBoxRatio = 16;
+		// public static final double k100msPerMin = 600; // constant
+		// public static final double kVelFactor = (kTicsPerRev / k100msPerMin) *
+		// kGearBoxRatio;
 
 		public static final double kCollectRPMs = 250; // Guess, so far
-		public static final double kLoadRPMs = kWheelRPM; // Given 2.25" wheel
-		public static final double kShootRPMs = 0; // Stop spinning
+		public static final double kLoadRPMs = 1000; // Given 2.25" wheel
+		public static final double kShootRPMs = 1200; // Stop spinning
 		public static final double kStopRPMs = 0; // Stop spinning
 
-		public static final double kHopperShootRPMs = 500.0; // Guess
-		public static final double kHopperLoadRPMs = 250.0; // Guess
+		public static final double kReverseRPMS = -1000;
+
+		// public static final double kHopperShootRPMs = 500.0; // Guess
+		// public static final double kHopperLoadRPMs = 250.0; // Guess
+
+		// public static final double kMaxSpeedMPS = Units.feetToMeters(0.5); // meters
+		// per second
+		// public static final double kMinSpeedMPS = -kMaxSpeedMPS; // meters per second
+		// public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation
+		// per second
+
+		// public static final double kTrackWidth = Units.inchesToMeters(26.341); //
+		// meters
+		// public static final double kWheelCirc = Units.inchesToMeters(Math.PI * 8.0);
+		// // meters
+		// public static final int kEncoderResolution = 42; // not used, NEO's native
+		// units are rotations
+		// public static final double kGearBoxRatio = 10.71;
+		// public static final double kPosFactor = kWheelCirc / kGearBoxRatio; // Meters
+		// per Revolution Revolution
+		// public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; //
+		// Meters per Second
 	}
 
 	public final static class EjectorConstants {
-		public static final double kP = 1.0;
-		public static final double kI = 0.005;
+		public static final double kP = 0.08;
+		public static final double kI = 0.0000000;
 		public static final double kD = 0.0;
 		public static final double kIz = 0.0;
 		public static final double kFF = 0.0;
@@ -295,22 +349,23 @@ public final class Constants {
 		public static final double kMinRPM = 0;
 		public static final double kMaxRPM = 11200; // 80% of Bag Free Spin RPMs
 
-		public static final double kCPMaxRPM = 60; // Rules limit CP to 1 rps
-		public static final double kCPDiameter = 32; // inches (2' 8")
-		public static final double kWheelDiameter = 2.25;
-		public static final double kWheelRPM = (kCPDiameter / kWheelDiameter) * kCPMaxRPM;
+		// public static final double kCPMaxRPM = 60; // Rules limit CP to 1 rps
+		// public static final double kCPDiameter = 32; // inches (2' 8")
+		// public static final double kWheelDiameter = 2.25;
+		// public static final double kWheelRPM = (kCPDiameter / kWheelDiameter) *
+		// kCPMaxRPM;
 
-		public static final double kTicsPerRev = 12; // * 4; // RS7 quad encoder on 775 motor
-		public static final double kGearBoxRatio = 16;
+		public static final double kTicsPerRev = 4096; // * 4; // RS7 quad encoder on 775 motor
+		public static final double kGearBoxRatio = 9;
 		public static final double k100msPerMin = 600; // constant
 		public static final double kVelFactor = (kTicsPerRev / k100msPerMin) * kGearBoxRatio;
 
 		public static final double kCollectRPMs = 250; // Guess, so far
-		public static final double kLoadRPMs = kWheelRPM; // Given 2.25" wheel
+		// public static final double kLoadRPMs = kWheelRPM; // Given 2.25" wheel
 		public static final double kShootRPMs = 0; // Stop spinning
 		public static final double kStopRPMs = 0; // Stop spinning
 
-		public static final double kEjectorShootRPMs = 250.0; // Guess
+		public static final double kEjectorShootRPMs = 11000.0; // Guess
 	}
 
 	public static final class ClimberConstants {

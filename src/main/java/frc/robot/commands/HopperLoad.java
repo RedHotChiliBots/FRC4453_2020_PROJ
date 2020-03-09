@@ -34,7 +34,9 @@ public class HopperLoad extends CommandBase {
   @Override
   public void execute() {
     if (force || hopper.getLowerSensor()) {
-      hopper.setHopperVelocity(HopperConstants.kHopperLoadRPMs);
+      hopper.setHopperVelocity(HopperConstants.kLoadRPMs);
+    } else {
+      hopper.stopHopper();
     }
   }
 

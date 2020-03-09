@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.EjectorConstants;
 import frc.robot.Constants.HopperConstants;
@@ -20,6 +21,9 @@ public class HopperShoot extends CommandBase {
    */
   private final Hopper hopper;
   private final Shooter shooter;
+  private Timer timer;
+  private boolean done;
+  private boolean timing;
 
   public HopperShoot(Hopper hopper, Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -31,30 +35,31 @@ public class HopperShoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    hopper.setEjectorVelocity(EjectorConstants.kEjectorShootRPMs);
-    shooter.setShootVelocity(ShooterConstants.kShooterShootRPMs);
+    done = false;
+    timing = false;
+    hopper.setHopperVelocity(HopperConstants.kShootRPMs);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if ((shooter.getShootVelocity() > ShooterConstants.kShooterShootRPMs * 0.9)
-        && (hopper.getEjectorVelocity() > EjectorConstants.kEjectorShootRPMs * 0.9)) {
-      hopper.setHopperVelocity(HopperConstants.kHopperShootRPMs);
+    if (!hopper.getUpperSensor()) {
+      timer.reset();
+      timing = true;
+    } else {
+      timing = false;
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    hopper.stopHopper();
-    hopper.stopEjector();
-    shooter.stopShoot();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return timing && timer.get() > 3.0;
   }
 }
