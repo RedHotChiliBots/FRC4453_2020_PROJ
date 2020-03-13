@@ -25,7 +25,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,8 +41,6 @@ import frc.robot.Constants.DigitalIOConstants;
 public class Shooter extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-
-  private final PowerDistributionPanel pdp = new PowerDistributionPanel(0);
 
   private final CANSparkMax shootMotor = new CANSparkMax(CANidConstants.kShooterMotor, MotorType.kBrushless);
   private final TalonSRX angleMotor = new TalonSRX(CANidConstants.kAngleMotor);
@@ -85,9 +82,13 @@ public class Shooter extends SubsystemBase {
   Library lib = new Library();
 
   private final ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
-  private NetworkTableEntry sbShootVel = shooterTab.addPersistent("ShootVelocity", 0).getEntry();
+	private NetworkTableEntry sbTiltAmps = shooterTab.addPersistent("Tilt Amps", 0).getEntry();
+	private NetworkTableEntry sbPosFactor = shooterTab.addPersistent("Pos Factor", 0).getEntry();
+	private NetworkTableEntry sbShootVel = shooterTab.addPersistent("ShootVelocity", 0).getEntry();
   private NetworkTableEntry sbAnglePos = shooterTab.addPersistent("Angle Position", 0).getEntry();
   private NetworkTableEntry sbTiltPos = shooterTab.addPersistent("Tilt Position", 0).getEntry();
+	private NetworkTableEntry sbTiltVelocity = shooterTab.addPersistent("Tilt Velocity", 0).getEntry();
+	private NetworkTableEntry sbAngleVelocity = shooterTab.addPersistent("Angle Velocity", 0).getEntry();
   private NetworkTableEntry sbShootSetPoint = shooterTab.addPersistent("Shoot SetPoint", 0).getEntry();
   private NetworkTableEntry sbAngleSetPoint = shooterTab.addPersistent("Angle SetPoint", 0).getEntry();
   private NetworkTableEntry sbTiltSetPoint = shooterTab.addPersistent("Tilt SetPoint", 0).getEntry();
@@ -148,7 +149,7 @@ public class Shooter extends SubsystemBase {
 
     // Configure Motor
     tiltMotor.setNeutralMode(NeutralMode.Brake);
-    tiltMotor.setInverted(false);
+    tiltMotor.setInverted(true);
     tiltMotor.setSensorPhase(false);
 
     /* Config sensor used for Primary PID [Velocity] */
@@ -175,10 +176,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public void periodic() {
-    sbShootVel.setDouble(getShootVelocity());
-    sbAnglePos.setDouble(getAnglePosition());
-    sbTiltPos.setDouble(getTiltPosition());
-    sbShootSetPoint.setDouble(shootSetPoint);
+  	sbTiltAmps.setDouble(getTiltAmps());
+		sbPosFactor.setDouble(AngleConstants.kPosFactor);
+		sbShootVel.setDouble(getShootVelocity());
+		sbAngleVelocity.setDouble(getAngleVelocity());
+		sbTiltVelocity.setDouble(getTiltVelocity());
+		sbAnglePos.setDouble(getAnglePosition());
+		sbTiltPos.setDouble(getTiltPosition());
+	  sbShootSetPoint.setDouble(shootSetPoint);
     sbAngleSetPoint.setDouble(angleSetPoint);
     sbTiltSetPoint.setDouble(tiltSetPoint);
     SmartDashboard.putBoolean("Left Limit Switch", getAngleLeftLimit());
@@ -213,9 +218,13 @@ public class Shooter extends SubsystemBase {
     tiltMotor.set(ControlMode.PercentOutput, 0.0);
   }
 
-  public double getAnglePosition() {
-    return angleMotor.getSelectedSensorPosition() / AngleConstants.kPosFactor;
-  }
+	public double getAngleVelocity() {
+		return angleMotor.getSelectedSensorVelocity() / AngleConstants.kPosFactor;
+	}
+
+	public double getAnglePosition() {
+		return angleMotor.getSelectedSensorPosition() / AngleConstants.kPosFactor;
+	}
 
   public void setAnglePosition(double pos) {
     angleSetPoint = pos;
@@ -246,9 +255,13 @@ public class Shooter extends SubsystemBase {
     angleMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
   }
 
-  public double getTiltPosition() {
-    return tiltMotor.getSelectedSensorPosition() / TiltConstants.kPosFactor;
-  }
+ 	public double getTiltVelocity() {
+		return tiltMotor.getSelectedSensorVelocity();
+	}
+
+	public double getTiltPosition() {
+		return tiltMotor.getSelectedSensorPosition(); // / TiltConstants.kPosFactor;
+	}
 
   public void setTiltPosition(double pos) {
     tiltSetPoint = pos;
@@ -274,7 +287,8 @@ public class Shooter extends SubsystemBase {
     tiltMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
   }
 
-  public double getTiltAmps() {
-    return pdp.getCurrent(TiltConstants.kTiltPowerIndex);
+	public double getTiltAmps() {
+		return tiltMotor.getStatorCurrent();
+    //return pdp.getCurrent(TiltConstants.kTiltPowerIndex);
   }
 }

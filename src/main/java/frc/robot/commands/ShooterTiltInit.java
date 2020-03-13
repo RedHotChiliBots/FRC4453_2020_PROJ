@@ -14,7 +14,6 @@ import frc.robot.subsystems.Shooter;
 public class ShooterTiltInit extends CommandBase {
 
   private final Shooter shooter;
-  private boolean finished = false;
 
   public ShooterTiltInit(Shooter shooter) {
     this.shooter = shooter;
@@ -24,25 +23,23 @@ public class ShooterTiltInit extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    shooter.moveTiltDown(TiltConstants.kATiltFindSpeed);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    if (shooter.getTiltAmps() > TiltConstants.kTiltAmps) {
-      shooter.setTiltZeroPos();
-      finished = true;
-    }
+		shooter.moveTiltDown(TiltConstants.kATiltFindSpeed);
   }
 
   @Override
   public boolean isFinished() {
-    return finished;
+    return shooter.getTiltAmps() > TiltConstants.kTiltAmps;
   }
 
   // Called once after isFinished returns true
   @Override
-  public void end(boolean interrupted) {
+	public void end(boolean interrupted) {
+		shooter.stopTilt();
+		shooter.setTiltZeroPos();
   }
 }

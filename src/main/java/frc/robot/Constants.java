@@ -154,23 +154,20 @@ public final class Constants {
 		public static final double kMinOutput = 0;
 		public static final double kMaxOutput = 1;
 
-		public static final double kAngleFindSpeed = 0.8;
-		public static final double kAngleCenterSpeed = 0.5;
+		public static final double kAngleFindSpeed = 0.15;
+		public static final double kAngleCenterSpeed = 0.05;
 
 		public static final double kTicsPerMotorRev = 4096;
-		public static final double kGBRatio = 10;
+		public static final double kGBRatio = 21;
 		public static final double kTicsPerGBRev = kTicsPerMotorRev * kGBRatio;
 
 		public static final double kRGTeeth = 170.0; // Ring Gear
-		public static final double kGBTeeth = 15.0; // Gear Box
+		public static final double kGBTeeth = 18.0; // Gear Box
 		public static final double kGBRevPerRGRev = (kRGTeeth / kGBTeeth);
 		public static final double kPosFactor = (kGBRevPerRGRev * kTicsPerGBRev) / 360.0; // Tics / Deg @ Ring Gear
 	}
 
 	public final static class TiltConstants {
-		public static final int kTiltPowerIndex = 5;
-		public static final double kTiltAmps = 0.5;
-
 		public static final double kP = 0.05;
 		public static final double kI = 0.0001;
 		public static final double kD = 0;
@@ -182,18 +179,16 @@ public final class Constants {
 		public static final double kMaxPos = 45.0;
 
 		public static final double kTicsPerMotorRev = 4096;
-		public static final double kGBRatio = 28;
+		public static final double kGBRatio = 12;
 		public static final double kTicsPerPinionRev = kTicsPerMotorRev * kGBRatio;
-		public static final double kTicsPerPinionDeg = kTicsPerPinionRev / 360.0;
 
 		public static final double kPinionPitchDia = 2.5; // inches
 		public static final double kRackPitchDia = 19.0; // inches
 		public static final double kRackPinionRatio = kRackPitchDia / kPinionPitchDia;
-		public static final double kPinonDegPerRackDeg = kRackPinionRatio / 360.0;
 
-		public static final double kPosFactor = kTicsPerPinionDeg * kPinonDegPerRackDeg;
-
-		public static final double kATiltFindSpeed = 0.5;
+		public static final double kPosFactor = (kRackPinionRatio * kTicsPerPinionRev) / 360.0;	//Tics / Deg
+		public static final double kTiltAmps = 10.0;
+		public static final double kATiltFindSpeed = 0.3;
 	}
 
 	public final static class SpinnerConstants {

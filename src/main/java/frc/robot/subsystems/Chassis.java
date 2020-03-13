@@ -16,7 +16,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -110,7 +109,7 @@ public class Chassis extends SubsystemBase {
 	// ==============================================================
 	// Identify PDP and PCM
 	private final PowerDistributionPanel pdp = new PowerDistributionPanel(CANidConstants.kPDP);
-	private final Compressor compressor = new Compressor(CANidConstants.kCompressor);
+//	private final Compressor compressor = new Compressor(CANidConstants.kCompressor);
 
 	// Identify compressor hi and lo sensors
 	private final AnalogInput hiPressureSensor = new AnalogInput(AnalogIOConstants.kHiPressureChannel);
@@ -155,7 +154,7 @@ public class Chassis extends SubsystemBase {
 		System.out.println("+++++ Chassis Constructor starting ...");
 
 		pdp.clearStickyFaults();
-		compressor.clearAllPCMStickyFaults();
+//compressor.clearAllPCMStickyFaults();
 
 		ahrs.reset();
 		ahrs.zeroYaw();

@@ -15,7 +15,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 //import edu.wpi.first.wpilibj2.d
@@ -24,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.LevelerConstants;
-import frc.robot.Constants.PneumaticConstants;
 import frc.robot.Library;
 
 /**
@@ -33,8 +31,8 @@ import frc.robot.Library;
 
 public class Climber extends SubsystemBase {
 
-	DoubleSolenoid climberSolenoid = new DoubleSolenoid(PneumaticConstants.kClimberExtendSolenoid,
-			PneumaticConstants.kClimberRetractSolenoid);
+	// DoubleSolenoid climberSolenoid = new DoubleSolenoid(PneumaticConstants.kClimberExtendSolenoid,
+	// 		PneumaticConstants.kClimberRetractSolenoid);
 
 	private final CANSparkMax climbMotor = new CANSparkMax(CANidConstants.kClimberMotor, MotorType.kBrushless);
 
@@ -58,7 +56,6 @@ public class Climber extends SubsystemBase {
 	private NetworkTableEntry sbClimbTgt = climberTab.addPersistent("Climb Target", 0).getEntry();
 	private NetworkTableEntry sbLevelTgt = climberTab.addPersistent("Level Target", 0).getEntry();
 
-	private NetworkTableEntry sbClimbSolenoid = climberTab.addPersistent("Climb Solenoid", 0).getEntry();
 
 	// climberSolenoid.set(kOff);
 	// climberSolenoid.set(kForward);
@@ -107,15 +104,15 @@ public class Climber extends SubsystemBase {
 		sbClimbTgt.setDouble(climbSetPoint);
 		sbLevelTgt.setDouble(levelSetPoint);
 
-		String str = "";
-		if (climberSolenoid.get() == ClimberConstants.ClimberExtend) {
-			str = "Extend";
-		} else if (climberSolenoid.get() == ClimberConstants.ClimberRetract) {
-			str = "Retract";
-		} else {
-			str = "Unknown";
-		}
-		sbClimbSolenoid.setString(str);
+		// String str = "";
+		// if (climberSolenoid.get() == ClimberConstants.ClimberExtend) {
+		// 	str = "Extend";
+		// } else if (climberSolenoid.get() == ClimberConstants.ClimberRetract) {
+		// 	str = "Retract";
+		// } else {
+		// 	str = "Unknown";
+		// }
+		// sbClimbSolenoid.setString(str);
 	}
 
 	public double getClimbVelocity() {
@@ -158,11 +155,11 @@ public class Climber extends SubsystemBase {
 		levelMotor.set(0);
 	}
 
-	public void climberExtend() {
-		climberSolenoid.set(ClimberConstants.ClimberExtend);
-	}
+	// public void climberExtend() {
+	// 	climberSolenoid.set(ClimberConstants.ClimberExtend);
+	// }
 
-	public void climberRetract() {
-		climberSolenoid.set(ClimberConstants.ClimberRetract);
-	}
+	// public void climberRetract() {
+	// 	climberSolenoid.set(ClimberConstants.ClimberRetract);
+	// }
 }

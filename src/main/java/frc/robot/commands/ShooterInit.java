@@ -20,8 +20,8 @@ public class ShooterInit extends ParallelCommandGroup {
   public ShooterInit(Shooter shooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());super();
-    addCommands(
-        // Initiale Tilt and Angle
-        new ShooterTiltInit(shooter), new ShooterAngleInit(shooter));
+  //   addCommands(
+  //       // Initiale Tilt and Angle
+  //       new ShooterTiltInit(shooter), new ShooterAngleInit(shooter));
   }
 }

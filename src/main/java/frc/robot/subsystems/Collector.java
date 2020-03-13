@@ -19,8 +19,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,17 +26,14 @@ import frc.robot.Library;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.CollectorConstants;
 import frc.robot.Constants.CollectArmConstants;
-import frc.robot.Constants.PneumaticConstants;
 
 /**
  * Add your docs here.
  */
 public class Collector extends SubsystemBase {
 
-	  private final PowerDistributionPanel pdp = new PowerDistributionPanel(0);
-
-	private final DoubleSolenoid collectorSolenoid = new DoubleSolenoid(PneumaticConstants.kCollectorExtendSolenoid,
-			PneumaticConstants.kCollectorRetractSolenoid);
+	// private final DoubleSolenoid collectorSolenoid = new DoubleSolenoid////(PneumaticConstants.kCollectorExtendSolenoid,
+	// 		PneumaticConstants.kCollectorRetractSolenoid);
 
 	private final CANSparkMax collectArmMotor = new CANSparkMax(CANidConstants.kCollectArmMotor, MotorType.kBrushless);
 
@@ -59,8 +54,6 @@ public class Collector extends SubsystemBase {
 	private NetworkTableEntry sbCollectArmSetPoint = collectorTab.addPersistent("CollectArm SetPoint", 0).getEntry();
 	private NetworkTableEntry sbCollectorTgt = collectorTab.addPersistent("Collector Target (rpm)", 0).getEntry();
 	private NetworkTableEntry sbCollectorVel = collectorTab.addPersistent("Collector Velocity (rpm)", 0).getEntry();
-
-	private NetworkTableEntry sbCollectSolenoid = collectorTab.addPersistent("Collector Solenoid", 0).getEntry();
 
 	private Library lib = new Library();
 
@@ -116,24 +109,24 @@ public class Collector extends SubsystemBase {
 		sbCollectorTgt.setDouble(collectorSetPoint);
 		sbCollectorVel.setDouble(getCollectorRPMs());
 
-		String str = "";
-		if (collectorSolenoid.get() == CollectorConstants.CollectorExtend) {
-			str = "Extend";
-		} else if (collectorSolenoid.get() == CollectorConstants.CollectorRetract) {
-			str = "Retract";
-		} else {
-			str = "Unknown";
-		}
-		sbCollectSolenoid.setString(str);
+		// String str = "";
+		// if (collectorSolenoid.get() == CollectorConstants.CollectorExtend) {
+		// 	str = "Extend";
+		// } else if (collectorSolenoid.get() == CollectorConstants.CollectorRetract) {
+		// 	str = "Retract";
+		// } else {
+		// 	str = "Unknown";
+		// }
+		// sbCollectSolenoid.setString(str);
 	}
 
-	public void collectorExtend() {
-		collectorSolenoid.set(CollectorConstants.CollectorExtend);
-	}
+	// public void collectorExtend() {
+	// 	collectorSolenoid.set(CollectorConstants.CollectorExtend);
+	// }
 
-	public void collectorRetract() {
-		collectorSolenoid.set(CollectorConstants.CollectorRetract);
-	}
+	// public void collectorRetract() {
+	// 	collectorSolenoid.set(CollectorConstants.CollectorRetract);
+	// }
 
 	public double getCollectArmPosition() {
 		return collectArmEncoder.getPosition();
@@ -185,10 +178,11 @@ public class Collector extends SubsystemBase {
 
 	public void setArmZeroPos() {
 		// collectArmEncoder.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
+	//	collectArmMotor.set
 	}
 
 	public double getArmAmps() {
-		return pdp.getCurrent(CollectArmConstants.kCollectArmPowerIndex);
+		return collectArmMotor.getOutputCurrent();
 	}
 
 }

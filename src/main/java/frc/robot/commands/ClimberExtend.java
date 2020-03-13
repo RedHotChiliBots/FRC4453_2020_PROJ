@@ -21,7 +21,7 @@ public class ClimberExtend extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    climber.climberExtend();
+//    climber.climberExtend();
   }
 
   // Called repeatedly when this Command is scheduled to run

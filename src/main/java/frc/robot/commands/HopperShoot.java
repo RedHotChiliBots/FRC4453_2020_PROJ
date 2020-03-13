@@ -9,9 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.EjectorConstants;
 import frc.robot.Constants.HopperConstants;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 
@@ -20,22 +18,18 @@ public class HopperShoot extends CommandBase {
 	 * Creates a new HopperLoad.
 	 */
 	private final Hopper hopper;
-	private final Shooter shooter;
 	private Timer timer;
-	private boolean done;
 	private boolean timing;
 
 	public HopperShoot(Hopper hopper, Shooter shooter) {
 		// Use addRequirements() here to declare subsystem dependencies.
 		this.hopper = hopper;
-		this.shooter = shooter;
 		addRequirements(hopper, shooter);
 	}
 
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		done = false;
 		timing = false;
 		hopper.setHopperVelocity(HopperConstants.kShootRPMs);
 

@@ -42,6 +42,7 @@ import frc.robot.commands.ClimberExtend;
 import frc.robot.commands.ClimberLevel;
 import frc.robot.commands.ClimberRetract;
 import frc.robot.commands.ClimberStop;
+import frc.robot.commands.CollectorArmInit;
 import frc.robot.commands.CollectorExtend;
 import frc.robot.commands.CollectorIntake;
 import frc.robot.commands.CollectorReject;
@@ -199,12 +200,12 @@ public class RobotContainer {
 		// new JoystickButton(m_driver, Button.kX.value).whenPressed(new
 		// ShooterAimStop(shooter));
 
+		new JoystickButton(m_operator, Button.kX.value).whenPressed(new CollectorArmInit(collector));
 		new JoystickButton(m_driver, Button.kBumperRight.value).whenPressed(new CollectorExtend(collector));
 		new JoystickButton(m_driver, Button.kBumperLeft.value).whenPressed(new CollectorRetract(collector));
 
 		new JoystickButton(m_operator, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));
 		new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
-		new JoystickButton(m_operator, Button.kX.value).whenPressed(new SpinnerStop(spinner));
 
 		for (int i = 0; i < 8; i++) {
 			new POVButton(m_operator, i * 45).whenHeld(new ShooterAim(shooter, i));
@@ -221,17 +222,20 @@ public class RobotContainer {
 		// new JoystickButton(m_driver, Button.kBack.value).whenPressed(new
 		// AutonDrive(chassis, 20.0));
 
-		new JoystickButton(m_operator, Button.kBack.value).and(new JoystickButton(m_operator, Button.kStart.value).negate())
-				.whileActiveOnce(new HopperLoad(hopper, false));
+		// new JoystickButton(m_operator, Button.kBack.value).and(new JoystickButton(m_operator, Button.kStart.value).negate())
+		// 		.whileActiveOnce(new HopperLoad(hopper, false));
 
-		new JoystickButton(m_operator, Button.kBack.value).and(new JoystickButton(m_operator, Button.kStart.value))
-				.whileActiveOnce(new HopperLoad(hopper, true));
+		// new JoystickButton(m_operator, Button.kBack.value).and(new
+		// JoystickButton(m_operator, Button.kStart.value))
+		// .whileActiveOnce(new HopperLoad(hopper, true));
+
+		new JoystickButton(m_operator, Button.kBack.value).whileActiveOnce(new HopperLoad(hopper, true));
 
 		// new JoystickButton(m_operator, Button.kB.value).whenPressed(new
 		// HopperShoot(hopper, shooter));
 
-		// new JoystickButton(m_driver, Button.kY.value).whenPressed(new
-		// CollectorIntake(collector));
+		new JoystickButton(m_operator, Button.kY.value).whenPressed(new
+		 CollectorIntake(collector));
 
 		new JoystickButton(m_driver, Button.kStart.value).whenPressed(new HopperShoot(hopper, shooter));
 
@@ -249,7 +253,7 @@ public class RobotContainer {
 		new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new ShooterAngleInit(shooter));
 		new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new ShooterTiltInit(shooter));
 
-		new JoystickButton(m_operator, Button.kY.value).whenPressed(new ShooterShoot(shooter));
+		// new JoystickButton(m_operator, Button.kY.value).whenPressed(new ShooterShoot(shooter));
 
 		new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterStop(shooter));
 

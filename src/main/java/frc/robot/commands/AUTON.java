@@ -7,16 +7,19 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Shooter;
 
-public class PURGE extends ParallelCommandGroup {
+public class AUTON extends SequentialCommandGroup {
   /**
    * Add your docs here.
    */
-  public PURGE(Hopper hopper, Collector collector) {
-    addCommands(new HopperReverse(hopper), new CollectorReject(collector));
+
+  public AUTON(Shooter shooter, Collector collector, Hopper hopper) {
+    addCommands(new ShooterInit(shooter), new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()),
+        new SHOOT(collector, hopper, shooter) /* , new AutonDriveTrajectory() */);
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

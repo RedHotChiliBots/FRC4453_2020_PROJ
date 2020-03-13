@@ -14,7 +14,6 @@ import frc.robot.subsystems.Collector;
 public class CollectorArmInit extends CommandBase {
 
   private final Collector collector;
-  private boolean finished = false;
 
   public CollectorArmInit(Collector collector) {
     this.collector = collector;
@@ -30,19 +29,16 @@ public class CollectorArmInit extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    if (collector.getArmAmps() > CollectArmConstants.kCollectArmAmps) {
-      collector.setArmZeroPos();
-      finished = true;
-    }
   }
 
   @Override
   public boolean isFinished() {
-    return finished;
+    return collector.getArmAmps() > CollectArmConstants.kCollectArmAmps;
   }
 
   // Called once after isFinished returns true
   @Override
-  public void end(boolean interrupted) {
+	public void end(boolean interrupted) {
+      collector.setArmZeroPos();
   }
 }
