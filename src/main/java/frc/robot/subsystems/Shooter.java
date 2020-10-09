@@ -92,6 +92,8 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry sbShootSetPoint = shooterTab.addPersistent("Shoot SetPoint", 0).getEntry();
   private NetworkTableEntry sbAngleSetPoint = shooterTab.addPersistent("Angle SetPoint", 0).getEntry();
   private NetworkTableEntry sbTiltSetPoint = shooterTab.addPersistent("Tilt SetPoint", 0).getEntry();
+  private NetworkTableEntry sbLeftPos = shooterTab.addPersistent("Angle Center Left Limit", 0).getEntry();
+  private NetworkTableEntry sbRightPos= shooterTab.addPersistent("Angle Center Right Limit", 0).getEntry();
 
   public Shooter() {
     System.out.println("+++++ Shooter Constructor starting ...");
@@ -260,12 +262,12 @@ public class Shooter extends SubsystemBase {
 	}
 
 	public double getTiltPosition() {
-		return tiltMotor.getSelectedSensorPosition(); // / TiltConstants.kPosFactor;
+		return tiltMotor.getSelectedSensorPosition();// / TiltConstants.kPosFactor;
 	}
 
   public void setTiltPosition(double pos) {
     tiltSetPoint = pos;
-    tiltMotor.set(ControlMode.Position, pos * TiltConstants.kPosFactor);
+    tiltMotor.set(ControlMode.Position, pos * TiltConstants.kTicsPerDegree);//TiltConstants.kPosFactor);
   }
 
   public void moveTiltDown(double spd) {

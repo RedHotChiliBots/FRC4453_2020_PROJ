@@ -64,6 +64,8 @@ import frc.robot.commands.ShooterTiltInit;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStop;
 import frc.robot.commands.SpinnerStopOnColor;
+import frc.robot.commands.ShooterTiltDeg;
+import frc.robot.commands.ShooterAngleDeg;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Collector;
@@ -234,8 +236,8 @@ public class RobotContainer {
 		// new JoystickButton(m_operator, Button.kB.value).whenPressed(new
 		// HopperShoot(hopper, shooter));
 
-		new JoystickButton(m_operator, Button.kY.value).whenPressed(new
-		 CollectorIntake(collector));
+		// new JoystickButton(m_operator, Button.kY.value).whenPressed(new
+		//  CollectorIntake(collector));
 
 		new JoystickButton(m_driver, Button.kStart.value).whenPressed(new HopperShoot(hopper, shooter));
 
@@ -253,10 +255,11 @@ public class RobotContainer {
 		new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new ShooterAngleInit(shooter));
 		new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new ShooterTiltInit(shooter));
 
-		// new JoystickButton(m_operator, Button.kY.value).whenPressed(new ShooterShoot(shooter));
+		new JoystickButton(m_operator, Button.kY.value).whenPressed(new ShooterShoot(shooter));
 
-		new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterStop(shooter));
-
+		// new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterStop(shooter));
+		// new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterTiltDeg(shooter, 135));
+		new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterAngleDeg(shooter, 10));
 	}
 
 	public void setDriverRumble(GenericHID.RumbleType t) {

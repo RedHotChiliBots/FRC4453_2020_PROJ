@@ -45,8 +45,8 @@ public class ShooterAngleCenter extends CommandBase {
         shooter.moveAngleLeft(AngleConstants.kAngleCenterSpeed);
       }
     }
-    SmartDashboard.putNumber("leftpos", leftPos);
-    SmartDashboard.putNumber("rightpos", rightPos);
+    sbLeftPos.setDouble(leftPos);
+    sbRightPos.setDouble(rightPos);
   }
 
   @Override

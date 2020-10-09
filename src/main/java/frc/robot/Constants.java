@@ -131,8 +131,8 @@ public final class Constants {
 		public static final double kD = 0;
 		public static final double kIz = 0;
 		public static final double kFF = 0;
-		public static final double kMinOutput = -1;
-		public static final double kMaxOutput = 1;
+		public static final double kMinOutput = -.5;
+		public static final double kMaxOutput = .5;
 
 		public static final double kStopRPMs = 0.0;
 		public static final double kMinRPM = -4540.0;
@@ -151,8 +151,8 @@ public final class Constants {
 		public static final double kD = 0;
 		public static final double kIz = 0;
 		public static final double kFF = 0;
-		public static final double kMinOutput = 0;
-		public static final double kMaxOutput = 1;
+		public static final double kMinOutput = 0.0;
+		public static final double kMaxOutput = 0.5;
 
 		public static final double kAngleFindSpeed = 0.15;
 		public static final double kAngleCenterSpeed = 0.05;
@@ -160,16 +160,17 @@ public final class Constants {
 		public static final double kTicsPerMotorRev = 4096;
 		public static final double kGBRatio = 21;
 		public static final double kTicsPerGBRev = kTicsPerMotorRev * kGBRatio;
+		// public static final double kTicsPerDeg = kTicsPerMotorRev / 360;
 
 		public static final double kRGTeeth = 170.0; // Ring Gear
 		public static final double kGBTeeth = 18.0; // Gear Box
 		public static final double kGBRevPerRGRev = (kRGTeeth / kGBTeeth);
-		public static final double kPosFactor = (kGBRevPerRGRev * kTicsPerGBRev) / 360.0; // Tics / Deg @ Ring Gear
+		public static final double kPosFactor = (kGBRevPerRGRev * kTicsPerGBRev) / 360; // Tics / Deg @ Ring Gear
 	}
 
 	public final static class TiltConstants {
-		public static final double kP = 0.05;
-		public static final double kI = 0.0001;
+		public static final double kP = 0.04;
+		public static final double kI = 0.000001;
 		public static final double kD = 0;
 		public static final double kIz = 0;
 		public static final double kFF = 0;
@@ -182,11 +183,18 @@ public final class Constants {
 		public static final double kGBRatio = 12;
 		public static final double kTicsPerPinionRev = kTicsPerMotorRev * kGBRatio;
 
+		public static final double kPinionTeeth = 50;
+		public static final double kDegreesPerRev = 360;
+		public static final double kTeethPerDegree = kPinionTeeth / kDegreesPerRev;
+		public static final double kTeethPerRev = kPinionTeeth / kGBRatio;
+		public static final double kTicsPerTeeth = kTicsPerMotorRev / kTeethPerRev;
+		public static final double kTicsPerDegree = -kTicsPerTeeth * kTeethPerDegree;
+
 		public static final double kPinionPitchDia = 2.5; // inches
 		public static final double kRackPitchDia = 19.0; // inches
-		public static final double kRackPinionRatio = kRackPitchDia / kPinionPitchDia;
+		public static final double kRackPinionRatio = kPinionPitchDia / kRackPitchDia;
 
-		public static final double kPosFactor = (kRackPinionRatio * kTicsPerPinionRev) / 360.0;	//Tics / Deg
+		// public static final double kPosFactor = (kRackPinionRatio * kTicsPerPinionRev) / 360.0;	//Tics / Deg
 		public static final double kTiltAmps = 10.0;
 		public static final double kATiltFindSpeed = 0.3;
 	}

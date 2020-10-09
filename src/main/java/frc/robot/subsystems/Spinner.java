@@ -131,9 +131,9 @@ public class Spinner extends SubsystemBase {
   public void periodic() {
     colorString = getColor();
 
-    // SmartDashboard.putNumber("Spin Detected Red", detectedColor.red);
-    // SmartDashboard.putNumber("Spin Detected Green", detectedColor.green);
-    // SmartDashboard.putNumber("Spin Detected Blue", detectedColor.blue);
+    SmartDashboard.putNumber("Spin Detected Red", detectedColor.red);
+    SmartDashboard.putNumber("Spin Detected Green", detectedColor.green);
+    SmartDashboard.putNumber("Spin Detected Blue", detectedColor.blue);
 
     sbSpinConf.setDouble(match.confidence);
     sbColorDetect.setString(colorString.toString());
