@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import frc.robot.Constants.AngleConstants;
 import frc.robot.subsystems.Shooter;
 
@@ -45,8 +46,8 @@ public class ShooterAngleCenter extends CommandBase {
         shooter.moveAngleLeft(AngleConstants.kAngleCenterSpeed);
       }
     }
-    sbLeftPos.setDouble(leftPos);
-    sbRightPos.setDouble(rightPos);
+    shooter.sbLeftPos.setDouble(leftPos);
+    shooter.sbRightPos.setDouble(rightPos);
   }
 
   @Override

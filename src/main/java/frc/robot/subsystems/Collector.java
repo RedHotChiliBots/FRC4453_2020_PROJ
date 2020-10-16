@@ -54,6 +54,7 @@ public class Collector extends SubsystemBase {
 	private NetworkTableEntry sbCollectArmSetPoint = collectorTab.addPersistent("CollectArm SetPoint", 0).getEntry();
 	private NetworkTableEntry sbCollectorTgt = collectorTab.addPersistent("Collector Target (rpm)", 0).getEntry();
 	private NetworkTableEntry sbCollectorVel = collectorTab.addPersistent("Collector Velocity (rpm)", 0).getEntry();
+	private NetworkTableEntry sbCollectArmAmps = collectorTab.addPersistent("Collector Arm Amps", 0).getEntry();
 
 	private Library lib = new Library();
 
@@ -108,6 +109,7 @@ public class Collector extends SubsystemBase {
 		sbCollectArmSetPoint.setDouble(collectArmSetPoint);
 		sbCollectorTgt.setDouble(collectorSetPoint);
 		sbCollectorVel.setDouble(getCollectorRPMs());
+		sbCollectArmAmps.setDouble(getArmAmps());
 
 		// String str = "";
 		// if (collectorSolenoid.get() == CollectorConstants.CollectorExtend) {

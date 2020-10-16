@@ -92,13 +92,13 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry sbShootSetPoint = shooterTab.addPersistent("Shoot SetPoint", 0).getEntry();
   private NetworkTableEntry sbAngleSetPoint = shooterTab.addPersistent("Angle SetPoint", 0).getEntry();
   private NetworkTableEntry sbTiltSetPoint = shooterTab.addPersistent("Tilt SetPoint", 0).getEntry();
-  private NetworkTableEntry sbLeftPos = shooterTab.addPersistent("Angle Center Left Limit", 0).getEntry();
-  private NetworkTableEntry sbRightPos= shooterTab.addPersistent("Angle Center Right Limit", 0).getEntry();
+  public NetworkTableEntry sbLeftPos = shooterTab.addPersistent("Angle Center Left Limit", 0).getEntry();
+  public NetworkTableEntry sbRightPos = shooterTab.addPersistent("Angle Center Right Limit", 0).getEntry();
 
   public Shooter() {
     System.out.println("+++++ Shooter Constructor starting ...");
     // ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
-
+  
     // Define Shooter motor
     shootMotor.restoreFactoryDefaults();
     shootMotor.clearFaults();
@@ -122,7 +122,7 @@ public class Shooter extends SubsystemBase {
     // Configure Motor
     angleMotor.setNeutralMode(NeutralMode.Brake);
     angleMotor.setInverted(false);
-    angleMotor.setSensorPhase(false);
+//    angleMotor.setSensorPhase(false);
 
     /* Config sensor used for Primary PID [Velocity] */
     angleMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, CANidConstants.kPIDLoopIdx,

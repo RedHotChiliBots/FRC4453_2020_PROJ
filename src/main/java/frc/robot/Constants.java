@@ -264,8 +264,8 @@ public final class Constants {
 		public static final double kCollectArmAmps = 0.5;
 
 		public static final double kP = 0.00008;
-		// public static final double kI = 0.0;
-		public static final double kI = 0.0000004;
+		public static final double kI = 0.0;
+		//public static final double kI = 0.0000004;
 
 		public static final double kD = 0;
 		public static final double kIz = 0;
