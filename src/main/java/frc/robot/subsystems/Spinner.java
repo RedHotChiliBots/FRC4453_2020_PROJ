@@ -10,22 +10,22 @@ package frc.robot.subsystems;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.revrobotics.ColorMatch;
-import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorSensorV3;
-
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.ColorSensorV3;
+import com.revrobotics.ColorMatchResult;
+import com.revrobotics.ColorMatch;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.SpinnerConstants;
 import frc.robot.Constants.SpinnerConstants.COLOR;

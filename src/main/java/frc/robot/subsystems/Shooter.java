@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Library;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TiltConstants;
-import frc.robot.Constants.AngleConstants;
+import frc.robot.Constants.YawConstants;
 import frc.robot.Constants.CANidConstants;
 import frc.robot.Constants.DigitalIOConstants;
 
@@ -138,10 +138,10 @@ public class Shooter extends SubsystemBase {
     angleMotor.configPeakOutputReverse(-1, CANidConstants.kTimeoutMs);
 
     /* Config the PID values */
-    angleMotor.config_kF(CANidConstants.kPIDLoopIdx, AngleConstants.kFF, CANidConstants.kTimeoutMs);
-    angleMotor.config_kP(CANidConstants.kPIDLoopIdx, AngleConstants.kP, CANidConstants.kTimeoutMs);
-    angleMotor.config_kI(CANidConstants.kPIDLoopIdx, AngleConstants.kI, CANidConstants.kTimeoutMs);
-    angleMotor.config_kD(CANidConstants.kPIDLoopIdx, AngleConstants.kD, CANidConstants.kTimeoutMs);
+    angleMotor.config_kF(CANidConstants.kPIDLoopIdx, YawConstants.kFF, CANidConstants.kTimeoutMs);
+    angleMotor.config_kP(CANidConstants.kPIDLoopIdx, YawConstants.kP, CANidConstants.kTimeoutMs);
+    angleMotor.config_kI(CANidConstants.kPIDLoopIdx, YawConstants.kI, CANidConstants.kTimeoutMs);
+    angleMotor.config_kD(CANidConstants.kPIDLoopIdx, YawConstants.kD, CANidConstants.kTimeoutMs);
 
     angleMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
 
@@ -151,8 +151,8 @@ public class Shooter extends SubsystemBase {
 
     // Configure Motor
     tiltMotor.setNeutralMode(NeutralMode.Brake);
-    tiltMotor.setInverted(true);
-    tiltMotor.setSensorPhase(false);
+    tiltMotor.setInverted(false);
+//    tiltMotor.setSensorPhase(false);
 
     /* Config sensor used for Primary PID [Velocity] */
     tiltMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, CANidConstants.kPIDLoopIdx,
@@ -179,7 +179,7 @@ public class Shooter extends SubsystemBase {
 
   public void periodic() {
   	sbTiltAmps.setDouble(getTiltAmps());
-		sbPosFactor.setDouble(AngleConstants.kPosFactor);
+		sbPosFactor.setDouble(YawConstants.kTicsPerDegree);
 		sbShootVel.setDouble(getShootVelocity());
 		sbAngleVelocity.setDouble(getAngleVelocity());
 		sbTiltVelocity.setDouble(getTiltVelocity());
@@ -221,16 +221,16 @@ public class Shooter extends SubsystemBase {
   }
 
 	public double getAngleVelocity() {
-		return angleMotor.getSelectedSensorVelocity() / AngleConstants.kPosFactor;
+		return angleMotor.getSelectedSensorVelocity() / YawConstants.kTicsPerDegree;
 	}
 
 	public double getAnglePosition() {
-		return angleMotor.getSelectedSensorPosition() / AngleConstants.kPosFactor;
+		return angleMotor.getSelectedSensorPosition() / YawConstants.kTicsPerDegree;
 	}
 
   public void setAnglePosition(double pos) {
     angleSetPoint = pos;
-    angleMotor.set(ControlMode.Position, pos * AngleConstants.kPosFactor);
+    angleMotor.set(ControlMode.Position, pos * YawConstants.kTicsPerDegree);
   }
 
   public void moveAngleLeft(double spd) {
@@ -262,16 +262,26 @@ public class Shooter extends SubsystemBase {
 	}
 
 	public double getTiltPosition() {
-		return tiltMotor.getSelectedSensorPosition();// / TiltConstants.kPosFactor;
-	}
+    return tiltMotor.getSelectedSensorPosition() / TiltConstants.kTicsPerDegree;
+  }
 
   public void setTiltPosition(double pos) {
     tiltSetPoint = pos;
-    tiltMotor.set(ControlMode.Position, pos * TiltConstants.kTicsPerDegree);//TiltConstants.kPosFactor);
+    tiltMotor.set(ControlMode.Position, pos * TiltConstants.kTicsPerDegree);
+  }
+
+  public void setTiltZeroPos() {
+    int tics = (int)Math.round(TiltConstants.kMinPos * TiltConstants.kTicsPerDegree);
+    tiltMotor.getSensorCollection().setQuadraturePosition(tics, CANidConstants.kTimeoutMs);
   }
 
   public void moveTiltDown(double spd) {
-    tiltMotor.set(ControlMode.PercentOutput, spd);
+    tiltMotor.set(ControlMode.PercentOutput, -spd);
+  }
+
+	public double getTiltAmps() {
+		return tiltMotor.getStatorCurrent();
+    //return pdp.getCurrent(TiltConstants.kTiltPowerIndex);
   }
 
   public double getX() {
@@ -285,12 +295,4 @@ public class Shooter extends SubsystemBase {
   // public boolean isLimit() {
   // return
   // }
-  public void setTiltZeroPos() {
-    tiltMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
-  }
-
-	public double getTiltAmps() {
-		return tiltMotor.getStatorCurrent();
-    //return pdp.getCurrent(TiltConstants.kTiltPowerIndex);
-  }
 }

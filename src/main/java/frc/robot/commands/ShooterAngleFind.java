@@ -8,7 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.AngleConstants;
+import frc.robot.Constants.YawConstants;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterAngleFind extends CommandBase {
@@ -24,7 +24,7 @@ public class ShooterAngleFind extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    shooter.moveAngleLeft(AngleConstants.kAngleFindSpeed);
+    shooter.moveAngleLeft(YawConstants.kAngleFindSpeed);
     movingLeft = true;
   }
 
@@ -34,10 +34,10 @@ public class ShooterAngleFind extends CommandBase {
     if (!shooter.getAngleCenterPos()) {
       if (movingLeft && shooter.getAngleLeftLimit()) {
         movingLeft = false;
-        shooter.moveAngleRight(AngleConstants.kAngleFindSpeed);
+        shooter.moveAngleRight(YawConstants.kAngleFindSpeed);
       } else if (!movingLeft && shooter.getAngleRightLimit()) {
         movingLeft = true;
-        shooter.moveAngleLeft(AngleConstants.kAngleFindSpeed);
+        shooter.moveAngleLeft(YawConstants.kAngleFindSpeed);
       }
     }
   }

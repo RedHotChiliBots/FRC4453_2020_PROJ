@@ -10,7 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import frc.robot.Constants.AngleConstants;
+import frc.robot.Constants.YawConstants;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterAngleCenter extends CommandBase {
@@ -28,7 +28,7 @@ public class ShooterAngleCenter extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    shooter.moveAngleLeft(AngleConstants.kAngleCenterSpeed);
+    shooter.moveAngleLeft(YawConstants.kAngleCenterSpeed);
     movingLeft = true;
   }
 
@@ -39,11 +39,11 @@ public class ShooterAngleCenter extends CommandBase {
       if (movingLeft) {
         movingLeft = false;
         leftPos = shooter.getAnglePosition();
-        shooter.moveAngleRight(AngleConstants.kAngleCenterSpeed);
+        shooter.moveAngleRight(YawConstants.kAngleCenterSpeed);
       } else if (!movingLeft) {
         movingLeft = true;
         rightPos = shooter.getAnglePosition();
-        shooter.moveAngleLeft(AngleConstants.kAngleCenterSpeed);
+        shooter.moveAngleLeft(YawConstants.kAngleCenterSpeed);
       }
     }
     shooter.sbLeftPos.setDouble(leftPos);

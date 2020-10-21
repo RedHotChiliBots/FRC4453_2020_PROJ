@@ -10,11 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.RamseteController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -27,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AUTONRENDEZVOUS;
 import frc.robot.commands.AUTONRENDEZVOUSTRENCH;
@@ -38,24 +33,21 @@ import frc.robot.commands.AutonDrive2Point;
 import frc.robot.commands.AutonDriveJoystick;
 import frc.robot.commands.AutonDriveTrajectory;
 import frc.robot.commands.ClimberClimb;
-import frc.robot.commands.ClimberExtend;
 import frc.robot.commands.ClimberLevel;
-import frc.robot.commands.ClimberRetract;
 import frc.robot.commands.ClimberStop;
 import frc.robot.commands.CollectorArmInit;
 import frc.robot.commands.CollectorExtend;
-import frc.robot.commands.CollectorIntake;
-import frc.robot.commands.CollectorReject;
 import frc.robot.commands.CollectorRetract;
 import frc.robot.commands.CollectorStop;
 import frc.robot.commands.DriveArcade;
 import frc.robot.commands.DriveTank;
-import frc.robot.commands.HopperEject;
 import frc.robot.commands.HopperLoad;
 import frc.robot.commands.HopperShoot;
 import frc.robot.commands.HopperStop;
 import frc.robot.commands.ShooterAim;
+import frc.robot.commands.ShooterAimJoystick;
 import frc.robot.commands.ShooterAimStop;
+import frc.robot.commands.ShooterAngleDeg;
 import frc.robot.commands.ShooterAngleInit;
 import frc.robot.commands.ShooterInit;
 import frc.robot.commands.ShooterShoot;
@@ -64,8 +56,6 @@ import frc.robot.commands.ShooterTiltInit;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStop;
 import frc.robot.commands.SpinnerStopOnColor;
-import frc.robot.commands.ShooterTiltDeg;
-import frc.robot.commands.ShooterAngleDeg;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Collector;
@@ -110,16 +100,15 @@ public class RobotContainer {
 	private final AutonDrive2Point autonDrive2Point = new AutonDrive2Point(
 			new Pose2d(new Translation2d(7.0, 7.0), new Rotation2d(0.0)), chassis);
 
-	private final AutonDriveTrajectory autonDriveTrajectory = new AutonDriveTrajectory(chassis.lineToRendezvousTrajectory,
-			chassis);
+	private final AutonDriveTrajectory autonDriveTrajectory = new AutonDriveTrajectory(
+			chassis.lineToRendezvousTrajectory, chassis);
 
-	private final AUTONRENDEZVOUSTRENCH AUTONRENDEZVOUSTRENCH = new AUTONRENDEZVOUSTRENCH(shooter, collector, hopper, chassis);
-	private final AUTONRENDEZVOUS AUTONRENDEZVOUS = new AUTONRENDEZVOUS(shooter, collector, hopper,
+	private final AUTONRENDEZVOUSTRENCH AUTONRENDEZVOUSTRENCH = new AUTONRENDEZVOUSTRENCH(shooter, collector, hopper,
 			chassis);
+	private final AUTONRENDEZVOUS AUTONRENDEZVOUS = new AUTONRENDEZVOUS(shooter, collector, hopper, chassis);
 	private final AUTONTRENCHRENDEZVOUS AUTONTRENCHRENDEZVOUS = new AUTONTRENCHRENDEZVOUS(shooter, collector, hopper,
 			chassis);
-	private final AUTONTRENCH AUTONTRENCH = new AUTONTRENCH(shooter, collector, hopper,
-			chassis);
+	private final AUTONTRENCH AUTONTRENCH = new AUTONTRENCH(shooter, collector, hopper, chassis);
 	// Define chooser for autonomous commands
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -151,12 +140,13 @@ public class RobotContainer {
 
 		// =============================================================
 		// Configure default commands for each subsystem
-		chassis
-				.setDefaultCommand(new DriveTank(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
+		chassis.setDefaultCommand(
+				new DriveTank(() -> m_driver.getY(Hand.kLeft), () -> m_driver.getY(Hand.kRight), chassis));
 		climber.setDefaultCommand(new ClimberStop(climber));
 		collector.setDefaultCommand(new CollectorStop(collector));
 		hopper.setDefaultCommand(new HopperStop(hopper));
-		shooter.setDefaultCommand(new ShooterStop(shooter));
+//		shooter.setDefaultCommand(new ShooterStop(shooter));
+		shooter.setDefaultCommand(new ShooterAimJoystick(() -> m_operator.getY(Hand.kLeft), () -> m_operator.getX(Hand.kLeft), shooter));
 		spinner.setDefaultCommand(new SpinnerStop(spinner));
 
 		// =============================================================
@@ -168,7 +158,6 @@ public class RobotContainer {
 		m_chooser.addOption("Auton Rendezvous to Trench", AUTONRENDEZVOUSTRENCH);
 		m_chooser.addOption("Auton Trench", AUTONTRENCH);
 		m_chooser.addOption("Auton Trench to Rendezvous", AUTONTRENCHRENDEZVOUS);
-
 
 		SmartDashboard.putData("Auton Chooser", m_chooser);
 	}
@@ -224,8 +213,9 @@ public class RobotContainer {
 		// new JoystickButton(m_driver, Button.kBack.value).whenPressed(new
 		// AutonDrive(chassis, 20.0));
 
-		// new JoystickButton(m_operator, Button.kBack.value).and(new JoystickButton(m_operator, Button.kStart.value).negate())
-		// 		.whileActiveOnce(new HopperLoad(hopper, false));
+		// new JoystickButton(m_operator, Button.kBack.value).and(new
+		// JoystickButton(m_operator, Button.kStart.value).negate())
+		// .whileActiveOnce(new HopperLoad(hopper, false));
 
 		// new JoystickButton(m_operator, Button.kBack.value).and(new
 		// JoystickButton(m_operator, Button.kStart.value))
@@ -237,7 +227,7 @@ public class RobotContainer {
 		// HopperShoot(hopper, shooter));
 
 		// new JoystickButton(m_operator, Button.kY.value).whenPressed(new
-		//  CollectorIntake(collector));
+		// CollectorIntake(collector));
 
 		new JoystickButton(m_driver, Button.kStart.value).whenPressed(new HopperShoot(hopper, shooter));
 
@@ -257,8 +247,10 @@ public class RobotContainer {
 
 		new JoystickButton(m_operator, Button.kY.value).whenPressed(new ShooterShoot(shooter));
 
-		// new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterStop(shooter));
-		// new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterTiltDeg(shooter, 135));
+		// new JoystickButton(m_operator, Button.kStart.value).whenPressed(new
+		// ShooterStop(shooter));
+		// new JoystickButton(m_operator, Button.kStart.value).whenPressed(new
+		// ShooterTiltDeg(shooter, 135));
 		new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterAngleDeg(shooter, 10));
 	}
 
