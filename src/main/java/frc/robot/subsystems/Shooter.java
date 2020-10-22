@@ -55,11 +55,13 @@ public class Shooter extends SubsystemBase {
   NetworkTableEntry tx = table.getEntry("tx");
   NetworkTableEntry ty = table.getEntry("ty");
   NetworkTableEntry ta = table.getEntry("ta");
+  NetworkTableEntry tv = table.getEntry("tv");
 
   // read values periodically
-  public double x = tx.getDouble(0.0);
-  public double y = ty.getDouble(0.0);
-  public double area = ta.getDouble(0.0);
+  public double x = tx.getDouble(0.0);  // +-27.0 degrees from crosshair to target
+  public double y = ty.getDouble(0.0);  // +-20.5 degrees from crosshair to target
+  public double area = ta.getDouble(0.0); // 0% to 100% of image
+  public double valid = tv.getDouble(0.0);  // 0-1 has valid targets
 
   private double shootSetPoint = 0.0;
   private double tiltSetPoint = 0.0;
