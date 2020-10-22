@@ -154,10 +154,10 @@ public final class Constants {
 		public static final double kMinOutput = 0.0;
 		public static final double kMaxOutput = 0.5;
 
-		public static final double kMinPos = -100.0;
-		public static final double kMaxPos = 100.0;
+		public static final double kMinDeg = -100.0;
+		public static final double kMaxDeg = 100.0;
 		public static final double kMaxSec = 4.0;
-		public static final double kRangeDeg = kMaxPos - kMinPos;
+		public static final double kRangeDeg = kMaxDeg - kMinDeg;
 		public static final double kRateDpS = kRangeDeg / kMaxSec / 50.0;	// 50x per second
 
 		public static final double kAngleFindSpeed = 0.15;
@@ -183,10 +183,10 @@ public final class Constants {
 		public static final double kMinOutput = -1.0;
 		public static final double kMaxOutput = 1.0;
 
-		public static final double kMinPos = 10.0;
-		public static final double kMaxPos = 45.0;
+		public static final double kMinDeg = 10.0;
+		public static final double kMaxDeg = 45.0;
 		public static final double kMaxSec = 1.0;
-		public static final double kRangeDeg = kMaxPos - kMinPos;
+		public static final double kRangeDeg = kMaxDeg - kMinDeg;
 		public static final double kRateDpS = kRangeDeg / kMaxSec / 50.0;	// 50x per second
 
 		public static final double kATiltFindSpeed = 0.3;

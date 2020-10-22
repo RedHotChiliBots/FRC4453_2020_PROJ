@@ -47,15 +47,16 @@ public class ShooterAimJoystick extends CommandBase {
 	public void execute() {
 		// Read joystick position
 		tiltCmd = tiltJoystick.getAsDouble();
-		yawCmd = yawJoystick.getAsDouble();
+		// Disable until Yaw PID is adjusted
+		yawCmd = 0.0;	// yawJoystick.getAsDouble();
 
 		// Calculate new target as Curr Target + Increment 
 		tiltNew = shooter.getTiltPosition() + (tiltCmd * TiltConstants.kRateDpS);
 		yawNew = shooter.getAnglePosition() + (yawCmd * YawConstants.kRateDpS);
 
 		// Clamp new targets to min and max values
-		tiltNew = Math.max(TiltConstants.kMinPos, Math.min(TiltConstants.kMaxPos, tiltNew));
-		yawNew = Math.max(YawConstants.kMinPos, Math.min(YawConstants.kMaxPos, yawNew));
+		tiltNew = Math.max(TiltConstants.kMinDeg, Math.min(TiltConstants.kMaxDeg, tiltNew));
+		yawNew = Math.max(YawConstants.kMinDeg, Math.min(YawConstants.kMaxDeg, yawNew));
 
 		// Update controllers with new targets
 		shooter.setTiltPosition(tiltNew);

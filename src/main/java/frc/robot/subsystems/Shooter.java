@@ -228,9 +228,9 @@ public class Shooter extends SubsystemBase {
 		return angleMotor.getSelectedSensorPosition() / YawConstants.kTicsPerDegree;
 	}
 
-  public void setAnglePosition(double pos) {
-    angleSetPoint = pos;
-    angleMotor.set(ControlMode.Position, pos * YawConstants.kTicsPerDegree);
+  public void setAnglePosition(double deg) {
+    angleSetPoint = deg;
+    angleMotor.set(ControlMode.Position, deg * YawConstants.kTicsPerDegree);
   }
 
   public void moveAngleLeft(double spd) {
@@ -258,20 +258,21 @@ public class Shooter extends SubsystemBase {
   }
 
  	public double getTiltVelocity() {
-		return tiltMotor.getSelectedSensorVelocity();
+		return tiltMotor.getSelectedSensorVelocity() / TiltConstants.kTicsPerDegree;
 	}
 
 	public double getTiltPosition() {
     return tiltMotor.getSelectedSensorPosition() / TiltConstants.kTicsPerDegree;
   }
 
-  public void setTiltPosition(double pos) {
-    tiltSetPoint = pos;
-    tiltMotor.set(ControlMode.Position, pos * TiltConstants.kTicsPerDegree);
+  public void setTiltPosition(double deg) {
+    tiltSetPoint = deg;
+    tiltMotor.set(ControlMode.Position, deg * TiltConstants.kTicsPerDegree);
   }
 
   public void setTiltZeroPos() {
-    int tics = (int)Math.round(TiltConstants.kMinPos * TiltConstants.kTicsPerDegree);
+    // tilt angle at initialization is not Zero.  Set to kMinDeg
+    int tics = (int)Math.round(TiltConstants.kMinDeg * TiltConstants.kTicsPerDegree);
     tiltMotor.getSensorCollection().setQuadraturePosition(tics, CANidConstants.kTimeoutMs);
   }
 
