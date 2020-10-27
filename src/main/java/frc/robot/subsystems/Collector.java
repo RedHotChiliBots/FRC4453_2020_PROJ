@@ -171,7 +171,7 @@ public class Collector extends SubsystemBase {
 	}
 
 	public void collectorStop() {
-		collectorMotor.set(ControlMode.PercentOutput, -0.0);
+		collectorMotor.set(ControlMode.PercentOutput, 0.0);
 	}
 
 	public void moveArmUp(double spd) {

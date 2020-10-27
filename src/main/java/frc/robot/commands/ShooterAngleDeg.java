@@ -32,7 +32,7 @@ public class ShooterAngleDeg extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setAnglePosition(deg);
+    shooter.setAngleTarget(deg);
   }
 
   // Called once the command ends or is interrupted.

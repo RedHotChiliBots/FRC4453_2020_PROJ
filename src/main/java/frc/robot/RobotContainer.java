@@ -51,7 +51,6 @@ import frc.robot.commands.ShooterAngleDeg;
 import frc.robot.commands.ShooterAngleInit;
 import frc.robot.commands.ShooterInit;
 import frc.robot.commands.ShooterShoot;
-import frc.robot.commands.ShooterStop;
 import frc.robot.commands.ShooterTiltInit;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStop;
