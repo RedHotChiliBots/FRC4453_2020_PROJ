@@ -46,8 +46,8 @@ public class ShooterAngleCenter extends CommandBase {
         shooter.moveAngleLeft(YawConstants.kAngleCenterSpeed);
       }
     }
-    shooter.sbLeftPos.setDouble(leftPos);
-    shooter.sbRightPos.setDouble(rightPos);
+    // shooter.sbLeftPos.setDouble(leftPos);
+    // shooter.sbRightPos.setDouble(rightPos);
   }
 
   @Override

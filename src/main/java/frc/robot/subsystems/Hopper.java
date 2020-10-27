@@ -75,7 +75,7 @@ public class Hopper extends SubsystemBase {
 	private NetworkTableEntry sbLowerSensor = hopperTab.addPersistent("Lower Sensor", false).getEntry();
 
 	public Hopper() {
-		System.out.println("+++++ Spinner Constructor starting ...");
+		System.out.println("+++++ Hopper Constructor starting ...");
 
 		// Define Shooter motor
 		topMaster.restoreFactoryDefaults();
@@ -145,7 +145,7 @@ public class Hopper extends SubsystemBase {
 		stopHopper();
 		stopEjector();
 
-		System.out.println("----- Spinner Constructor finished ...");
+		System.out.println("----- Hopper Constructor finished ...");
 	}
 
 	// Called once per Robot execution loop - 50Hz

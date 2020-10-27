@@ -322,6 +322,8 @@ public class Chassis extends SubsystemBase {
 		m_rightEncoder.setPosition(0.0);
 
 		resetFieldPosition(0.0, 0.0);
+
+		System.out.println("----- Chassis Constructor finished ...");
 	}
 
 	public DifferentialDriveOdometry getOdometry() {

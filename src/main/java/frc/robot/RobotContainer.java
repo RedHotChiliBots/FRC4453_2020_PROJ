@@ -81,6 +81,8 @@ public class RobotContainer {
 	public final Collector collector = new Collector();
 	public final Hopper hopper = new Hopper();
 
+
+
 	// =============================================================
 	// Define Joysticks
 	XboxController m_driver = new XboxController(OIConstants.kDriverControllerPort);
@@ -114,13 +116,15 @@ public class RobotContainer {
 
 	//
 	ShuffleboardTab chassisTab = Shuffleboard.getTab("Chassis");
-	ShuffleboardTab pneumaticsTab = Shuffleboard.getTab("Pneumatics");
+//	ShuffleboardTab pneumaticsTab = Shuffleboard.getTab("Pneumatics");
 	ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
 	ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
 	ShuffleboardTab spinnerTab = Shuffleboard.getTab("Spinner");
 	ShuffleboardTab collectorTab = Shuffleboard.getTab("Collector");
 	ShuffleboardTab hopperTab = Shuffleboard.getTab("Hopper");
 	ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
+
+	
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -138,6 +142,7 @@ public class RobotContainer {
 		SmartDashboard.putData("Collector", collector);
 		SmartDashboard.putData("Hopper", hopper);
 
+		System.out.println("Subsystems are put on Shuffleboard");
 		// =============================================================
 		// Configure default commands for each subsystem
 		chassis.setDefaultCommand(
@@ -148,6 +153,8 @@ public class RobotContainer {
 //		shooter.setDefaultCommand(new ShooterStop(shooter));
 		shooter.setDefaultCommand(new ShooterAimJoystick(() -> m_operator.getY(Hand.kLeft), () -> m_operator.getX(Hand.kLeft), shooter));
 		spinner.setDefaultCommand(new SpinnerStop(spinner));
+
+		System.out.println("Default Commands Set");
 
 		// =============================================================
 		// Build chooser for autonomous commands
@@ -160,7 +167,8 @@ public class RobotContainer {
 		m_chooser.addOption("Auton Trench to Rendezvous", AUTONTRENCHRENDEZVOUS);
 
 		SmartDashboard.putData("Auton Chooser", m_chooser);
-	}
+		System.out.println("Options added to AutonChooser");
+		}
 
 	/**
 	 * Use this method to define your button->command mappings. Buttons can be
@@ -252,6 +260,7 @@ public class RobotContainer {
 		// new JoystickButton(m_operator, Button.kStart.value).whenPressed(new
 		// ShooterTiltDeg(shooter, 135));
 		new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterAngleDeg(shooter, 10));
+		System.out.println("Buttons configured");
 	}
 
 	public void setDriverRumble(GenericHID.RumbleType t) {
@@ -313,7 +322,7 @@ public class RobotContainer {
 	public boolean setForce(boolean force) {
 		return this.force = force;
 	}
-
+	
 	/**
 	 * Use this to pass the autonomous command to the main {@link Robot} class.
 	 *

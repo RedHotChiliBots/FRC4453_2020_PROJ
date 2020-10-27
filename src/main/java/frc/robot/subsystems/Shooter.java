@@ -55,13 +55,13 @@ public class Shooter extends SubsystemBase {
   NetworkTableEntry tx = table.getEntry("tx");
   NetworkTableEntry ty = table.getEntry("ty");
   NetworkTableEntry ta = table.getEntry("ta");
-  NetworkTableEntry tv = table.getEntry("tv");
+//  NetworkTableEntry tv = table.getEntry("tv");
 
   // read values periodically
   public double x = tx.getDouble(0.0);  // +-27.0 degrees from crosshair to target
   public double y = ty.getDouble(0.0);  // +-20.5 degrees from crosshair to target
   public double area = ta.getDouble(0.0); // 0% to 100% of image
-  public double valid = tv.getDouble(0.0);  // 0-1 has valid targets
+//  public double valid = tv.getDouble(0.0);  // 0-1 has valid targets
 
   private double shootSetPoint = 0.0;
   private double tiltSetPoint = 0.0;
@@ -94,8 +94,8 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry sbShootSetPoint = shooterTab.addPersistent("Shoot SetPoint", 0).getEntry();
   private NetworkTableEntry sbAngleSetPoint = shooterTab.addPersistent("Angle SetPoint", 0).getEntry();
   private NetworkTableEntry sbTiltSetPoint = shooterTab.addPersistent("Tilt SetPoint", 0).getEntry();
-  public NetworkTableEntry sbLeftPos = shooterTab.addPersistent("Angle Center Left Limit", 0).getEntry();
-  public NetworkTableEntry sbRightPos = shooterTab.addPersistent("Angle Center Right Limit", 0).getEntry();
+  // public NetworkTableEntry sbLeftPos = shooterTab.addPersistent("Angle Center Left Limit", 0).getEntry();
+  // public NetworkTableEntry sbRightPos = shooterTab.addPersistent("Angle Center Right Limit", 0).getEntry();
 
   public Shooter() {
     System.out.println("+++++ Shooter Constructor starting ...");
@@ -230,10 +230,18 @@ public class Shooter extends SubsystemBase {
 		return angleMotor.getSelectedSensorPosition() / YawConstants.kTicsPerDegree;
 	}
 
-  public void setAnglePosition(double deg) {
-    angleSetPoint = deg;
-    angleMotor.set(ControlMode.Position, deg * YawConstants.kTicsPerDegree);
-  }
+	public void setAnglePosition(double deg) {
+		angleSetPoint = deg;
+		angleMotor.set(ControlMode.Position, deg * YawConstants.kTicsPerDegree);
+	}
+	
+	public double getTiltSetpoint() {
+		return tiltSetPoint;
+	}
+
+	public double getAngleSetpoint() {
+		return angleSetPoint;
+	}
 
   public void moveAngleLeft(double spd) {
     angleMotor.set(ControlMode.PercentOutput, -spd);
