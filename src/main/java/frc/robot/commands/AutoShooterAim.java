@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -55,8 +54,8 @@ public class AutoShooterAim extends CommandBase {
     y = dsy.getAsDouble();
     distance = (ShooterConstants.kTargetHeight - ShooterConstants.kCameraHeight)
         / Math.tan(ShooterConstants.kCameraAngle + y);
-    shooter.setTiltPosition(y);
-    shooter.setAnglePosition(x);
+    shooter.setTiltTarget(y);
+    shooter.setAngleTarget(x);
     // shooter.setAnglePosition(shooter.getAnglePosition() + x);
 
     // sbVisionX.setDouble(x);

@@ -64,8 +64,6 @@ public class Shooter extends SubsystemBase {
   public double valid = tv.getDouble(0.0);  // 0-1 has valid targets
 
   private double shootSetPoint = 0.0;
-  private double tiltSetPoint = 0.0;
-  private double angleSetPoint = 0.0;
 
   // private ShuffleboardTab shooterTab;
 
@@ -188,8 +186,8 @@ public class Shooter extends SubsystemBase {
 		sbAnglePos.setDouble(getAnglePosition());
 		sbTiltPos.setDouble(getTiltPosition());
 	  sbShootSetPoint.setDouble(shootSetPoint);
-    sbAngleSetPoint.setDouble(angleSetPoint);
-    sbTiltSetPoint.setDouble(tiltSetPoint);
+    sbAngleSetPoint.setDouble(getAngleTarget());
+    sbTiltSetPoint.setDouble(getTiltTarget());
     SmartDashboard.putBoolean("Left Limit Switch", getAngleLeftLimit());
     SmartDashboard.putBoolean("Right Limit Switch", getAngleRightLimit());
     SmartDashboard.putBoolean("Center Limit Switch", getAngleCenterPos());
@@ -230,9 +228,12 @@ public class Shooter extends SubsystemBase {
 		return angleMotor.getSelectedSensorPosition() / YawConstants.kTicsPerDegree;
 	}
 
-  public void setAnglePosition(double deg) {
-    angleSetPoint = deg;
+  public void setAngleTarget(double deg) {
     angleMotor.set(ControlMode.Position, deg * YawConstants.kTicsPerDegree);
+  }
+
+  public double getAngleTarget() {
+    return angleMotor.getClosedLoopTarget() / YawConstants.kTicsPerDegree;
   }
 
   public void moveAngleLeft(double spd) {
@@ -257,6 +258,7 @@ public class Shooter extends SubsystemBase {
 
   public void setAngleZeroPos() {
     angleMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
+    setAngleTarget(0.0);
   }
 
  	public double getTiltVelocity() {
@@ -267,15 +269,19 @@ public class Shooter extends SubsystemBase {
     return tiltMotor.getSelectedSensorPosition() / TiltConstants.kTicsPerDegree;
   }
 
-  public void setTiltPosition(double deg) {
-    tiltSetPoint = deg;
+  public void setTiltTarget(double deg) {
     tiltMotor.set(ControlMode.Position, deg * TiltConstants.kTicsPerDegree);
+  }
+
+  public double getTiltTarget() {
+    return tiltMotor.getClosedLoopTarget() / TiltConstants.kTicsPerDegree;
   }
 
   public void setTiltZeroPos() {
     // tilt angle at initialization is not Zero.  Set to kMinDeg
     int tics = (int)Math.round(TiltConstants.kMinDeg * TiltConstants.kTicsPerDegree);
     tiltMotor.getSensorCollection().setQuadraturePosition(tics, CANidConstants.kTimeoutMs);
+    setTiltTarget(TiltConstants.kMinDeg);
   }
 
   public void moveTiltDown(double spd) {

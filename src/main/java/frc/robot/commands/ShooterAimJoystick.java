@@ -27,6 +27,8 @@ public class ShooterAimJoystick extends CommandBase {
 	double tiltNew = 0;
 	double yawNew = 0;
 
+	double deadZone = 0.01;
+
 	/**
 	 * Creates a new AimShooter.
 	 */
@@ -50,17 +52,21 @@ public class ShooterAimJoystick extends CommandBase {
 		// Disable until Yaw PID is adjusted
 		yawCmd = 0.0;	// yawJoystick.getAsDouble();
 
+		// Zero out deadZone to avoid creep
+		tiltCmd = (Math.abs(tiltCmd) < deadZone ? 0.0 : tiltCmd);
+		yawCmd = (Math.abs(yawCmd) < deadZone ? 0.0 : yawCmd);
+	
 		// Calculate new target as Curr Target + Increment 
-		tiltNew = shooter.getTiltPosition() + (tiltCmd * TiltConstants.kRateDpS);
-		yawNew = shooter.getAnglePosition() + (yawCmd * YawConstants.kRateDpS);
+		tiltNew = shooter.getTiltTarget() + (tiltCmd * TiltConstants.kRateDpS);
+		yawNew = shooter.getAngleTarget() + (yawCmd * YawConstants.kRateDpS);
 
 		// Clamp new targets to min and max values
 		tiltNew = Math.max(TiltConstants.kMinDeg, Math.min(TiltConstants.kMaxDeg, tiltNew));
 		yawNew = Math.max(YawConstants.kMinDeg, Math.min(YawConstants.kMaxDeg, yawNew));
 
-		// Update controllers with new targets
-		shooter.setTiltPosition(tiltNew);
-		shooter.setAnglePosition(yawNew);
+		// Update motor controllers with new targets
+		shooter.setTiltTarget(tiltNew);
+		shooter.setAngleTarget(yawNew);
 	}
 
 	// Called once the command ends or is interrupted.

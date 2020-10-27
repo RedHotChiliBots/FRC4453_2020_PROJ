@@ -7,9 +7,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import frc.robot.Constants.YawConstants;
 import frc.robot.subsystems.Shooter;
 
@@ -53,8 +51,6 @@ public class ShooterAngleCenter extends CommandBase {
   @Override
   public boolean isFinished() {
     if (leftPos != 0 && rightPos != 0) {
-      shooter.setAnglePosition((leftPos + rightPos) / 2.0);
-      shooter.setAngleZeroPos();
       return true;
     } else {
       return false;
@@ -64,5 +60,7 @@ public class ShooterAngleCenter extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
+    shooter.setAngleTarget((leftPos + rightPos) / 2.0);
+    shooter.setAngleZeroPos();
   }
 }

@@ -39,32 +39,32 @@ public class ShooterAim extends CommandBase {
     if ((counter % 25) == 0) {
       switch (deg) {
       case 0:
-        shooter.setTiltPosition(shooter.getTiltPosition() + tiltInc);
+        shooter.setTiltTarget(shooter.getTiltPosition() + tiltInc);
         break;
       case 1:
-        shooter.setTiltPosition(shooter.getTiltPosition() + tiltInc);
-        shooter.setAnglePosition(shooter.getAnglePosition() + angleInc);
+        shooter.setTiltTarget(shooter.getTiltPosition() + tiltInc);
+        shooter.setAngleTarget(shooter.getAnglePosition() + angleInc);
         break;
       case 2:
-        shooter.setAnglePosition(shooter.getAnglePosition() + angleInc);
+        shooter.setAngleTarget(shooter.getAnglePosition() + angleInc);
         break;
       case 3:
-        shooter.setTiltPosition(shooter.getTiltPosition() - tiltInc);
-        shooter.setAnglePosition(shooter.getAnglePosition() + angleInc);
+        shooter.setTiltTarget(shooter.getTiltPosition() - tiltInc);
+        shooter.setAngleTarget(shooter.getAnglePosition() + angleInc);
         break;
       case 4:
-        shooter.setTiltPosition(shooter.getTiltPosition() - tiltInc);
+        shooter.setTiltTarget(shooter.getTiltPosition() - tiltInc);
         break;
       case 5:
-        shooter.setTiltPosition(shooter.getTiltPosition() - tiltInc);
-        shooter.setAnglePosition(shooter.getAnglePosition() - angleInc);
+        shooter.setTiltTarget(shooter.getTiltPosition() - tiltInc);
+        shooter.setAngleTarget(shooter.getAnglePosition() - angleInc);
         break;
       case 6:
-        shooter.setAnglePosition(shooter.getAnglePosition() - angleInc);
+        shooter.setAngleTarget(shooter.getAnglePosition() - angleInc);
         break;
       case 7:
-        shooter.setTiltPosition(shooter.getTiltPosition() + tiltInc);
-        shooter.setAnglePosition(shooter.getAnglePosition() - angleInc);
+        shooter.setTiltTarget(shooter.getTiltPosition() + tiltInc);
+        shooter.setAngleTarget(shooter.getAnglePosition() - angleInc);
         break;
       }
     }
