@@ -39,6 +39,7 @@ import frc.robot.commands.CollectorArmInit;
 import frc.robot.commands.CollectorExtend;
 import frc.robot.commands.CollectorRetract;
 import frc.robot.commands.CollectorStop;
+import frc.robot.commands.CollectorIntake;
 import frc.robot.commands.DriveArcade;
 import frc.robot.commands.DriveTank;
 import frc.robot.commands.HopperLoad;
@@ -150,7 +151,7 @@ public class RobotContainer {
 		collector.setDefaultCommand(new CollectorStop(collector));
 		hopper.setDefaultCommand(new HopperStop(hopper));
 //		shooter.setDefaultCommand(new ShooterStop(shooter));
-		shooter.setDefaultCommand(new ShooterAimJoystick(() -> m_operator.getY(Hand.kLeft), () -> m_operator.getX(Hand.kLeft), shooter));
+		shooter.setDefaultCommand(new ShooterAimJoystick(() -> getOperatorLY(), () -> getOperatorLX(), shooter));
 		spinner.setDefaultCommand(new SpinnerStop(spinner));
 
 		System.out.println("Default Commands Set");
@@ -228,18 +229,17 @@ public class RobotContainer {
 		// JoystickButton(m_operator, Button.kStart.value))
 		// .whileActiveOnce(new HopperLoad(hopper, true));
 
-		new JoystickButton(m_operator, Button.kBack.value).whileActiveOnce(new HopperLoad(hopper, true));
+		// new JoystickButton(m_operator, Button.kBack.value).whileActiveOnce(new HopperLoad(hopper, true));
 
 		// new JoystickButton(m_operator, Button.kB.value).whenPressed(new
 		// HopperShoot(hopper, shooter));
 
-		// new JoystickButton(m_operator, Button.kY.value).whenPressed(new
-		// CollectorIntake(collector));
+		new JoystickButton(m_operator, Button.kY.value).whenPressed(new CollectorIntake(collector));
 
 		new JoystickButton(m_driver, Button.kStart.value).whenPressed(new HopperShoot(hopper, shooter));
 
-		// new JoystickButton(m_driver, Button.kBack.value).whenPressed(new
-		// CollectorStop(collector));
+		new JoystickButton(m_driver, Button.kBack.value).whenPressed(new
+		CollectorStop(collector));
 
 		// new JoystickButton(m_driver, Button.kX.value).whenPressed(new
 		// CollectorReject(collector));
@@ -252,7 +252,7 @@ public class RobotContainer {
 		new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new ShooterAngleInit(shooter));
 		new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new ShooterTiltInit(shooter));
 
-		new JoystickButton(m_operator, Button.kY.value).whenPressed(new ShooterShoot(shooter));
+		// new JoystickButton(m_operator, Button.kY.value).whenPressed(new ShooterShoot(shooter));
 
 		// new JoystickButton(m_operator, Button.kStart.value).whenPressed(new
 		// ShooterStop(shooter));

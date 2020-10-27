@@ -33,7 +33,7 @@ public class CollectorArmInit extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return collector.getArmAmps() > CollectArmConstants.kCollectArmAmps;
+    return Math.abs(collector.getArmAmps()) > CollectArmConstants.kCollectArmAmps;
   }
 
   // Called once after isFinished returns true

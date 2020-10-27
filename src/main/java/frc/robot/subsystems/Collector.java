@@ -83,9 +83,9 @@ public class Collector extends SubsystemBase {
 				CANidConstants.kTimeoutMs);
 
 		// Conifigure motor controller
-		collectorMotor.setSensorPhase(false); // Positive Sensor Reading should match Green (blinking) Leds on Talon
+		// collectorMotor.setSensorPhase(false); // Positive Sensor Reading should match Green (blinking) Leds on Talon
 		collectorMotor.setNeutralMode(NeutralMode.Brake); // Brake motor on neutral input
-		collectorMotor.setInverted(true); // Run motor in normal rotation with positive input
+		collectorMotor.setInverted(false); // Run motor in normal rotation with positive input
 
 		/* Config the peak and nominal outputs */
 		collectorMotor.configNominalOutputForward(0, CANidConstants.kTimeoutMs);

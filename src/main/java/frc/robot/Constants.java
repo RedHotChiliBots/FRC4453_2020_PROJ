@@ -146,17 +146,17 @@ public final class Constants {
 	}
 
 	public final static class YawConstants {
-		public static final double kP = 0.0005;
-		public static final double kI = 0.0;
+		public static final double kP = 0.01;
+		public static final double kI = 0.000015;
 		public static final double kD = 0;
 		public static final double kIz = 0;
 		public static final double kFF = 0;
 		public static final double kMinOutput = 0.0;
 		public static final double kMaxOutput = 0.5;
 
-		public static final double kMinDeg = -100.0;
-		public static final double kMaxDeg = 100.0;
-		public static final double kMaxSec = 4.0;
+		public static final double kMinDeg = -140.0;
+		public static final double kMaxDeg = 140.0;
+		public static final double kMaxSec = 2.0;
 		public static final double kRangeDeg = kMaxDeg - kMinDeg;
 		public static final double kRateDpS = kRangeDeg / kMaxSec / 50.0;	// 50x per second
 

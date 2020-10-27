@@ -33,7 +33,7 @@ public class ShooterTiltInit extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return shooter.getTiltAmps() > TiltConstants.kTiltAmps;
+    return Math.abs(shooter.getTiltAmps()) > TiltConstants.kTiltAmps;
   }
 
   // Called once after isFinished returns true

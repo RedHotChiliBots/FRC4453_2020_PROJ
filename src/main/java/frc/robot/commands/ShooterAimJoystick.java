@@ -51,7 +51,7 @@ public class ShooterAimJoystick extends CommandBase {
 		tiltCmd = -tiltJoystick.getAsDouble();
 		System.out.println("tiltCmd " + tiltCmd);
 		// Disable until Yaw PID is adjusted
-		yawCmd = 0.0;	// -yawJoystick.getAsDouble();
+		yawCmd = yawJoystick.getAsDouble();	// -yawJoystick.getAsDouble();
 
 		// Zero out deadZone to avoid creep
 		tiltCmd = (Math.abs(tiltCmd) < deadZone ? 0.0 : tiltCmd);
