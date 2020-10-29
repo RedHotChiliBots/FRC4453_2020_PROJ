@@ -286,19 +286,17 @@ public final class Constants {
 
 		public static final double kStopPos = 0.0;
 		public static final double kMinPos = 0.0;
-		public static final double kMaxPos = 4540.8;
+		public static final double kMaxPos = 90.0;
 
-		public static final double kWheelCirc = 2.5 * Math.PI; // inches
-		public static final int kEncoderResolution = 42; // not used, NEO's native units are rotations
 		public static final double kGearBoxRatio = 100.0;
-		public static final double kVelFactor = kWheelCirc / kGearBoxRatio / 60.0; // Meters per Second
+		public static final double kRotationConvert = kGearBoxRatio / 360.0;
 
 		public static final double kMaxVelocity = 35.0 / 3.0; // inches per second
 		public static final double kStopRPMs = 0.0; // inches per second
 		public static final double kShooterShootRPMs = kMaxPos;
 
 		public static final double kExtendPos = kMaxPos;
-		public static final double kRetractPos = 0.0;
+		public static final double kRetractPos = kMinPos;
 		
 		public static final double kArmFindSpeed = 0.5;
 	}

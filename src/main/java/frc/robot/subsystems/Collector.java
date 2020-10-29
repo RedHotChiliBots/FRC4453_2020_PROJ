@@ -74,6 +74,8 @@ public class Collector extends SubsystemBase {
 		collectArmPIDController.setFF(CollectArmConstants.kFF);
 		collectArmPIDController.setOutputRange(CollectArmConstants.kMinOutput, CollectArmConstants.kMaxOutput);
 
+		collectArmEncoder.setPositionConversionFactor(CollectArmConstants.kRotationConvert);
+		
 		/* Factory Default all hardware to prevent unexpected behaviour */
 		collectorMotor.configFactoryDefault();
 		collectorMotor.clearStickyFaults();
@@ -178,9 +180,16 @@ public class Collector extends SubsystemBase {
 		collectArmMotor.set(spd);
 	}
 
-	public void setArmZeroPos() {
-		// collectArmEncoder.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
-	//	collectArmMotor.set
+	public void setArmTarget(double tgt) {
+		collectArmPIDController.setReference(tgt, ControlType.kPosition);
+	}
+
+	public void setArmPostition(double tgt) {
+		collectArmEncoder.setPosition(tgt);
+	}
+
+	public double getArmPosition() {
+		return collectArmEncoder.getPosition();
 	}
 
 	public double getArmAmps() {

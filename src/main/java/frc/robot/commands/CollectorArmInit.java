@@ -38,7 +38,8 @@ public class CollectorArmInit extends CommandBase {
 
   // Called once after isFinished returns true
   @Override
-	public void end(boolean interrupted) {
-      collector.setArmZeroPos();
+  public void end(boolean interrupted) {
+      collector.setArmPostition(CollectArmConstants.kMinPos);
+      collector.setArmTarget(CollectArmConstants.kMinPos);
   }
 }
