@@ -74,7 +74,7 @@ public class Collector extends SubsystemBase {
 		collectArmPIDController.setFF(CollectArmConstants.kFF);
 		collectArmPIDController.setOutputRange(CollectArmConstants.kMinOutput, CollectArmConstants.kMaxOutput);
 
-		collectArmEncoder.setPositionConversionFactor(CollectArmConstants.kRotationConvert);
+		collectArmEncoder.setPositionConversionFactor(CollectArmConstants.kDegreesToRotations);
 		
 		/* Factory Default all hardware to prevent unexpected behaviour */
 		collectorMotor.configFactoryDefault();
@@ -101,6 +101,8 @@ public class Collector extends SubsystemBase {
 		collectorMotor.config_kI(CANidConstants.kPIDLoopIdx, CollectorConstants.kI, CANidConstants.kTimeoutMs);
 		collectorMotor.config_kD(CANidConstants.kPIDLoopIdx, CollectorConstants.kD, CANidConstants.kTimeoutMs);
 
+		collectorStop();
+		
 		System.out.println("----- Collector Constructor finished ...");
 	}
 

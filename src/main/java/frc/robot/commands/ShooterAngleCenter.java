@@ -15,6 +15,8 @@ public class ShooterAngleCenter extends CommandBase {
 
   private final Shooter shooter;
   private boolean movingLeft = true;
+  private boolean thisFound = false;
+  private boolean lastFound = false;
   private double leftPos = 0;
   private double rightPos = 0;
 
@@ -28,22 +30,41 @@ public class ShooterAngleCenter extends CommandBase {
   public void initialize() {
     shooter.moveAngleLeft(YawConstants.kAngleCenterSpeed);
     movingLeft = true;
+    thisFound = shooter.getAngleCenterPos();
+    lastFound = shooter.getAngleCenterPos();
+    leftPos = 0;
+    rightPos = 0;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    if (!shooter.getAngleCenterPos()) {
+    // capture current Center position
+    thisFound = shooter.getAngleCenterPos();
+
+    // if transition from not seeing Center to seeing Center, capture angle
+    if (thisFound && (thisFound != lastFound)) {
+      if (movingLeft) {
+        leftPos = shooter.getAnglePosition();
+      } else {
+        rightPos = shooter.getAnglePosition();
+      }
+    }
+
+    // if transition off Center position, switch direction
+    if (!thisFound && (thisFound != lastFound)) {
       if (movingLeft) {
         movingLeft = false;
-        leftPos = shooter.getAnglePosition();
         shooter.moveAngleRight(YawConstants.kAngleCenterSpeed);
       } else if (!movingLeft) {
         movingLeft = true;
-        rightPos = shooter.getAnglePosition();
         shooter.moveAngleLeft(YawConstants.kAngleCenterSpeed);
       }
     }
+
+    // reset last found
+    lastFound = thisFound;
+
     // shooter.sbLeftPos.setDouble(leftPos);
     // shooter.sbRightPos.setDouble(rightPos);
   }

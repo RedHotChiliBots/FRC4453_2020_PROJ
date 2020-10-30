@@ -181,10 +181,10 @@ public class RobotContainer {
 		// =============================================================
 		// Define Operator controls, buttons, bumpers, etc.
 		new JoystickButton(m_driver, Button.kA.value)
-				.whenPressed(new DriveTank(() -> getDriveLY(), () -> getDriveRX(), chassis));
-
+				.whenPressed(new DriveTank(() -> getDriverLY(), () -> getDriverRY(), chassis));
+				
 		new JoystickButton(m_driver, Button.kB.value)
-				.whenPressed(new DriveArcade(() -> getDriveLY(), () -> getDriveLX(), chassis));
+				.whenPressed(new DriveArcade(() -> getDriverLY(), () -> getDriverLX(), chassis));
 
 		// new JoystickButton(m_driver,
 		// Button.kX.value).whenPressed(autonDriveJoystick);
@@ -278,17 +278,17 @@ public class RobotContainer {
 		m_operator.setRumble(t, 0);
 	}
 
-	public double getDriveLX() {
+	public double getDriverLX() {
 		double v = m_driver.getX(Hand.kLeft);
 		return Math.abs(v) < DEADZONE ? 0.0 : v;
 	}
 
-	public double getDriveLY() {
+	public double getDriverLY() {
 		double v = m_driver.getY(Hand.kLeft);
 		return Math.abs(v) < DEADZONE ? 0.0 : v;
 	}
 
-	public double getDriveRX() {
+	public double getDriverRX() {
 		double v = m_driver.getX(Hand.kRight);
 		return Math.abs(v) < DEADZONE ? 0.0 : v;
 	}

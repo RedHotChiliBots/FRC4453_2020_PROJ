@@ -172,6 +172,8 @@ public class Shooter extends SubsystemBase {
 
     tiltMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
 
+    stopTilt();
+    stopAngle();
     setShootVelocity(ShooterConstants.kStopRPMs);
 
     System.out.println("----- Shooter Constructor finished ...");

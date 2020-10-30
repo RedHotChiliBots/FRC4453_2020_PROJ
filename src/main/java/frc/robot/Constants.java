@@ -291,7 +291,7 @@ public final class Constants {
 		public static final double kMaxPos = 90.0;
 
 		public static final double kGearBoxRatio = 100.0;
-		public static final double kRotationConvert = kGearBoxRatio / 360.0;
+		public static final double kDegreesToRotations = kGearBoxRatio / 360.0;
 
 		public static final double kMaxVelocity = 35.0 / 3.0; // inches per second
 		public static final double kStopRPMs = 0.0; // inches per second
