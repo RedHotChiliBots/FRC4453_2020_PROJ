@@ -272,7 +272,9 @@ public final class Constants {
 
 	public static final class CollectArmConstants {
 		public static final int kCollectArmPowerIndex = 7;
-		public static final double kCollectArmAmps = 0.5;
+
+		public static final double kArmFindSpeed = 0.3;
+		public static final double kCollectArmAmps = 15.0;
 
 		public static final double kP = 0.00008;
 		public static final double kI = 0.0;
@@ -297,8 +299,6 @@ public final class Constants {
 
 		public static final double kExtendPos = kMaxPos;
 		public static final double kRetractPos = kMinPos;
-		
-		public static final double kArmFindSpeed = 0.5;
 	}
 
 	public final static class HopperConstants {

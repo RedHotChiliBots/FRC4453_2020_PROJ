@@ -42,8 +42,8 @@ public class Collector extends SubsystemBase {
 
 	private final TalonSRX collectorMotor = new TalonSRX(CANidConstants.kCollectorMotor);
 
-	private double collectArmSetPoint;
-	private double collectorSetPoint;
+	private double collectorArmTarget;
+	private double collectorTarget;
 
 	// climberSolenoid.set(kOff);
 	// climberSolenoid.set(kForward);
@@ -65,7 +65,7 @@ public class Collector extends SubsystemBase {
 		collectArmMotor.clearFaults();
 
 		collectArmMotor.setIdleMode(IdleMode.kBrake);
-		collectArmMotor.setInverted(true);
+		collectArmMotor.setInverted(false);
 
 		collectArmPIDController.setP(CollectArmConstants.kP);
 		collectArmPIDController.setI(CollectArmConstants.kI);
@@ -87,7 +87,7 @@ public class Collector extends SubsystemBase {
 		// Conifigure motor controller
 		// collectorMotor.setSensorPhase(false); // Positive Sensor Reading should match Green (blinking) Leds on Talon
 		collectorMotor.setNeutralMode(NeutralMode.Brake); // Brake motor on neutral input
-		collectorMotor.setInverted(false); // Run motor in normal rotation with positive input
+		collectorMotor.setInverted(true); // Run motor in normal rotation with positive input
 
 		/* Config the peak and nominal outputs */
 		collectorMotor.configNominalOutputForward(0, CANidConstants.kTimeoutMs);
@@ -108,8 +108,8 @@ public class Collector extends SubsystemBase {
 	public void periodic() {
 
 		sbCollectArmVel.setDouble(getCollectArmPosition());
-		sbCollectArmSetPoint.setDouble(collectArmSetPoint);
-		sbCollectorTgt.setDouble(collectorSetPoint);
+		sbCollectArmSetPoint.setDouble(collectorArmTarget);
+		sbCollectorTgt.setDouble(collectorTarget);
 		sbCollectorVel.setDouble(getCollectorRPMs());
 		sbCollectArmAmps.setDouble(getArmAmps());
 
@@ -137,8 +137,8 @@ public class Collector extends SubsystemBase {
 	}
 
 	public void setCollectArmPosition(double pos) {
-		this.collectArmSetPoint = lib.Clip(pos, CollectArmConstants.kMaxPos, CollectArmConstants.kMinPos);
-		collectArmPIDController.setReference(collectArmSetPoint, ControlType.kPosition);
+		this.collectorArmTarget = lib.Clip(pos, CollectArmConstants.kMaxPos, CollectArmConstants.kMinPos);
+		collectArmPIDController.setReference(collectorArmTarget, ControlType.kPosition);
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class Collector extends SubsystemBase {
 	 * @param rpm - desired speed (rpms) of motor/gearbox
 	 */
 	public void setCollectorRPMs(double rpm) {
-		collectorSetPoint = rpm;
+		collectorTarget = rpm;
 		collectorMotor.set(ControlMode.Velocity, rpm * CollectorConstants.kVelFactor);
 	}
 
