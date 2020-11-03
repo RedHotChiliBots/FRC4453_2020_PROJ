@@ -20,20 +20,20 @@ public class AUTONRENDEZVOUSTRENCH extends SequentialCommandGroup {
    */
   public AUTONRENDEZVOUSTRENCH(Shooter shooter, Collector collector, Hopper hopper, Chassis chassis) {
    addCommands(new ShooterInit(shooter), 
-			new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()),
+			new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()),
 			new SHOOT(collector, hopper, shooter),
 		// move to Rendevous Zone and collect and shoot there
 			new AutonDriveTrajectory(chassis.lineToRendezvousTrajectory, chassis),
 			new ParallelRaceGroup(new AutonDriveTrajectory(chassis.rendezvousPickUpTrajectory, chassis),
 				new COLLECT(collector, hopper, false)),
-			new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()), 
+			new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()), 
 			new SHOOT(collector, hopper, shooter),
 		// Move from Rendezvous to trench, collect and shoot there
 			new AutonDriveTrajectory(chassis.rendezvousToTrenchTrajectory, chassis),
 			new ParallelRaceGroup(new
 				AutonDriveTrajectory(chassis.trenchPickUpTrajectory, chassis),
 				new COLLECT(collector, hopper, false)),
-			new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()),
+			new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()),
 				new SHOOT(collector, hopper, shooter));
 
   }

@@ -55,13 +55,15 @@ public class Shooter extends SubsystemBase {
   NetworkTableEntry tx = table.getEntry("tx");
   NetworkTableEntry ty = table.getEntry("ty");
   NetworkTableEntry ta = table.getEntry("ta");
-//  NetworkTableEntry tv = table.getEntry("tv");
+  NetworkTableEntry ts = table.getEntry("ts");
+  NetworkTableEntry tv = table.getEntry("tv");
 
   // read values periodically
-  public double x = tx.getDouble(0.0);  // +-27.0 degrees from crosshair to target
-  public double y = ty.getDouble(0.0);  // +-20.5 degrees from crosshair to target
+  public double x = tx.getDouble(0.0);  // +-29.8.0 degrees from crosshair to target
+  public double y = ty.getDouble(0.0);  // +-24.85 degrees from crosshair to target
   public double area = ta.getDouble(0.0); // 0% to 100% of image
-//  public double valid = tv.getDouble(0.0);  // 0-1 has valid targets
+  public double skew = ts.getDouble(0.0); // Rotation, -90 deg to 0 deg
+  public double valid = tv.getDouble(0.0);  // 0-1 has valid targets
 
   private double shootSetPoint = 0.0;
 
@@ -71,6 +73,8 @@ public class Shooter extends SubsystemBase {
   // SmartDashboard.putNumber("LimelightX", x);
   // SmartDashboard.putNumber("LimelightY", y);
   // SmartDashboard.putNumber("LimelightArea", area);
+  // SmartDashboard.putNumber("LimelightSkew", skew);
+  // SmartDashboard.putNumber("LimelightValid", valid);
 
   // private CANDigitalInput angleLim;
   // angleLim = null;
@@ -83,7 +87,6 @@ public class Shooter extends SubsystemBase {
 
   private final ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
 	private NetworkTableEntry sbTiltAmps = shooterTab.addPersistent("Tilt Amps", 0).getEntry();
-	private NetworkTableEntry sbPosFactor = shooterTab.addPersistent("Pos Factor", 0).getEntry();
 	private NetworkTableEntry sbShootVel = shooterTab.addPersistent("ShootVelocity", 0).getEntry();
   private NetworkTableEntry sbAnglePos = shooterTab.addPersistent("Angle Position", 0).getEntry();
   private NetworkTableEntry sbTiltPos = shooterTab.addPersistent("Tilt Position", 0).getEntry();
@@ -92,8 +95,9 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry sbShootSetPoint = shooterTab.addPersistent("Shoot SetPoint", 0).getEntry();
   private NetworkTableEntry sbAngleSetPoint = shooterTab.addPersistent("Angle SetPoint", 0).getEntry();
   private NetworkTableEntry sbTiltSetPoint = shooterTab.addPersistent("Tilt SetPoint", 0).getEntry();
-  // public NetworkTableEntry sbLeftPos = shooterTab.addPersistent("Angle Center Left Limit", 0).getEntry();
-  // public NetworkTableEntry sbRightPos = shooterTab.addPersistent("Angle Center Right Limit", 0).getEntry();
+  private NetworkTableEntry sbLeftPos = shooterTab.addPersistent("Angle Center Left Pos", 0).getEntry();
+  private NetworkTableEntry sbRightPos = shooterTab.addPersistent("Angle Center Right Pos", 0).getEntry();
+  private NetworkTableEntry sbCenterPos = shooterTab.addPersistent("Angle Center Center Pos", 0).getEntry();
 
   public Shooter() {
     System.out.println("+++++ Shooter Constructor starting ...");
@@ -181,15 +185,17 @@ public class Shooter extends SubsystemBase {
 
   public void periodic() {
   	sbTiltAmps.setDouble(getTiltAmps());
-		sbPosFactor.setDouble(YawConstants.kTicsPerDegree);
-		sbShootVel.setDouble(getShootVelocity());
-		sbAngleVelocity.setDouble(getAngleVelocity());
-		sbTiltVelocity.setDouble(getTiltVelocity());
-		sbAnglePos.setDouble(getAnglePosition());
-		sbTiltPos.setDouble(getTiltPosition());
-	  sbShootSetPoint.setDouble(shootSetPoint);
-    sbAngleSetPoint.setDouble(getAngleTarget());
     sbTiltSetPoint.setDouble(getTiltTarget());
+    sbTiltPos.setDouble(getTiltPosition());
+    sbTiltVelocity.setDouble(getTiltVelocity());
+
+    sbAngleSetPoint.setDouble(getAngleTarget());
+    sbAnglePos.setDouble(getAnglePosition());
+    sbAngleVelocity.setDouble(getAngleVelocity());
+
+		sbShootSetPoint.setDouble(shootSetPoint);
+    sbShootVel.setDouble(getShootVelocity());
+       
     SmartDashboard.putBoolean("Left Limit Switch", getAngleLeftLimit());
     SmartDashboard.putBoolean("Right Limit Switch", getAngleRightLimit());
     SmartDashboard.putBoolean("Center Limit Switch", getAngleCenterPos());
@@ -295,12 +301,24 @@ public class Shooter extends SubsystemBase {
     //return pdp.getCurrent(TiltConstants.kTiltPowerIndex);
   }
 
-  public double getX() {
+  public double getTgtX() {
     return tx.getDouble(0.0);
   }
 
-  public double getY() {
+  public double getTgtY() {
     return ty.getDouble(0.0);
+  }
+
+  public double getTgtArea() {
+    return ty.getDouble(0.0);
+  }
+
+  public double getTgtSkew() {
+    return ty.getDouble(0.0);
+  }
+
+  public boolean getTgtValid() {
+    return (ty.getDouble(0.0)==0 ? false : true);
   }
 
   // public boolean isLimit() {

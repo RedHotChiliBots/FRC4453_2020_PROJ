@@ -143,6 +143,7 @@ public final class Constants {
 		public static final double kCameraAngle = 0.0;
 		public static final double kCameraHeight = 48.0;
 		public static final double kTargetHeight = 85.0;
+		public static final double kDistToTarget = kTargetHeight - kCameraHeight;
 	}
 
 	public final static class YawConstants {

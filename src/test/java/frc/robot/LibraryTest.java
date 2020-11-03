@@ -2,7 +2,6 @@ package frc.robot;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import frc.robot.Library;
 
 public class LibraryTest {
 
@@ -11,6 +10,7 @@ public class LibraryTest {
 	final double DELTA = 0.000001;
 	int intResult = 0;
 	double dblResult = 0.0;
+	double[] dblArray = {0.0, 0.0};
 
 	@Test
 	public void testClipInt() throws Exception {
@@ -42,4 +42,23 @@ public class LibraryTest {
 		assertEquals(20.0, dblResult, DELTA);
 	}
 
+	@Test
+	public void testCalcSkewAngle() throws Exception {
+		dblResult = lib.calcSkewAngle(10.0);
+		assertEquals(10.0, dblResult, DELTA);
+	}
+
+	@Test
+	public void testCalcTiltAngle() throws Exception {
+		dblResult = lib.calcTiltAngle(10.0);
+		assertEquals(10.0, dblResult, DELTA);
+	}
+
+	@Test
+	public void testTgtCmd() throws Exception {
+		dblArray = lib.tgtCmd(10.0, 20.0, 30.0);
+		System.out.println("X " + dblArray[0] + "  Y " + dblArray[1]/12);
+		assertEquals(-10.0, dblArray[0], DELTA);
+		assertEquals(10.2563564, dblArray[1]/12, DELTA);
+	}
 }

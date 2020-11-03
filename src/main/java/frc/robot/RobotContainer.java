@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
@@ -42,7 +43,6 @@ import frc.robot.commands.CollectorStop;
 import frc.robot.commands.CollectorIntake;
 import frc.robot.commands.DriveArcade;
 import frc.robot.commands.DriveTank;
-import frc.robot.commands.HopperLoad;
 import frc.robot.commands.HopperShoot;
 import frc.robot.commands.HopperStop;
 import frc.robot.commands.ShooterAim;
@@ -51,7 +51,6 @@ import frc.robot.commands.ShooterAimStop;
 import frc.robot.commands.ShooterAngleDeg;
 import frc.robot.commands.ShooterAngleInit;
 import frc.robot.commands.ShooterInit;
-import frc.robot.commands.ShooterShoot;
 import frc.robot.commands.ShooterTiltInit;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStop;
@@ -80,7 +79,6 @@ public class RobotContainer {
 	public final Climber climber = new Climber();
 	public final Collector collector = new Collector();
 	public final Hopper hopper = new Hopper();
-
 
 
 	// =============================================================
@@ -114,9 +112,9 @@ public class RobotContainer {
 	// Define chooser for autonomous commands
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-	//
+	// =============================================================
+	// Create tabs on shuffleboard for each subsystem
 	ShuffleboardTab chassisTab = Shuffleboard.getTab("Chassis");
-//	ShuffleboardTab pneumaticsTab = Shuffleboard.getTab("Pneumatics");
 	ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
 	ShuffleboardTab climberTab = Shuffleboard.getTab("Climber");
 	ShuffleboardTab spinnerTab = Shuffleboard.getTab("Spinner");
@@ -124,7 +122,7 @@ public class RobotContainer {
 	ShuffleboardTab hopperTab = Shuffleboard.getTab("Hopper");
 	ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
 
-	
+	NetworkTableEntry sbChassisSub = shooterTab.addPersistent("Chassis", 0).getEntry();
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -134,7 +132,9 @@ public class RobotContainer {
 		// Configure the button bindings
 		configureButtonBindings();
 
+		// =============================================================
 		// Add subsystems to dashboard
+		sbChassisSub.setValue(chassis);
 		SmartDashboard.putData("Chassis", chassis);
 		SmartDashboard.putData("Shooter", shooter);
 		SmartDashboard.putData("Climber", climber);
@@ -142,7 +142,6 @@ public class RobotContainer {
 		SmartDashboard.putData("Collector", collector);
 		SmartDashboard.putData("Hopper", hopper);
 
-		System.out.println("Subsystems are put on Shuffleboard");
 		// =============================================================
 		// Configure default commands for each subsystem
 		chassis.setDefaultCommand(
@@ -153,8 +152,6 @@ public class RobotContainer {
 //		shooter.setDefaultCommand(new ShooterStop(shooter));
 		shooter.setDefaultCommand(new ShooterAimJoystick(() -> getOperatorLY(), () -> getOperatorLX(), shooter));
 		spinner.setDefaultCommand(new SpinnerStop(spinner));
-
-		System.out.println("Default Commands Set");
 
 		// =============================================================
 		// Build chooser for autonomous commands
@@ -168,7 +165,7 @@ public class RobotContainer {
 
 		SmartDashboard.putData("Auton Chooser", m_chooser);
 		System.out.println("Options added to AutonChooser");
-		}
+	}
 
 	/**
 	 * Use this method to define your button->command mappings. Buttons can be
@@ -245,7 +242,7 @@ public class RobotContainer {
 		// CollectorReject(collector));
 
 		new JoystickButton(m_driver, Button.kY.value)
-				.whenPressed(new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()));
+				.whenPressed(new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()));
 
 		new JoystickButton(m_driver, Button.kX.value).whenPressed(new ShooterAimStop(shooter));
 

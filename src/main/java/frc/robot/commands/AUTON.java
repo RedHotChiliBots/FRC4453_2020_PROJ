@@ -18,7 +18,7 @@ public class AUTON extends SequentialCommandGroup {
    */
 
   public AUTON(Shooter shooter, Collector collector, Hopper hopper) {
-    addCommands(new ShooterInit(shooter), new AutoShooterAim(shooter, () -> shooter.getX(), () -> shooter.getY()),
+    addCommands(new ShooterInit(shooter), new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()),
         new SHOOT(collector, hopper, shooter) /* , new AutonDriveTrajectory() */);
     // Add Commands here:
     // e.g. addSequential(new Command1());
