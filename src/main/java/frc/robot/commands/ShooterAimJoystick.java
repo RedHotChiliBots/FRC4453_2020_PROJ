@@ -27,7 +27,7 @@ public class ShooterAimJoystick extends CommandBase {
 	double tiltNew = 0;
 	double yawNew = 0;
 
-	double deadZone = 0.01;
+	double deadZone = 0.025;
 
 	/**
 	 * Creates a new AimShooter.
