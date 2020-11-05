@@ -27,8 +27,6 @@ public class ShooterAimJoystick extends CommandBase {
 	double tiltNew = 0;
 	double yawNew = 0;
 
-	double deadZone = 0.025;
-
 	/**
 	 * Creates a new AimShooter.
 	 */
@@ -54,8 +52,8 @@ public class ShooterAimJoystick extends CommandBase {
 		yawCmd = yawJoystick.getAsDouble();	// -yawJoystick.getAsDouble();
 
 		// Zero out deadZone to avoid creep
-		tiltCmd = (Math.abs(tiltCmd) < deadZone ? 0.0 : tiltCmd);
-		yawCmd = (Math.abs(yawCmd) < deadZone ? 0.0 : yawCmd);
+		tiltCmd = (Math.abs(tiltCmd) < YawConstants.kJoystickDeadZone ? 0.0 : tiltCmd);
+		yawCmd = (Math.abs(yawCmd) < YawConstants.kJoystickDeadZone ? 0.0 : yawCmd);
 	
 		// Calculate new target as Curr Target + Increment 
 		tiltNew = shooter.getTiltTarget() + (tiltCmd * TiltConstants.kRateDpS);
