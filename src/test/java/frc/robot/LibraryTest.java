@@ -44,21 +44,23 @@ public class LibraryTest {
 
 	@Test
 	public void testCalcSkewAngle() throws Exception {
-		dblResult = lib.calcSkewAngle(10.0);
-		//assertEquals(10.0, dblResult, DELTA);
+		assertEquals(45.0, lib.calcSkewAngle(-90.0), DELTA);
+		assertEquals(0.0, lib.calcSkewAngle(-45.0), DELTA);
+		assertEquals(45.0, lib.calcSkewAngle(0.0), DELTA);
 	}
 
 	@Test
 	public void testCalcTiltAngle() throws Exception {
-		dblResult = lib.calcTiltAngle(10.0);
-		//assertEquals(10.0, dblResult, DELTA);
+		assertEquals(10.0, lib.calcTiltAngle(3.0), DELTA);
+		assertEquals(20.0, lib.calcTiltAngle(10.0), DELTA);
+		assertEquals(45.0, lib.calcTiltAngle(40.0), DELTA);
 	}
 
 	@Test
 	public void testTgtCmd() throws Exception {
-		dblArray = lib.tgtCmd(10.0, 20.0, 30.0);
+		dblArray = lib.tgtCmd(10.0, 20.0, -75.0);
 		System.out.println("X " + dblArray[0] + "  Y " + dblArray[1]);
-		//assertEquals(-10.0, dblArray[0], DELTA);
-		//assertEquals(10.0, dblArray[1], DELTA);
+		assertEquals(-10.0, dblArray[0], DELTA);
+		assertEquals(20.0, dblArray[1], DELTA);
 	}
 }

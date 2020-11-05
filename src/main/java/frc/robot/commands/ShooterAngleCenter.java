@@ -65,8 +65,8 @@ public class ShooterAngleCenter extends CommandBase {
     // reset last found
     lastFound = thisFound;
 
-    // shooter.sbLeftPos.setDouble(leftPos);
-    // shooter.sbRightPos.setDouble(rightPos);
+    shooter.sbLeftPos.setDouble(leftPos);
+    shooter.sbRightPos.setDouble(rightPos);
   }
 
   @Override
@@ -81,7 +81,9 @@ public class ShooterAngleCenter extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    shooter.setAngleTarget((leftPos + rightPos) / 2.0);
+    double centerPos = (leftPos + rightPos) / 2.0;
+    shooter.sbCenterPos.setDouble(centerPos);
+    shooter.setAngleTarget(centerPos);
     shooter.setAngleZeroPos();
   }
 }

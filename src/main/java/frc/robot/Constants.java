@@ -173,6 +173,8 @@ public final class Constants {
 		public static final double kRingGearboxRatio = kRGTeeth / kGBTeeth;
 		public static final double kTicsPerRingRev = kTicsPerGearboxRev * kRingGearboxRatio;
 		public static final double kTicsPerDegree = kTicsPerRingRev / 360;
+
+		public static final double kJoystickDeadZone = 0.025;
 	}
 
 	public final static class TiltConstants {
