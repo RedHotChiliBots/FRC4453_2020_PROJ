@@ -29,13 +29,15 @@ public final class Library {
 		double skewAngle = 0.0;
 
 		skewAngle = calcSkewAngle(skew);
-
+		System.out.println("skewAngle " + skewAngle);
 		cmd[0] = -x;
-		double distHorz = ShooterConstants.kDistToTarget / Math.tan(Math.toRadians(y));
+		double distHorz = (ShooterConstants.kDistToTarget/12) / Math.tan(Math.toRadians(y));
 		double distOffset = distHorz * Math.tan(Math.toRadians(skewAngle));
-		double distTarget = Math.sqrt(Math.pow(ShooterConstants.kDistToTarget, 2) + Math.pow(distHorz, 2) +
+		double distTarget = Math.sqrt(Math.pow((ShooterConstants.kDistToTarget/12), 2) + Math.pow(distHorz, 2) +
 				Math.pow(distOffset, 2));
+		System.out.println("distHorz "+distHorz+"   distOffset "+distOffset+"   distTarget "+distTarget);
 		cmd[1] = calcTiltAngle(distTarget);
+		System.out.println("tiltAngle " + cmd[1]);
 
 		return cmd;
 	}
@@ -87,7 +89,7 @@ public final class Library {
 		}};
 
 	public double calcTiltAngle(double dist) {
-		dist = Clip(dist, 3, 40);
+		dist = Clip(dist, 40, 3);
 		return conv.get((int)Math.round(dist));
 	}
 
