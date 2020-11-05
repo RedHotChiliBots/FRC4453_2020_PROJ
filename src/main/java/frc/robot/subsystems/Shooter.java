@@ -310,15 +310,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getTgtArea() {
-    return ty.getDouble(0.0);
+    return ta.getDouble(0.0);
   }
 
   public double getTgtSkew() {
-    return ty.getDouble(0.0);
+    return ts.getDouble(0.0);
   }
 
   public boolean getTgtValid() {
-    return (ty.getDouble(0.0)==0 ? false : true);
+    return (tv.getDouble(0.0)==0 ? false : true);
   }
 
   // public boolean isLimit() {

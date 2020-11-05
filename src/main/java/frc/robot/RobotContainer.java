@@ -122,8 +122,6 @@ public class RobotContainer {
 	ShuffleboardTab hopperTab = Shuffleboard.getTab("Hopper");
 	ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
 
-	NetworkTableEntry sbChassisSub = shooterTab.addPersistent("Chassis", 0).getEntry();
-
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
@@ -134,7 +132,6 @@ public class RobotContainer {
 
 		// =============================================================
 		// Add subsystems to dashboard
-		sbChassisSub.setValue(chassis);
 		SmartDashboard.putData("Chassis", chassis);
 		SmartDashboard.putData("Shooter", shooter);
 		SmartDashboard.putData("Climber", climber);

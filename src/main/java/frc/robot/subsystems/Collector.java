@@ -65,7 +65,7 @@ public class Collector extends SubsystemBase {
 		collectArmMotor.clearFaults();
 
 		collectArmMotor.setIdleMode(IdleMode.kBrake);
-		collectArmMotor.setInverted(false);
+		collectArmMotor.setInverted(true);
 
 		collectArmPIDController.setP(CollectArmConstants.kP);
 		collectArmPIDController.setI(CollectArmConstants.kI);
@@ -179,7 +179,7 @@ public class Collector extends SubsystemBase {
 	}
 
 	public void moveArmUp(double spd) {
-		collectArmMotor.set(spd);
+		collectArmMotor.set(-spd);
 	}
 
 	public void setArmTarget(double tgt) {
