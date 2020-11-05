@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 import frc.robot.Constants.YawConstants;
+import frc.robot.Library;
 import frc.robot.Constants.TiltConstants;
 
 public class ShooterAimJoystick extends CommandBase {
@@ -26,6 +27,8 @@ public class ShooterAimJoystick extends CommandBase {
 	double yawCmd = 0;
 	double tiltNew = 0;
 	double yawNew = 0;
+
+	Library lib = new Library();
 
 	/**
 	 * Creates a new AimShooter.
@@ -62,8 +65,8 @@ public class ShooterAimJoystick extends CommandBase {
 		System.out.println("tiltNew " + tiltNew);
 //		System.out.println("yawNew " + yawNew);
 		// Clamp new targets to min and max values
-		tiltNew = Math.max(TiltConstants.kMinDeg, Math.min(TiltConstants.kMaxDeg, tiltNew));
-		yawNew = Math.max(YawConstants.kMinDeg, Math.min(YawConstants.kMaxDeg, yawNew));
+		tiltNew = lib.Clip(tiltNew, TiltConstants.kMaxDeg, TiltConstants.kMinDeg);
+		yawNew = lib.Clip(yawNew, YawConstants.kMaxDeg, YawConstants.kMinDeg);
 
 		// Update motor controllers with new targets
 		shooter.setTiltTarget(tiltNew);
