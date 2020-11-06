@@ -276,16 +276,16 @@ public final class Constants {
 	public static final class CollectArmConstants {
 		public static final int kCollectArmPowerIndex = 7;
 
-		public static final double kArmFindSpeed = 0.3;
+		public static final double kArmFindSpeed = 0.4;
 		public static final double kCollectArmAmps = 15.0;
 
-		public static final double kP = 0.01;
+		public static final double kP = 0.0005;
 		public static final double kI = 0.0;
 		public static final double kD = 0;
 		public static final double kIz = 0;
 		public static final double kFF = 0;
-		public static final double kMinOutput = -1;
-		public static final double kMaxOutput = 1;
+		public static final double kMinOutput = -0.5;
+		public static final double kMaxOutput = 0.5;
 
 		public static final double kStopPos = 0.0;
 		public static final double kMinPos = 0.0;

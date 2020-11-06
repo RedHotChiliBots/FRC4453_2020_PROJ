@@ -23,12 +23,12 @@ public class CollectorArmInit extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    collector.moveArmUp(CollectArmConstants.kArmFindSpeed);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
-  public void execute() {
+	public void execute() {
+		collector.moveArmUp(CollectArmConstants.kArmFindSpeed);
   }
 
   @Override
