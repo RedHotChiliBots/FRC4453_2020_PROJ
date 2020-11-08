@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.VisionConstants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -24,26 +25,46 @@ import frc.robot.Constants.ShooterConstants;
  */
 public final class Library {
 
-	public double[] tgtCmd(double x, double y, double skew) {
-		double[] cmd = { 0.0, 0.0 };
+	public double Clip(double value, double max, double min) {
+		return Math.min(Math.max(value, min), max);
+	}
+
+	public int Clip(int value, int max, int min) {
+		return Math.min(Math.max(value, min), max);
+	}
+
+	public double[] calcTgtCmd(double x, double y, double skew) {
+		double[] cmd = { 0.0, 0.0, 0.0 };
 		double skewAngle = 0.0;
 
-		skewAngle = calcSkewAngle(skew);
+		if (Math.abs(x) < 10.0) {
+			skewAngle = calcSkewAngle(skew);
+		}
 		System.out.println("skewAngle " + skewAngle);
 		cmd[0] = -x;
-		double distHorz = (ShooterConstants.kDistToTarget/12) / Math.tan(Math.toRadians(y));
+		double distHorz = (VisionConstants.kDistToTarget / 12) / Math.tan(Math.toRadians(y));
 		double distOffset = distHorz * Math.tan(Math.toRadians(skewAngle));
-		double distTarget = Math.sqrt(Math.pow((ShooterConstants.kDistToTarget/12), 2) + Math.pow(distHorz, 2) +
-				Math.pow(distOffset, 2));
-		System.out.println("distHorz "+distHorz+"   distOffset "+distOffset+"   distTarget "+distTarget);
+		double distTarget = Math.sqrt(
+				Math.pow((VisionConstants.kDistToTarget / 12), 2) + Math.pow(distHorz, 2) + Math.pow(distOffset, 2));
+		cmd[2] = distTarget;
+		System.out.println("distHorz " + distHorz + "   distOffset " + distOffset + "   distTarget " + distTarget);
 		cmd[1] = calcTiltAngle(distTarget);
 		System.out.println("tiltAngle " + cmd[1]);
 
 		return cmd;
 	}
 
-	private Map<Integer, Double> conv = new HashMap<Integer, Double>()
-		{
+	public double calcTiltAngle(double dist) {
+		dist = Clip(dist, 40, 3);
+		return conv.get((int) Math.round(dist));
+	}
+
+	public double calcSkewAngle(double skew) {
+		double skewAngle = (skew < -45 ? 90.0 + skew : skew);
+		return Math.abs(skewAngle);
+	}
+
+	private Map<Integer, Double> conv = new HashMap<Integer, Double>() {
 
 		private static final long serialVersionUID = 1L;
 
@@ -80,28 +101,12 @@ public final class Library {
 			put(32, 42.0);
 			put(33, 43.0);
 			put(34, 44.0);
-			put(35, 45.0); 
-			put(36, 45.0); 
-			put(37, 45.0); 
-			put(38, 45.0); 
+			put(35, 45.0);
+			put(36, 45.0);
+			put(37, 45.0);
+			put(38, 45.0);
 			put(39, 45.0);
 			put(40, 45.0);
-		}};
-
-	public double calcTiltAngle(double dist) {
-		dist = Clip(dist, 40, 3);
-		return conv.get((int)Math.round(dist));
-	}
-
-	public double calcSkewAngle(double skew) {
-		return Math.abs(skew+45.0);
-	}
-
-	public double Clip(double value, double max, double min) {
-		return Math.min(Math.max(value, min), max);
-	}
-
-	public int Clip(int value, int max, int min) {
-		return Math.min(Math.max(value, min), max);
-	}
+		}
+	};
 }

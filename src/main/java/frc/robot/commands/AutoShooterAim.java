@@ -9,10 +9,12 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Shooter;
 
 public class AutoShooterAim extends CommandBase {
@@ -24,11 +26,6 @@ public class AutoShooterAim extends CommandBase {
   DoubleSupplier dsy = null;
 
   private double distance = 0.0;
-
-  private final ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
-  // private NetworkTableEntry sbVisionX = visionTab.addPersistent("Vision X", 0).getEntry();
-  // private NetworkTableEntry sbVisionY = visionTab.addPersistent("Vision Y", 0).getEntry();
-  // private NetworkTableEntry sbVisionDist = visionTab.addPersistent("Vision Dist", 0).getEntry();
 
   /**
    * Creates a new AimShooter.
@@ -52,8 +49,8 @@ public class AutoShooterAim extends CommandBase {
   public void execute() {
     x = dsx.getAsDouble();
     y = dsy.getAsDouble();
-    distance = (ShooterConstants.kTargetHeight - ShooterConstants.kCameraHeight)
-        / Math.tan(ShooterConstants.kCameraAngle + y);
+    distance = (VisionConstants.kTargetHeight - VisionConstants.kCameraHeight)
+        / Math.tan(VisionConstants.kCameraAngle + y);
     shooter.setTiltTarget(y);
     shooter.setAngleTarget(x);
     // shooter.setAnglePosition(shooter.getAnglePosition() + x);

@@ -98,6 +98,11 @@ public class Shooter extends SubsystemBase {
   public NetworkTableEntry sbLeftPos = shooterTab.addPersistent("Angle Center Left Pos", 0).getEntry();
   public NetworkTableEntry sbRightPos = shooterTab.addPersistent("Angle Center Right Pos", 0).getEntry();
   public NetworkTableEntry sbCenterPos = shooterTab.addPersistent("Angle Center Center Pos", 0).getEntry();
+//  public NetworkTableEntry sbVisionValid = visionTab.addPersistent("LL Valid", 0).getEntry();
+//  public NetworkTableEntry sbVisionX = visionTab.addPersistent("LL X", 0).getEntry();
+//  public NetworkTableEntry sbVisionY = visionTab.addPersistent("LL Y", 0).getEntry();
+//  public NetworkTableEntry sbVisionSkew = visionTab.addPersistent("LL Skew", 0).getEntry();
+//  public NetworkTableEntry sbVisionDist = visionTab.addPersistent("Vision Dist", 0).getEntry();
 
   public Shooter() {
     System.out.println("+++++ Shooter Constructor starting ...");

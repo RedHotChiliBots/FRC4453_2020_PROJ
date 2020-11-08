@@ -61,6 +61,7 @@ import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spinner;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -74,6 +75,7 @@ public class RobotContainer {
 	// =============================================================
 	// Initialize SubSystems
 	public final Chassis chassis = new Chassis();
+	public final Vision vision = new Vision();
 	public final Spinner spinner = new Spinner();
 	public final Shooter shooter = new Shooter();
 	public final Climber climber = new Climber();
@@ -133,6 +135,7 @@ public class RobotContainer {
 		// =============================================================
 		// Add subsystems to dashboard
 		SmartDashboard.putData("Chassis", chassis);
+		SmartDashboard.putData("Vision", vision);
 		SmartDashboard.putData("Shooter", shooter);
 		SmartDashboard.putData("Climber", climber);
 		SmartDashboard.putData("Spinner", spinner);
@@ -149,6 +152,7 @@ public class RobotContainer {
 //		shooter.setDefaultCommand(new ShooterStop(shooter));
 		shooter.setDefaultCommand(new ShooterAimJoystick(() -> getOperatorLY(), () -> getOperatorLX(), shooter));
 		spinner.setDefaultCommand(new SpinnerStop(spinner));
+//		vision.setDefaultCommand(new VisionSeek(vision));
 
 		// =============================================================
 		// Build chooser for autonomous commands

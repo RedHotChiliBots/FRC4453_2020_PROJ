@@ -81,6 +81,13 @@ public final class Constants {
 		public static final int kOperatorControllerPort = 1;
 	}
 
+	public static final class VisionConstants {
+		public static final double kCameraAngle = 0.0;
+		public static final double kCameraHeight = 48.0;
+		public static final double kTargetHeight = 85.0;
+		public static final double kDistToTarget = kTargetHeight - kCameraHeight;
+	}
+
 	public static final class ChassisConstants {
 		public static final double kMaxSpeedMPS = Units.feetToMeters(0.5); // meters per second
 		public static final double kMinSpeedMPS = -kMaxSpeedMPS; // meters per second
@@ -140,10 +147,6 @@ public final class Constants {
 
 		public static final double kShooterShootRPMs = kMaxRPM;
 
-		public static final double kCameraAngle = 0.0;
-		public static final double kCameraHeight = 48.0;
-		public static final double kTargetHeight = 85.0;
-		public static final double kDistToTarget = kTargetHeight - kCameraHeight;
 	}
 
 	public final static class YawConstants {
