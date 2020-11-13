@@ -8,15 +8,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;;
+import frc.robot.subsystems.Turret;
 
-public class ShooterAimStop extends CommandBase {
+public class TurretAngleStop extends CommandBase {
 
-  private final Shooter shooter;
+  private final Turret turret;
 
-  public ShooterAimStop(Shooter shooter) {
-    this.shooter = shooter;
-    addRequirements(shooter);
+  public TurretAngleStop(Turret turret) {
+    this.turret = turret;
+    addRequirements(turret);
   }
 
   // Called just before this Command runs the first time
@@ -27,14 +27,12 @@ public class ShooterAimStop extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    shooter.stopTilt();
-    shooter.stopAngle();
+    turret.stopAngle();
   }
 
-  // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 
   // Called once after isFinished returns true

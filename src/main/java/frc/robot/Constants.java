@@ -81,13 +81,6 @@ public final class Constants {
 		public static final int kOperatorControllerPort = 1;
 	}
 
-	public static final class VisionConstants {
-		public static final double kCameraAngle = 0.0;
-		public static final double kCameraHeight = 48.0;
-		public static final double kTargetHeight = 85.0;
-		public static final double kDistToTarget = kTargetHeight - kCameraHeight;
-	}
-
 	public static final class ChassisConstants {
 		public static final double kMaxSpeedMPS = Units.feetToMeters(0.5); // meters per second
 		public static final double kMinSpeedMPS = -kMaxSpeedMPS; // meters per second
@@ -177,6 +170,7 @@ public final class Constants {
 		public static final double kTicsPerRingRev = kTicsPerGearboxRev * kRingGearboxRatio;
 		public static final double kTicsPerDegree = kTicsPerRingRev / 360;
 
+		public static final double kOnTgtDegree = 1.0;
 		public static final double kJoystickDeadZone = 0.025;
 	}
 
@@ -208,12 +202,21 @@ public final class Constants {
 		public static final double kTicsPerRackRev = kTicsPerPinionRev * kRackPinionRatio;
 		public static final double kTicsPerDegree = kTicsPerRackRev / 360.0;
 
+		public static final double kOnTgtDegree = 1.0;
+
 //		public static final double kPinionTeeth = 50;
 //		public static final double kDegreesPerRev = 360;
 //		public static final double kTeethPerDegree = kPinionTeeth / kDegreesPerRev;
 //		public static final double kTeethPerRev = kPinionTeeth / kGBRatio;
 //		public static final double kTicsPerTeeth = kTicsPerMotorRev / kTeethPerRev;
 //		public static final double kTicsPerDegree = -kTicsPerTeeth * kTeethPerDegree;
+	}
+
+	public static final class VisionConstants {
+		public static final double kCameraAngle = 0.0;
+		public static final double kCameraHeight = 48.0;
+		public static final double kTargetHeight = 85.0;
+		public static final double kDistToTarget = kTargetHeight - kCameraHeight;
 	}
 
 	public final static class SpinnerConstants {

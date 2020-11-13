@@ -21,13 +21,13 @@ public class AUTONRENDEZVOUS extends SequentialCommandGroup {
 
 	public AUTONRENDEZVOUS(Shooter shooter, Collector collector, Hopper hopper, Chassis chassis) {
 		addCommands(new ShooterInit(shooter), 
-			new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()),
+			//new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()),
 			new SHOOT(collector, hopper, shooter),
 		// move to Rendevous Zone and collect and shoot there
 			new AutonDriveTrajectory(chassis.lineToRendezvousTrajectory, chassis),
 			new ParallelRaceGroup(new AutonDriveTrajectory(chassis.rendezvousPickUpTrajectory, chassis),
 				new COLLECT(collector, hopper, false)),
-			new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()), 
+			//new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()), 
 			new SHOOT(collector, hopper, shooter));
 	}
 }

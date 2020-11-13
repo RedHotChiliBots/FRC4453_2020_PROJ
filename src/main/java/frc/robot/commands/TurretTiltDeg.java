@@ -8,19 +8,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
-public class ShooterAngleDeg extends CommandBase {
+public class TurretTiltDeg extends CommandBase {
   /**
    * Creates a new ShooterTiltDeg.
    */
-  Shooter shooter = null;
+  Turret turret = null;
   int deg = 0;
 
-  public ShooterAngleDeg(Shooter shooter, int deg) {
-    this.shooter = shooter;
+  public TurretTiltDeg(Turret turret, int deg) {
+    this.turret = turret;
     this.deg = deg;
-    addRequirements(shooter);
+    addRequirements(turret);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -32,7 +32,7 @@ public class ShooterAngleDeg extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setAngleTarget(deg);
+    turret.setTiltTarget(deg);
   }
 
   // Called once the command ends or is interrupted.
@@ -43,6 +43,6 @@ public class ShooterAngleDeg extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shooter.getAnglePosition() == deg;
+    return turret.getTiltPosition() == deg;
   }
 }

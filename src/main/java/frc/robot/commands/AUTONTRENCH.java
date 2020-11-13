@@ -21,14 +21,14 @@ public class AUTONTRENCH extends SequentialCommandGroup {
   public AUTONTRENCH(Shooter shooter, Collector collector, Hopper hopper, Chassis chassis) {
 		new SequentialCommandGroup(
 			new ShooterInit(shooter), 
-			new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()),
+			//new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()),
 			new SHOOT(collector, hopper, shooter),
 		// move to Trench and collect and shoot there
 			new AutonDriveTrajectory(chassis.lineToTrenchTrajectory, chassis),
 			new ParallelRaceGroup(
 				new AutonDriveTrajectory(chassis.trenchPickUpTrajectory, chassis), 
 				new COLLECT(collector, hopper, true)),
-			new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()),
+			//new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()),
 			new SHOOT(collector, hopper, shooter));
   }
 }

@@ -8,47 +8,38 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.YawConstants;
-import frc.robot.subsystems.Shooter;
+import frc.robot.Constants.TiltConstants;
+import frc.robot.subsystems.Turret;
 
-public class ShooterAngleFind extends CommandBase {
+public class TurretTiltInit extends CommandBase {
 
-  private final Shooter shooter;
-  private boolean movingLeft = true;
+  private final Turret turret;
 
-  public ShooterAngleFind(Shooter shooter) {
-    this.shooter = shooter;
-    addRequirements(shooter);
+  public TurretTiltInit(Turret turret) {
+    this.turret = turret;
+    addRequirements(turret);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    shooter.moveAngleLeft(YawConstants.kAngleFindSpeed);
-    movingLeft = true;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    if (!shooter.getAngleCenterPos()) {
-      if (movingLeft && shooter.getAngleLeftLimit()) {
-        movingLeft = false;
-        shooter.moveAngleRight(YawConstants.kAngleFindSpeed);
-      } else if (!movingLeft && shooter.getAngleRightLimit()) {
-        movingLeft = true;
-        shooter.moveAngleLeft(YawConstants.kAngleFindSpeed);
-      }
-    }
+		turret.moveTiltDown(TiltConstants.kATiltFindSpeed);
   }
 
   @Override
   public boolean isFinished() {
-    return shooter.getAngleCenterPos();
+    return Math.abs(turret.getTiltAmps()) > TiltConstants.kTiltAmps;
   }
 
   // Called once after isFinished returns true
   @Override
-  public void end(boolean interrupted) {
+	public void end(boolean interrupted) {
+		turret.stopTilt();
+		turret.setTiltZeroPos();
   }
 }

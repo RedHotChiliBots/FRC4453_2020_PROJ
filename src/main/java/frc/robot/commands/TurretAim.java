@@ -8,23 +8,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
-public class ShooterAim extends CommandBase {
+public class TurretAim extends CommandBase {
 
-  Shooter shooter = null;
+  Turret turret = null;
   int deg = 0;
   int counter = 0;
   double tiltInc = 2.0;
   double angleInc = 5.0;
 
   /**
-   * Creates a new AimShooter.
+   * Creates a new Aimturret.
    */
-  public ShooterAim(Shooter shooter, int deg) {
-    this.shooter = shooter;
+  public TurretAim(Turret turret, int deg) {
+    this.turret = turret;
     this.deg = deg;
-    addRequirements(shooter);
+    addRequirements(turret);
   }
 
   // Called when the command is initially scheduled.
@@ -39,32 +39,32 @@ public class ShooterAim extends CommandBase {
     if ((counter % 25) == 0) {
       switch (deg) {
       case 0:
-        shooter.setTiltTarget(shooter.getTiltPosition() + tiltInc);
+        turret.setTiltTarget(turret.getTiltPosition() + tiltInc);
         break;
       case 1:
-        shooter.setTiltTarget(shooter.getTiltPosition() + tiltInc);
-        shooter.setAngleTarget(shooter.getAnglePosition() + angleInc);
+        turret.setTiltTarget(turret.getTiltPosition() + tiltInc);
+        turret.setAngleTarget(turret.getAnglePosition() + angleInc);
         break;
       case 2:
-        shooter.setAngleTarget(shooter.getAnglePosition() + angleInc);
+        turret.setAngleTarget(turret.getAnglePosition() + angleInc);
         break;
       case 3:
-        shooter.setTiltTarget(shooter.getTiltPosition() - tiltInc);
-        shooter.setAngleTarget(shooter.getAnglePosition() + angleInc);
+        turret.setTiltTarget(turret.getTiltPosition() - tiltInc);
+        turret.setAngleTarget(turret.getAnglePosition() + angleInc);
         break;
       case 4:
-        shooter.setTiltTarget(shooter.getTiltPosition() - tiltInc);
+        turret.setTiltTarget(turret.getTiltPosition() - tiltInc);
         break;
       case 5:
-        shooter.setTiltTarget(shooter.getTiltPosition() - tiltInc);
-        shooter.setAngleTarget(shooter.getAnglePosition() - angleInc);
+        turret.setTiltTarget(turret.getTiltPosition() - tiltInc);
+        turret.setAngleTarget(turret.getAnglePosition() - angleInc);
         break;
       case 6:
-        shooter.setAngleTarget(shooter.getAnglePosition() - angleInc);
+        turret.setAngleTarget(turret.getAnglePosition() - angleInc);
         break;
       case 7:
-        shooter.setTiltTarget(shooter.getTiltPosition() + tiltInc);
-        shooter.setAngleTarget(shooter.getAnglePosition() - angleInc);
+        turret.setTiltTarget(turret.getTiltPosition() + tiltInc);
+        turret.setAngleTarget(turret.getAnglePosition() - angleInc);
         break;
       }
     }

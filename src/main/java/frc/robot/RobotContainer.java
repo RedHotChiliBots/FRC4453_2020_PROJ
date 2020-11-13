@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
@@ -29,7 +28,7 @@ import frc.robot.commands.AUTONRENDEZVOUS;
 import frc.robot.commands.AUTONRENDEZVOUSTRENCH;
 import frc.robot.commands.AUTONTRENCH;
 import frc.robot.commands.AUTONTRENCHRENDEZVOUS;
-import frc.robot.commands.AutoShooterAim;
+import frc.robot.commands.AutoTurretAim;
 import frc.robot.commands.AutonDrive2Point;
 import frc.robot.commands.AutonDriveJoystick;
 import frc.robot.commands.AutonDriveTrajectory;
@@ -45,13 +44,14 @@ import frc.robot.commands.DriveArcade;
 import frc.robot.commands.DriveTank;
 import frc.robot.commands.HopperShoot;
 import frc.robot.commands.HopperStop;
-import frc.robot.commands.ShooterAim;
-import frc.robot.commands.ShooterAimJoystick;
-import frc.robot.commands.ShooterAimStop;
-import frc.robot.commands.ShooterAngleDeg;
-import frc.robot.commands.ShooterAngleInit;
+import frc.robot.commands.TurretAim;
+import frc.robot.commands.TurretAimJoystick;
+import frc.robot.commands.TurretAimStop;
+import frc.robot.commands.TurretAngleDeg;
+import frc.robot.commands.TurretAngleInit;
 import frc.robot.commands.ShooterInit;
-import frc.robot.commands.ShooterTiltInit;
+import frc.robot.commands.ShooterStop;
+import frc.robot.commands.TurretTiltInit;
 import frc.robot.commands.SpinnerCountRevs;
 import frc.robot.commands.SpinnerStop;
 import frc.robot.commands.SpinnerStopOnColor;
@@ -61,7 +61,7 @@ import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spinner;
-import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Turret;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -75,7 +75,7 @@ public class RobotContainer {
 	// =============================================================
 	// Initialize SubSystems
 	public final Chassis chassis = new Chassis();
-	public final Vision vision = new Vision();
+	public final Turret turret = new Turret();
 	public final Spinner spinner = new Spinner();
 	public final Shooter shooter = new Shooter();
 	public final Climber climber = new Climber();
@@ -122,7 +122,7 @@ public class RobotContainer {
 	ShuffleboardTab spinnerTab = Shuffleboard.getTab("Spinner");
 	ShuffleboardTab collectorTab = Shuffleboard.getTab("Collector");
 	ShuffleboardTab hopperTab = Shuffleboard.getTab("Hopper");
-	ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
+	ShuffleboardTab turretTab = Shuffleboard.getTab("Turret");
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -135,7 +135,7 @@ public class RobotContainer {
 		// =============================================================
 		// Add subsystems to dashboard
 		SmartDashboard.putData("Chassis", chassis);
-		SmartDashboard.putData("Vision", vision);
+		SmartDashboard.putData("Turret", turret);
 		SmartDashboard.putData("Shooter", shooter);
 		SmartDashboard.putData("Climber", climber);
 		SmartDashboard.putData("Spinner", spinner);
@@ -149,8 +149,9 @@ public class RobotContainer {
 		climber.setDefaultCommand(new ClimberStop(climber));
 		collector.setDefaultCommand(new CollectorStop(collector));
 		hopper.setDefaultCommand(new HopperStop(hopper));
-//		shooter.setDefaultCommand(new ShooterStop(shooter));
-		shooter.setDefaultCommand(new ShooterAimJoystick(() -> getOperatorLY(), () -> getOperatorLX(), shooter));
+		shooter.setDefaultCommand(new ShooterStop(shooter));
+//		turret.setDefaultCommand(new AutoTurretAim(() -> turret.getTiltCmd(), () -> turret.getYawCmd(), turret));
+		turret.setDefaultCommand(new TurretAimJoystick(() -> getOperatorLY(), () -> getOperatorLX(), turret));
 		spinner.setDefaultCommand(new SpinnerStop(spinner));
 //		vision.setDefaultCommand(new VisionSeek(vision));
 
@@ -205,7 +206,7 @@ public class RobotContainer {
 		new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
 
 		for (int i = 0; i < 8; i++) {
-			new POVButton(m_operator, i * 45).whenHeld(new ShooterAim(shooter, i));
+			new POVButton(m_operator, i * 45).whenHeld(new TurretAim(turret, i));
 		}
 
 		// new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new
@@ -243,12 +244,12 @@ public class RobotContainer {
 		// CollectorReject(collector));
 
 		new JoystickButton(m_driver, Button.kY.value)
-				.whenPressed(new AutoShooterAim(shooter, () -> shooter.getTgtX(), () -> shooter.getTgtY()));
+				.whenPressed(new AutoTurretAim(() -> turret.getTiltCmd(), () -> turret.getYawCmd(), turret));
 
-		new JoystickButton(m_driver, Button.kX.value).whenPressed(new ShooterAimStop(shooter));
+		new JoystickButton(m_driver, Button.kX.value).whenPressed(new TurretAimStop(turret));
 
-		new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new ShooterAngleInit(shooter));
-		new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new ShooterTiltInit(shooter));
+		new JoystickButton(m_operator, Button.kBumperRight.value).whenPressed(new TurretAngleInit(turret));
+		new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new TurretTiltInit(turret));
 
 		// new JoystickButton(m_operator, Button.kY.value).whenPressed(new ShooterShoot(shooter));
 
@@ -256,7 +257,7 @@ public class RobotContainer {
 		// ShooterStop(shooter));
 		// new JoystickButton(m_operator, Button.kStart.value).whenPressed(new
 		// ShooterTiltDeg(shooter, 135));
-		new JoystickButton(m_operator, Button.kStart.value).whenPressed(new ShooterAngleDeg(shooter, 10));
+		new JoystickButton(m_operator, Button.kStart.value).whenPressed(new TurretAngleDeg(turret, 10));
 		System.out.println("Buttons configured");
 	}
 

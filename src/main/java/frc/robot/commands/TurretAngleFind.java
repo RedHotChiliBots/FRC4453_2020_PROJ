@@ -8,31 +8,43 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.Constants.YawConstants;
+import frc.robot.subsystems.Turret;
 
-public class ShooterAngleStop extends CommandBase {
+public class TurretAngleFind extends CommandBase {
 
-  private final Shooter shooter;
+  private final Turret turret;
+  private boolean movingLeft = true;
 
-  public ShooterAngleStop(Shooter shooter) {
-    this.shooter = shooter;
-    addRequirements(shooter);
+  public TurretAngleFind(Turret turret) {
+    this.turret = turret;
+    addRequirements(turret);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    turret.moveAngleLeft(YawConstants.kAngleFindSpeed);
+    movingLeft = true;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    shooter.stopAngle();
+    if (!turret.getAngleCenterPos()) {
+      if (movingLeft && turret.getAngleLeftLimit()) {
+        movingLeft = false;
+        turret.moveAngleRight(YawConstants.kAngleFindSpeed);
+      } else if (!movingLeft && turret.getAngleRightLimit()) {
+        movingLeft = true;
+        turret.moveAngleLeft(YawConstants.kAngleFindSpeed);
+      }
+    }
   }
 
   @Override
   public boolean isFinished() {
-    return true;
+    return turret.getAngleCenterPos();
   }
 
   // Called once after isFinished returns true

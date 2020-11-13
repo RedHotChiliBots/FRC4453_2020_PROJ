@@ -18,7 +18,10 @@ public class PrepToShoot extends SequentialCommandGroup {
    * Add your docs here.
    */
   public PrepToShoot(Shooter shooter, Hopper hopper, DoubleSupplier dsx, DoubleSupplier dsy) {
-    addCommands(new AutoShooterAim(shooter, dsx, dsy), new HopperShoot(hopper, shooter), new ShooterShoot(shooter));
+    addCommands(
+        new HopperShoot(hopper, shooter), 
+        new ShooterShoot(shooter)
+    );
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

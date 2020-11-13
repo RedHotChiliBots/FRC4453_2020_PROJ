@@ -9,29 +9,29 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.YawConstants;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
-public class ShooterAngleCenter extends CommandBase {
+public class TurretAngleCenter extends CommandBase {
 
-  private final Shooter shooter;
+  private final Turret turret;
   private boolean movingLeft = true;
   private boolean thisFound = false;
   private boolean lastFound = false;
   private double leftPos = 0;
   private double rightPos = 0;
 
-  public ShooterAngleCenter(Shooter shooter) {
-    this.shooter = shooter;
-    addRequirements(shooter);
+  public TurretAngleCenter(Turret turret) {
+    this.turret = turret;
+    addRequirements(turret);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    shooter.moveAngleLeft(YawConstants.kAngleCenterSpeed);
+    turret.moveAngleLeft(YawConstants.kAngleCenterSpeed);
     movingLeft = true;
-    thisFound = shooter.getAngleCenterPos();
-    lastFound = shooter.getAngleCenterPos();
+    thisFound = turret.getAngleCenterPos();
+    lastFound = turret.getAngleCenterPos();
     leftPos = 0;
     rightPos = 0;
   }
@@ -40,14 +40,14 @@ public class ShooterAngleCenter extends CommandBase {
   @Override
   public void execute() {
     // capture current Center position
-    thisFound = shooter.getAngleCenterPos();
+    thisFound = turret.getAngleCenterPos();
 
     // if transition from not seeing Center to seeing Center, capture angle
     if (thisFound && (thisFound != lastFound)) {
       if (movingLeft) {
-        leftPos = shooter.getAnglePosition();
+        leftPos = turret.getAnglePosition();
       } else {
-        rightPos = shooter.getAnglePosition();
+        rightPos = turret.getAnglePosition();
       }
     }
 
@@ -55,18 +55,18 @@ public class ShooterAngleCenter extends CommandBase {
     if (!thisFound && (thisFound != lastFound)) {
       if (movingLeft) {
         movingLeft = false;
-        shooter.moveAngleRight(YawConstants.kAngleCenterSpeed);
+        turret.moveAngleRight(YawConstants.kAngleCenterSpeed);
       } else if (!movingLeft) {
         movingLeft = true;
-        shooter.moveAngleLeft(YawConstants.kAngleCenterSpeed);
+        turret.moveAngleLeft(YawConstants.kAngleCenterSpeed);
       }
     }
 
     // reset last found
     lastFound = thisFound;
 
-    shooter.sbLeftPos.setDouble(leftPos);
-    shooter.sbRightPos.setDouble(rightPos);
+    turret.sbLeftPos.setDouble(leftPos);
+    turret.sbRightPos.setDouble(rightPos);
   }
 
   @Override
@@ -82,8 +82,8 @@ public class ShooterAngleCenter extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     double centerPos = (leftPos + rightPos) / 2.0;
-    shooter.sbCenterPos.setDouble(centerPos);
-    shooter.setAngleTarget(centerPos);
-    shooter.setAngleZeroPos();
+    turret.sbCenterPos.setDouble(centerPos);
+    turret.setAngleTarget(centerPos);
+    turret.setAngleZeroPos();
   }
 }

@@ -8,16 +8,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.TiltConstants;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;;
 
-public class ShooterTiltInit extends CommandBase {
+public class TurretAimStop extends CommandBase {
 
-  private final Shooter shooter;
+  private final Turret turret;
 
-  public ShooterTiltInit(Shooter shooter) {
-    this.shooter = shooter;
-    addRequirements(shooter);
+  public TurretAimStop(Turret turret) {
+    this.turret = turret;
+    addRequirements(turret);
   }
 
   // Called just before this Command runs the first time
@@ -28,18 +27,18 @@ public class ShooterTiltInit extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-		shooter.moveTiltDown(TiltConstants.kATiltFindSpeed);
+    turret.stopTilt();
+    turret.stopAngle();
   }
 
+  // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return Math.abs(shooter.getTiltAmps()) > TiltConstants.kTiltAmps;
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
-	public void end(boolean interrupted) {
-		shooter.stopTilt();
-		shooter.setTiltZeroPos();
+  public void end(boolean interrupted) {
   }
 }

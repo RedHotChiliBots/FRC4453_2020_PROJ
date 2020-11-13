@@ -10,18 +10,18 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
 import frc.robot.Constants.YawConstants;
 import frc.robot.Library;
 import frc.robot.Constants.TiltConstants;
 
-public class ShooterAimJoystick extends CommandBase {
+public class TurretAimJoystick extends CommandBase {
 
 	DoubleSupplier tiltJoystick;
 	DoubleSupplier yawJoystick;
 
-	Shooter shooter = null;
+	Turret turret = null;
 
 	double tiltCmd = 0;
 	double yawCmd = 0;
@@ -33,11 +33,11 @@ public class ShooterAimJoystick extends CommandBase {
 	/**
 	 * Creates a new AimShooter.
 	 */
-	public ShooterAimJoystick(DoubleSupplier tiltJoystick, DoubleSupplier yawJoystick, Shooter shooter) {
-		this.shooter = shooter;
+	public TurretAimJoystick(DoubleSupplier tiltJoystick, DoubleSupplier yawJoystick, Turret turret) {
+		this.turret = turret;
 		this.tiltJoystick = tiltJoystick;
 		this.yawJoystick = yawJoystick;
-		addRequirements(shooter);
+		addRequirements(turret);
 	}
 
 	// Called when the command is initially scheduled.
@@ -59,8 +59,8 @@ public class ShooterAimJoystick extends CommandBase {
 		yawCmd = (Math.abs(yawCmd) < YawConstants.kJoystickDeadZone ? 0.0 : yawCmd);
 	
 		// Calculate new target as Curr Target + Increment 
-		tiltNew = shooter.getTiltTarget() + (tiltCmd * TiltConstants.kRateDpS);
-		yawNew = shooter.getAngleTarget() + (yawCmd * YawConstants.kRateDpS);
+		tiltNew = turret.getTiltTarget() + (tiltCmd * TiltConstants.kRateDpS);
+		yawNew = turret.getAngleTarget() + (yawCmd * YawConstants.kRateDpS);
 
 		System.out.println("tiltNew " + tiltNew);
 //		System.out.println("yawNew " + yawNew);
@@ -69,8 +69,8 @@ public class ShooterAimJoystick extends CommandBase {
 		yawNew = lib.Clip(yawNew, YawConstants.kMaxDeg, YawConstants.kMinDeg);
 
 		// Update motor controllers with new targets
-		shooter.setTiltTarget(tiltNew);
-		shooter.setAngleTarget(yawNew);
+		turret.setTiltTarget(tiltNew);
+		turret.setAngleTarget(yawNew);
 	}
 
 	// Called once the command ends or is interrupted.
