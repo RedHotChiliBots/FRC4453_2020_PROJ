@@ -10,7 +10,6 @@ public class LibraryTest {
 	final double DELTA = 0.000001;
 	int intResult = 0;
 	double dblResult = 0.0;
-	double[] dblArray = {0.0, 0.0};
 
 	@Test
 	public void testClipInt() throws Exception {

@@ -21,9 +21,13 @@ public class VisionTest {
 
 	@Test
 	public void testCalcTiltAngle() throws Exception {
-		assertEquals(10.0, lib.calcTiltAngle(3.0), DELTA);
+		assertEquals(10.0, lib.calcTiltAngle(2.9), DELTA);
+		assertEquals(10.0, lib.calcTiltAngle(3.1), DELTA);
+		assertEquals(12.5, lib.calcTiltAngle(3.9), DELTA);
 		assertEquals(20.0, lib.calcTiltAngle(10.0), DELTA);
-		assertEquals(45.0, lib.calcTiltAngle(40.0), DELTA);
+		assertEquals(45.0, lib.calcTiltAngle(39.9), DELTA);
+		assertEquals(45.0, lib.calcTiltAngle(40.1), DELTA);
+		assertEquals(45.0, lib.calcTiltAngle(40.9), DELTA);
 	}
 
 	@Test

@@ -53,9 +53,9 @@ public final class Library {
 		return cmd;
 	}
 
-	public double calcTiltAngle(double dist) {
-		dist = Clip(dist, 40, 3);
-		return conv.get((int) Math.round(dist));
+	public double calcTiltAngle(double d) {
+		int dist = (int)Clip(Math.round(d), 40, 3);
+		return conv.get(dist);
 	}
 
 	public double calcSkewAngle(double skew) {
