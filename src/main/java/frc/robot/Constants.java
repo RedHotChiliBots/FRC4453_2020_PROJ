@@ -279,7 +279,7 @@ public final class Constants {
 	public static final class CollectArmConstants {
 		public static final int kCollectArmPowerIndex = 7;
 
-		public static final double kArmFindSpeed = 0.4;
+		public static final double kArmFindSpeed = 0.5;
 		public static final double kCollectArmAmps = 15.0;
 
 		public static final double kP = 0.05;
@@ -287,22 +287,19 @@ public final class Constants {
 		public static final double kD = 0;
 		public static final double kIz = 0;
 		public static final double kFF = 0;
-		public static final double kMinOutput = -0.5;
-		public static final double kMaxOutput = 0.5;
+		public static final double kMinOutput = -0.6;
+		public static final double kMaxOutput = 0.6;
 
 		public static final double kStopPos = 0.0;
 		public static final double kMinPos = 0.0;
-		public static final double kMaxPos = 90.0;
+		public static final double kStowPos = 0.25;
+		public static final double kMaxPos = 100.0;
 
 		public static final double kGearBoxRatio = 100.0;
 		public static final double kRevolutionToDegrees = 360.0 / kGearBoxRatio;
 
-		public static final double kMaxVelocity = 35.0 / 3.0; // inches per second
-		public static final double kStopRPMs = 0.0; // inches per second
-		public static final double kShooterShootRPMs = kMaxPos;
-
-		public static final double kExtendPos = 35.0;
-		public static final double kRetractPos = kMinPos;
+		public static final double kExtendPos = kMaxPos;
+		public static final double kRetractPos = kStowPos;
 	}
 
 	public final static class HopperConstants {
