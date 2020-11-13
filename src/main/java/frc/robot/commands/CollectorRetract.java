@@ -26,12 +26,13 @@ public class CollectorRetract extends CommandBase {
 	@Override
 	public void initialize() {
 		// collector.collectorRetract();
-		collector.setCollectArmPosition(CollectArmConstants.kRetractPos);
+//		collector.setCollectArmPosition(CollectArmConstants.kRetractPos);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	public void execute() {
+		collector.setCollectArmPosition(CollectArmConstants.kRetractPos);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

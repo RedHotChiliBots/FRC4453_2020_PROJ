@@ -50,7 +50,7 @@ public class Collector extends SubsystemBase {
 	// climberSolenoid.set(kReverse);
 
 	private final ShuffleboardTab collectorTab = Shuffleboard.getTab("Collector");
-	private NetworkTableEntry sbCollectArmVel = collectorTab.addPersistent("CollectArmVelocity", 0).getEntry();
+	private NetworkTableEntry sbCollectArmPos = collectorTab.addPersistent("CollectArmPosition", 0).getEntry();
 	private NetworkTableEntry sbCollectArmSetPoint = collectorTab.addPersistent("CollectArm SetPoint", 0).getEntry();
 	private NetworkTableEntry sbCollectorTgt = collectorTab.addPersistent("Collector Target (rpm)", 0).getEntry();
 	private NetworkTableEntry sbCollectorVel = collectorTab.addPersistent("Collector Velocity (rpm)", 0).getEntry();
@@ -74,7 +74,7 @@ public class Collector extends SubsystemBase {
 		collectArmPIDController.setFF(CollectArmConstants.kFF);
 		collectArmPIDController.setOutputRange(CollectArmConstants.kMinOutput, CollectArmConstants.kMaxOutput);
 
-		collectArmEncoder.setPositionConversionFactor(CollectArmConstants.kDegreesToRotations);
+		collectArmEncoder.setPositionConversionFactor(CollectArmConstants.kRevolutionToDegrees);
 		
 		/* Factory Default all hardware to prevent unexpected behaviour */
 		collectorMotor.configFactoryDefault();
@@ -109,7 +109,7 @@ public class Collector extends SubsystemBase {
 	// Called once per Robot execution loop - 50Hz
 	public void periodic() {
 
-		sbCollectArmVel.setDouble(getCollectArmPosition());
+		sbCollectArmPos.setDouble(getCollectArmPosition());
 		sbCollectArmSetPoint.setDouble(collectorArmTarget);
 		sbCollectorTgt.setDouble(collectorTarget);
 		sbCollectorVel.setDouble(getCollectorRPMs());

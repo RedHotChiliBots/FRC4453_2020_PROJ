@@ -282,7 +282,7 @@ public final class Constants {
 		public static final double kArmFindSpeed = 0.4;
 		public static final double kCollectArmAmps = 15.0;
 
-		public static final double kP = 0.0005;
+		public static final double kP = 0.05;
 		public static final double kI = 0.0;
 		public static final double kD = 0;
 		public static final double kIz = 0;
@@ -295,13 +295,13 @@ public final class Constants {
 		public static final double kMaxPos = 90.0;
 
 		public static final double kGearBoxRatio = 100.0;
-		public static final double kDegreesToRotations = kGearBoxRatio / 360.0;
+		public static final double kRevolutionToDegrees = 360.0 / kGearBoxRatio;
 
 		public static final double kMaxVelocity = 35.0 / 3.0; // inches per second
 		public static final double kStopRPMs = 0.0; // inches per second
 		public static final double kShooterShootRPMs = kMaxPos;
 
-		public static final double kExtendPos = kMaxPos;
+		public static final double kExtendPos = 35.0;
 		public static final double kRetractPos = kMinPos;
 	}
 
