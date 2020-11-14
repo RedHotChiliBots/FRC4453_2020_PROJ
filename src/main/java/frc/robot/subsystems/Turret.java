@@ -48,44 +48,50 @@ public class Turret extends SubsystemBase {
   NetworkTableEntry tv = table.getEntry("tv");
 
   // read values periodically
-  private double x = 0.0;  // +-29.8.0 degrees from crosshair to target
-  private double y = 0.0;  // +-24.85 degrees from crosshair to target
+  private double x = 0.0; // +-29.8.0 degrees from crosshair to target
+  private double y = 0.0; // +-24.85 degrees from crosshair to target
   private double area = 0.0; // 0% to 100% of image
   private double skew = 0.0; // Rotation, -90 deg to 0 deg
-  private double valid = 0.0;  // 0-1 has valid targets
+  private double valid = 0.0; // 0-1 has valid targets
 
   private double[] cmd = { 0.0, 0.0, 0.0 };
 
   private final ShuffleboardTab turretTab = Shuffleboard.getTab("Turret");
   private NetworkTableEntry sbTiltAmps = turretTab.addPersistent("Tilt Amps", 0).getEntry();
-  private NetworkTableEntry sbAnglePos = turretTab.addPersistent("Angle Position", 0).getEntry();
   private NetworkTableEntry sbTiltPos = turretTab.addPersistent("Tilt Position", 0).getEntry();
   private NetworkTableEntry sbTiltVelocity = turretTab.addPersistent("Tilt Velocity", 0).getEntry();
+  private NetworkTableEntry sbTiltSetPoint = turretTab.addPersistent("Tilt SetPoint", 0).getEntry();
+  private NetworkTableEntry sbAnglePos = turretTab.addPersistent("Angle Position", 0).getEntry();
   private NetworkTableEntry sbAngleVelocity = turretTab.addPersistent("Angle Velocity", 0).getEntry();
   private NetworkTableEntry sbAngleSetPoint = turretTab.addPersistent("Angle SetPoint", 0).getEntry();
-  private NetworkTableEntry sbTiltSetPoint = turretTab.addPersistent("Tilt SetPoint", 0).getEntry();
   public NetworkTableEntry sbLeftPos = turretTab.addPersistent("Angle Center Left Pos", 0).getEntry();
   public NetworkTableEntry sbRightPos = turretTab.addPersistent("Angle Center Right Pos", 0).getEntry();
   public NetworkTableEntry sbCenterPos = turretTab.addPersistent("Angle Center Center Pos", 0).getEntry();
 
-  private NetworkTableEntry sbTurretValid = turretTab.addPersistent("LL Valid", 0).getEntry();
-  private NetworkTableEntry sbTurretX = turretTab.addPersistent("LL X", 0).getEntry();
-  private NetworkTableEntry sbTurretY = turretTab.addPersistent("LL Y", 0).getEntry();
-  private NetworkTableEntry sbTurretArea = turretTab.addPersistent("LL Area", 0).getEntry();
-  private NetworkTableEntry sbTurretSkew = turretTab.addPersistent("LL Skew", 0).getEntry();
+  private NetworkTableEntry sbLLValid = turretTab.addPersistent("LL Valid", 0).getEntry();
+  private NetworkTableEntry sbLLX = turretTab.addPersistent("LL X", 0).getEntry();
+  private NetworkTableEntry sbLLY = turretTab.addPersistent("LL Y", 0).getEntry();
+  private NetworkTableEntry sbLLArea = turretTab.addPersistent("LL Area", 0).getEntry();
+  private NetworkTableEntry sbLLSkew = turretTab.addPersistent("LL Skew", 0).getEntry();
   private NetworkTableEntry sbTurretYaw = turretTab.addPersistent("Vision Yaw", 0).getEntry();
   private NetworkTableEntry sbTurretTilt = turretTab.addPersistent("Vision Tilt", 0).getEntry();
   private NetworkTableEntry sbTurretDist = turretTab.addPersistent("Vision Dist", 0).getEntry();
 
+  private NetworkTableEntry sbTgtValid = turretTab.addPersistent("Target Valid", 0).getEntry();
+  private NetworkTableEntry sbTiltOnTgt = turretTab.addPersistent("Tilt On Target", 0).getEntry();
+  private NetworkTableEntry sbYawOnTgt = turretTab.addPersistent("Yaw On Target", 0).getEntry();
+  private NetworkTableEntry sbTracking = turretTab.addPersistent("Tracking", 0).getEntry();
+
   private Library lib = new Library();
-  
-  public Turret() {
+  private Chassis chassis = null;
+
+  public Turret(Chassis chassis) {
     System.out.println("+++++ Vision Constructor starting ...");
-    // Define Angle motor
-    angleMotor.configFactoryDefault();
-    angleMotor.clearStickyFaults();
+    this.chassis = chassis;
 
     // Configure Motor
+    angleMotor.configFactoryDefault();
+    angleMotor.clearStickyFaults();
     angleMotor.setNeutralMode(NeutralMode.Brake);
     angleMotor.setInverted(false);
     // angleMotor.setSensorPhase(false);
@@ -111,11 +117,9 @@ public class Turret extends SubsystemBase {
 
     angleMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
 
-    // Define Tilt motor
+    // Configure Motor
     tiltMotor.configFactoryDefault();
     tiltMotor.clearStickyFaults();
-
-    // Configure Motor
     tiltMotor.setNeutralMode(NeutralMode.Brake);
     tiltMotor.setInverted(false);
     // tiltMotor.setSensorPhase(false);
@@ -163,21 +167,25 @@ public class Turret extends SubsystemBase {
     area = ta.getDouble(0.0); // 0% to 100% of image
     skew = ts.getDouble(0.0); // Rotation, -90 deg to 0 deg
     valid = tv.getDouble(0.0); // 0-1 has valid targets
-    
+
     if (isTgtValid()) {
       cmd = lib.calcTgtCmd(x, y, skew);
     }
 
-    sbTurretValid.setBoolean(isTgtValid());
-    sbTurretX.setDouble(x);
-    sbTurretY.setDouble(y);
-    sbTurretArea.setDouble(area);
-
-    sbTurretSkew.setDouble(lib.calcSkewAngle(skew));
+    sbLLValid.setBoolean(isTgtValid());
+    sbLLX.setDouble(x);
+    sbLLY.setDouble(y);
+    sbLLArea.setDouble(area);
+    sbLLSkew.setDouble(lib.calcSkewAngle(skew));
 
     sbTurretYaw.setDouble(cmd[0]);
     sbTurretTilt.setDouble(cmd[1]);
     sbTurretDist.setDouble(cmd[2]);
+
+    sbTgtValid.setBoolean(isTgtValid());
+    sbTiltOnTgt.setBoolean(isTiltOnTarget());
+    sbYawOnTgt.setBoolean(isYawOnTarget());
+    sbTracking.setBoolean(isTracking());
   }
 
   public void stopAngle() {
@@ -277,16 +285,6 @@ public class Turret extends SubsystemBase {
     return ts.getDouble(0.0);
   }
 
-  public boolean isTgtValid() {
-    return (valid == 0 ? false : true);
-  }
-
-  public boolean isTracking() {
-    double tiltError = Math.abs(tiltMotor.getClosedLoopError() / TiltConstants.kTicsPerDegree);
-    double angleError = Math.abs(angleMotor.getClosedLoopError() / YawConstants.kTicsPerDegree);
-    return (isTgtValid() && (tiltError < TiltConstants.kOnTgtDegree) && (angleError < YawConstants.kOnTgtDegree));
-  }
-
   public double getYawCmd() {
     return cmd[0];
   }
@@ -297,5 +295,25 @@ public class Turret extends SubsystemBase {
 
   public double getTgtDist() {
     return cmd[2];
+  }
+
+  public boolean isLLTgtValid() {
+    return valid == 1;
+  }
+
+  public boolean isTgtValid() {
+    return (isLLTgtValid() && (Math.abs(180.0 - getAnglePosition() + chassis.getYaw()) < 10.0));
+  }
+
+  public boolean isTiltOnTarget() {
+    return (Math.abs(tiltMotor.getClosedLoopError() / TiltConstants.kTicsPerDegree)) < TiltConstants.kOnTgtDegree;
+  }
+
+  public boolean isYawOnTarget() {
+    return (Math.abs(angleMotor.getClosedLoopError() / YawConstants.kTicsPerDegree)) < YawConstants.kOnTgtDegree;
+  }
+
+  public boolean isTracking() {
+    return isTgtValid() && isTiltOnTarget() && isYawOnTarget();
   }
 }

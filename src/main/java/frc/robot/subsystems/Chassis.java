@@ -366,6 +366,14 @@ public class Chassis extends SubsystemBase {
 		return ahrs.getPitch();
 	}
 
+	public double getRoll() {
+		return ahrs.getRoll();
+	}
+
+	public double getYaw() {
+		return ahrs.getYaw();
+	}
+
 	public void periodic() {
 		sbRobotAngle.setDouble(getAngle().getDegrees());
 		sbLeftPos.setDouble(m_leftEncoder.getPosition());

@@ -24,7 +24,6 @@ public class AutonDrive extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    // System.out.println("AutonDrive running");
   }
 
   // Called repeatedly when this Command is scheduled to run

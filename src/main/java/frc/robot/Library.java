@@ -39,16 +39,14 @@ public final class Library {
 		if (Math.abs(x) < 10.0) {
 			skewAngle = calcSkewAngle(skew);
 		}
-		System.out.println("skewAngle " + skewAngle);
+		
 		cmd[0] = -x;
 		double distHorz = (VisionConstants.kDistToTarget / 12) / Math.tan(Math.toRadians(y));
 		double distOffset = distHorz * Math.tan(Math.toRadians(skewAngle));
 		double distTarget = Math.sqrt(
 				Math.pow((VisionConstants.kDistToTarget / 12), 2) + Math.pow(distHorz, 2) + Math.pow(distOffset, 2));
 		cmd[2] = distTarget;
-		System.out.println("distHorz " + distHorz + "   distOffset " + distOffset + "   distTarget " + distTarget);
 		cmd[1] = calcTiltAngle(distTarget);
-		System.out.println("tiltAngle " + cmd[1]);
 
 		return cmd;
 	}

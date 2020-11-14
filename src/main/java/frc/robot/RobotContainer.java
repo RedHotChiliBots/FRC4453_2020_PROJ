@@ -75,7 +75,7 @@ public class RobotContainer {
 	// =============================================================
 	// Initialize SubSystems
 	public final Chassis chassis = new Chassis();
-	public final Turret turret = new Turret();
+	public final Turret turret = new Turret(chassis);
 	public final Spinner spinner = new Spinner();
 	public final Shooter shooter = new Shooter();
 	public final Climber climber = new Climber();
@@ -166,7 +166,6 @@ public class RobotContainer {
 		m_chooser.addOption("Auton Trench to Rendezvous", AUTONTRENCHRENDEZVOUS);
 
 		SmartDashboard.putData("Auton Chooser", m_chooser);
-		System.out.println("Options added to AutonChooser");
 	}
 
 	/**
@@ -258,7 +257,6 @@ public class RobotContainer {
 		// new JoystickButton(m_operator, Button.kStart.value).whenPressed(new
 		// ShooterTiltDeg(shooter, 135));
 		new JoystickButton(m_operator, Button.kStart.value).whenPressed(new TurretAngleDeg(turret, 10));
-		System.out.println("Buttons configured");
 	}
 
 	public void setDriverRumble(GenericHID.RumbleType t) {

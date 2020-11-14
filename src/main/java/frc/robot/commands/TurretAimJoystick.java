@@ -50,20 +50,12 @@ public class TurretAimJoystick extends CommandBase {
 	public void execute() {
 		// Read joystick position
 		tiltCmd = -tiltJoystick.getAsDouble();
-		System.out.println("tiltCmd " + tiltCmd);
-		// Disable until Yaw PID is adjusted
-		yawCmd = yawJoystick.getAsDouble();	// -yawJoystick.getAsDouble();
+		yawCmd = yawJoystick.getAsDouble();	
 
-		// Zero out deadZone to avoid creep
-		tiltCmd = (Math.abs(tiltCmd) < YawConstants.kJoystickDeadZone ? 0.0 : tiltCmd);
-		yawCmd = (Math.abs(yawCmd) < YawConstants.kJoystickDeadZone ? 0.0 : yawCmd);
-	
 		// Calculate new target as Curr Target + Increment 
 		tiltNew = turret.getTiltTarget() + (tiltCmd * TiltConstants.kRateDpS);
 		yawNew = turret.getAngleTarget() + (yawCmd * YawConstants.kRateDpS);
 
-		System.out.println("tiltNew " + tiltNew);
-//		System.out.println("yawNew " + yawNew);
 		// Clamp new targets to min and max values
 		tiltNew = lib.Clip(tiltNew, TiltConstants.kMaxDeg, TiltConstants.kMinDeg);
 		yawNew = lib.Clip(yawNew, YawConstants.kMaxDeg, YawConstants.kMinDeg);
