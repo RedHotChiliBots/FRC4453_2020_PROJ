@@ -7,13 +7,15 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.CollectArmConstants;
 import frc.robot.subsystems.Collector;
 
 public class CollectorArmInit extends CommandBase {
 
-  private final Collector collector;
+	private final Collector collector;
+	private Timer timer = new Timer();
 
   public CollectorArmInit(Collector collector) {
     this.collector = collector;
@@ -22,7 +24,9 @@ public class CollectorArmInit extends CommandBase {
 
   // Called just before this Command runs the first time
   @Override
-  public void initialize() {
+	public void initialize() {
+		timer.reset();
+		timer.start();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -33,13 +37,13 @@ public class CollectorArmInit extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(collector.getArmAmps()) > CollectArmConstants.kCollectArmAmps;
+    return timer.get() < 0.25 ? false : Math.abs(collector.getArmAmps()) > CollectArmConstants.kCollectArmAmps;
   }
 
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
       collector.setArmPostition(CollectArmConstants.kMinPos);
-      collector.setArmTarget(CollectArmConstants.kMinPos);
+      collector.setArmTarget(CollectArmConstants.kStowPos);
   }
 }

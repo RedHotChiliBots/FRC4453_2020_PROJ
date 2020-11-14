@@ -23,18 +23,19 @@ public class CollectorExtend extends CommandBase {
   @Override
   public void initialize() {
     // collector.collectorExtend();
-    collector.setCollectArmPosition(CollectArmConstants.kExtendPos);
+//    collector.setCollectArmPosition(CollectArmConstants.kExtendPos);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
-  public void execute() {
+	public void execute() {
+		collector.setCollectArmPosition(CollectArmConstants.kExtendPos);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return false;
+    return false; // 0.4 < Math.abs(collector.collectArmSetPoint - collector.getCollectArmPosition()
   }
 
   // Called once after isFinished returns true
