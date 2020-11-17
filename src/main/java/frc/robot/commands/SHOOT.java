@@ -20,7 +20,7 @@ public class SHOOT extends SequentialCommandGroup {
 	 */
 
 	public SHOOT(Collector collector, Hopper hopper, Shooter shooter) {
-		new SequentialCommandGroup(
+		addCommands(
 			new HopperEject(hopper), 
 			new ShooterShoot(shooter), 
 			new HopperShoot(hopper, shooter),

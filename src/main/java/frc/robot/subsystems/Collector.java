@@ -42,7 +42,7 @@ public class Collector extends SubsystemBase {
 
 	private final TalonSRX collectorMotor = new TalonSRX(CANidConstants.kCollectorMotor);
 
-	private double collectorArmTarget;
+	public double collectorArmTarget;
 	private double collectorTarget;
 
 	// climberSolenoid.set(kOff);

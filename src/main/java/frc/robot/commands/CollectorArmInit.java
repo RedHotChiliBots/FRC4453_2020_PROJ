@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Constants.CollectArmConstants;
 import frc.robot.subsystems.Collector;
 
@@ -37,7 +38,7 @@ public class CollectorArmInit extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return timer.get() < 0.25 ? false : Math.abs(collector.getArmAmps()) > CollectArmConstants.kCollectArmAmps;
+    return /*timer.get() < 0.25 ? false : Math.abs(collector.getArmAmps()) > CollectArmConstants.kCollectArmAmps;*/ Math.abs(collector.getArmAmps()) > Constants.CollectArmConstants.kCollectArmAmps;
   }
 
   // Called once after isFinished returns true

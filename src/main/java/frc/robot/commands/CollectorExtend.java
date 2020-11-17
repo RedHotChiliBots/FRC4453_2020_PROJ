@@ -35,7 +35,7 @@ public class CollectorExtend extends CommandBase {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return false; // 0.4 < Math.abs(collector.collectArmSetPoint - collector.getCollectArmPosition()
+    return  0.4 < Math.abs(collector.collectorArmTarget - collector.getCollectArmPosition());
   }
 
   // Called once after isFinished returns true
