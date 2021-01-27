@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.HopperConstants;
 import frc.robot.subsystems.Hopper;
+import edu.wpi.first.wpilibj.Timer;
 
 public class HopperLoad extends CommandBase {
 	/**
@@ -17,6 +18,7 @@ public class HopperLoad extends CommandBase {
 	 */
 	private final Hopper hopper;
 	private boolean force;
+	private Timer timer = new Timer();
 
 	public HopperLoad(Hopper hopper, boolean force) {
 		// Use addRequirements() here to declare subsystem dependencies.
@@ -28,6 +30,8 @@ public class HopperLoad extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
+		timer.reset();
+		timer.start();
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -49,6 +53,6 @@ public class HopperLoad extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return hopper.getUpperSensor();
+		return timer.get() < 0.25 ? false :  hopper.getUpperSensor();
 	}
 }

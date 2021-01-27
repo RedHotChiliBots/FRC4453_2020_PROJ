@@ -28,7 +28,7 @@ public class HopperEject extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    hopper.setEjectorVelocity(EjectorConstants.kShootRPMs);
+    hopper.setEjectorOutput(1.0);
   }
 
   // Make this return true when this Command no longer needs to run execute()

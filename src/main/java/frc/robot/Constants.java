@@ -48,8 +48,8 @@ public final class Constants {
 
 		public static final int kTopMasterMotor = 40;
 		public static final int kBottomFollowerMotor = 41;
-		public static final int kLeftEjectorMotor = 42;
-		// public static final int kRightEjectorMotor = 43;
+		public static final int kLeftEjectorMotor = 43;
+		// public static final int kRightEjectorMotor = 42;
 
 		public static final int kClimberMotor = 50;
 		public static final int kLevelerMotor = 51;

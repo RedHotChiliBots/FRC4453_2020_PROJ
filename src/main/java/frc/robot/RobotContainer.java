@@ -38,11 +38,13 @@ import frc.robot.commands.ClimberStop;
 import frc.robot.commands.CollectorArmInit;
 import frc.robot.commands.CollectorExtend;
 import frc.robot.commands.CollectorRetract;
+import frc.robot.commands.COLLECT;
 import frc.robot.commands.CollectorStop;
 import frc.robot.commands.CollectorIntake;
 import frc.robot.commands.DriveArcade;
 import frc.robot.commands.DriveTank;
 import frc.robot.commands.HopperShoot;
+import frc.robot.commands.HopperLoad;
 import frc.robot.commands.HopperStop;
 import frc.robot.commands.TurretAim;
 import frc.robot.commands.TurretAimJoystick;
@@ -209,7 +211,7 @@ public class RobotContainer {
 		new JoystickButton(m_driver, Button.kBumperLeft.value).whenPressed(new CollectorRetract(collector));
 
 		new JoystickButton(m_operator, Button.kA.value).whenPressed(new SpinnerCountRevs(spinner));
-		new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
+		// new JoystickButton(m_operator, Button.kB.value).whenPressed(new SpinnerStopOnColor(spinner));
 
 		for (int i = 0; i < 8; i++) {
 			new POVButton(m_operator, i * 45).whenHeld(new TurretAim(turret, i));
@@ -219,7 +221,9 @@ public class RobotContainer {
 		// ClimberExtend(climber));
 		// new JoystickButton(m_operator, Button.kBumperLeft.value).whenPressed(new
 		// ClimberRetract(climber));
-		new JoystickButton(m_operator, Button.kBack.value).whenHeld(new ClimberClimb(climber));
+		//		new JoystickButton(m_operator, Button.kBack.value).whenHeld(new ClimberClimb(climber));
+		new JoystickButton(m_operator, Button.kBack.value).whenPressed(new COLLECT(collector, hopper, false));
+		new JoystickButton(m_driver, Button.kBack.value).whenPressed(new SHOOT(collector, hopper, shooter));
 		new JoystickButton(m_operator, Button.kStickRight.value)
 				.whenPressed(new ClimberLevel(climber, () -> getOperatorRY()));
 
@@ -234,17 +238,18 @@ public class RobotContainer {
 		// JoystickButton(m_operator, Button.kStart.value))
 		// .whileActiveOnce(new HopperLoad(hopper, true));
 
-		// new JoystickButton(m_operator, Button.kBack.value).whileActiveOnce(new HopperLoad(hopper, true));
+		new JoystickButton(m_operator, Button.kY.value).whenPressed(new HopperLoad(hopper, false));
+		new JoystickButton(m_operator, Button.kB.value).whenPressed(new HopperReverse(hopper));
 
 		// new JoystickButton(m_operator, Button.kB.value).whenPressed(new
 		// HopperShoot(hopper, shooter));
 
-		new JoystickButton(m_operator, Button.kY.value).whenPressed(new CollectorIntake(collector));
+	//	new JoystickButton(m_operator, Button.kY.value).whenPressed(new CollectorIntake(collector));
 
 		new JoystickButton(m_driver, Button.kStart.value).whenPressed(new HopperShoot(hopper, shooter));
 
-		new JoystickButton(m_driver, Button.kBack.value).whenPressed(new
-		CollectorStop(collector));
+	//	new JoystickButton(m_driver, Button.kBack.value).whenPressed(new
+	//	CollectorStop(collector));
 
 		// new JoystickButton(m_driver, Button.kX.value).whenPressed(new
 		// CollectorReject(collector));

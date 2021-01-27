@@ -91,6 +91,7 @@ public class Chassis extends SubsystemBase {
 
 	// Create config for trajectory
 	private TrajectoryConfig config;
+	private TrajectoryConfig configReversed;
 
 	// An example trajectory to follow. All units in meters.
 	// public Trajectory exampleTrajectory;
@@ -99,7 +100,9 @@ public class Chassis extends SubsystemBase {
 	public Trajectory rendezvousToTrenchTrajectory;
 	public Trajectory rendezvousPickUpTrajectory;
 	public Trajectory trenchPickUpTrajectory;
-	public Trajectory trenchToRendezvousTrajectory;
+  public Trajectory trenchToRendezvousTrajectory;
+  public Trajectory bouncePathTrajectory;
+	public Trajectory outAndBack;
 
 	// ==============================================================
 	// Initialize NavX AHRS board
@@ -223,6 +226,14 @@ public class Chassis extends SubsystemBase {
 						.setKinematics(m_kinematics)
 						// Apply the voltage constraint
 						.addConstraint(autoVoltageConstraint);
+		
+		configReversed = new TrajectoryConfig(ChassisConstants.kMaxSpeedMetersPerSecond,
+				ChassisConstants.kMaxAccelerationMetersPerSecondSquared)
+						// Add kinematics to ensure max speed is actually obeyed
+						.setKinematics(m_kinematics)
+						// Apply the voltage constraint
+						.addConstraint(autoVoltageConstraint)
+						.setReversed(true);
 
 		lineToRendezvousTrajectory = TrajectoryGenerator.generateTrajectory(
 				// Start at the origin facing the +X direction
@@ -288,7 +299,29 @@ public class Chassis extends SubsystemBase {
 				// End 3 meters straight ahead of where we started, facing forward
 				new Pose2d(2.6, 2.4, new Rotation2d(0)),
 				// Pass config
+        config);
+        
+    bouncePathTrajectory = TrajectoryGenerator.generateTrajectory(
+				// Start at the origin facing the +X direction
+				new Pose2d(-1.09855, 0.6096, new Rotation2d(0)),
+				// Pass through these two interior waypoints, making an 's' curve path
+				// List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+				List.of(new Translation2d(0, 0.6096), new Translation2d(1.06045, 1.3716), new Translation2d(1.5748, 1.9812), new Translation2d(1.06045, 2.8956), new Translation2d(-1.0985, 2.8956), new Translation2d(1.5748, 3.5052), new Translation2d(1.5748, 4.4196), new Translation2d(1.06045, 5.0292), new Translation2d(-1.0985, 5.0292), new Translation2d(0, 5.9436)),
+				// End 3 meters straight ahead of where we started, facing forward
+				new Pose2d(2.9, 3.9, new Rotation2d(0)),
+				// Pass config
 				config);
+
+				outAndBack = TrajectoryGenerator.generateTrajectory(
+				// Start at the origin facing the +X direction
+				new Pose2d(0.0, 0.0, new Rotation2d(0)),
+				// Pass through these two interior waypoints, making an 's' curve path
+				// List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+				List.of(),
+				// End 3 meters straight ahead of where we started, facing forward
+				new Pose2d(0, 10, new Rotation2d(0)),
+				// Pass config
+				configReversed);
 		// m_leftPIDController.setP(ChassisConstants.kP);
 		// m_leftPIDController.setI(ChassisConstants.kI);
 		// m_leftPIDController.setD(ChassisConstants.kD);

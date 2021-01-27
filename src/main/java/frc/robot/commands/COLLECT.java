@@ -19,9 +19,10 @@ public class COLLECT extends SequentialCommandGroup {
 	 */
 
 	public COLLECT(Collector collector, Hopper hopper, boolean override) {
-		new SequentialCommandGroup(new CollectorExtend(collector),
+		// new SequentialCommandGroup(new CollectorExtend(collector),
+		addCommands(new CollectorExtend(collector), 
 				new ParallelRaceGroup(new HopperLoad(hopper, override), new CollectorIntake(collector)),
-				new CollectorReject(collector), new WaitCommand(2.0), new CollectorStop(collector),
+				new ParallelRaceGroup(new CollectorReject(collector), new WaitCommand(2.0)), new CollectorStop(collector),
 				new CollectorRetract(collector));
 
 		// Add Commands here:
