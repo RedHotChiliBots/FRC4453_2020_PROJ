@@ -27,7 +27,7 @@ public class TurretAngleStop extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    turret.stopAngle();
+    turret.stopYaw();
   }
 
   @Override

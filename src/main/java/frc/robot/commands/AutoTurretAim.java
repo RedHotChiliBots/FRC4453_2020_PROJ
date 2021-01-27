@@ -42,7 +42,7 @@ public class AutoTurretAim extends CommandBase {
     yaw = dsYaw.getAsDouble();
 
     turret.setTiltTarget(tilt);
-    turret.setAngleTarget(yaw);
+    turret.setYawTarget(yaw);
   }
 
   // Called once the command ends or is interrupted.

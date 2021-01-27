@@ -38,7 +38,7 @@ public final class Constants {
 		public static final int kLeftFollowerMotor = 3;
 
 		public static final int kShooterMotor = 10;
-		public static final int kAngleMotor = 11;
+		public static final int kYawMotor = 11;
 		public static final int kTiltMotor = 12;
 
 		public static final int kSpinnerMotor = 20;
@@ -120,7 +120,7 @@ public final class Constants {
 		public static final double kaVoltSecondsSquaredPerMeter = 0.01; // 0.2;
 
 		public static final double kMaxSpeedMetersPerSecond = 1;
-		public static final double kMaxAccelerationMetersPerSecondSquared = 0.7;;
+		public static final double kMaxAccelerationMetersPerSecondSquared = 0.7;
 	}
 
 	public final static class ShooterConstants {
@@ -157,8 +157,8 @@ public final class Constants {
 		public static final double kRangeDeg = kMaxDeg - kMinDeg;
 		public static final double kRateDpS = kRangeDeg / kMaxSec / 50.0;	// 50x per second
 
-		public static final double kAngleFindSpeed = 0.15;
-		public static final double kAngleCenterSpeed = 0.05;
+		public static final double kYawFindSpeed = 0.15;
+		public static final double kYawCenterSpeed = 0.05;
 
 		public static final double kTicsPerMotorRev = 4096;
 		public static final double kGearBoxRatio = 21;

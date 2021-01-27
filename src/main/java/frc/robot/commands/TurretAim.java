@@ -43,28 +43,28 @@ public class TurretAim extends CommandBase {
         break;
       case 1:
         turret.setTiltTarget(turret.getTiltPosition() + tiltInc);
-        turret.setAngleTarget(turret.getAnglePosition() + angleInc);
+        turret.setYawTarget(turret.getYawPosition() + angleInc);
         break;
       case 2:
-        turret.setAngleTarget(turret.getAnglePosition() + angleInc);
+        turret.setYawTarget(turret.getYawPosition() + angleInc);
         break;
       case 3:
         turret.setTiltTarget(turret.getTiltPosition() - tiltInc);
-        turret.setAngleTarget(turret.getAnglePosition() + angleInc);
+        turret.setYawTarget(turret.getYawPosition() + angleInc);
         break;
       case 4:
         turret.setTiltTarget(turret.getTiltPosition() - tiltInc);
         break;
       case 5:
         turret.setTiltTarget(turret.getTiltPosition() - tiltInc);
-        turret.setAngleTarget(turret.getAnglePosition() - angleInc);
+        turret.setYawTarget(turret.getYawPosition() - angleInc);
         break;
       case 6:
-        turret.setAngleTarget(turret.getAnglePosition() - angleInc);
+        turret.setYawTarget(turret.getYawPosition() - angleInc);
         break;
       case 7:
         turret.setTiltTarget(turret.getTiltPosition() + tiltInc);
-        turret.setAngleTarget(turret.getAnglePosition() - angleInc);
+        turret.setYawTarget(turret.getYawPosition() - angleInc);
         break;
       }
     }

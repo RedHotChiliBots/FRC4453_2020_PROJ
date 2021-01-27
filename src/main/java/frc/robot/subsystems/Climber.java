@@ -36,15 +36,19 @@ public class Climber extends SubsystemBase {
 
 	private final CANSparkMax climbMotor = new CANSparkMax(CANidConstants.kClimberMotor, MotorType.kBrushless);
 
-	private final CANPIDController climbPIDController = new CANPIDController(climbMotor);
-	private final CANEncoder climbEncoder = new CANEncoder(climbMotor);
+	private final CANPIDController climbPIDController = climbMotor.getPIDController();
+	// new CANPIDController(climbMotor);
+	private final CANEncoder climbEncoder = climbMotor.getEncoder();
+	// new CANEncoder(climbMotor);
 
 	private double climbSetPoint;
 
 	private final CANSparkMax levelMotor = new CANSparkMax(CANidConstants.kLevelerMotor, MotorType.kBrushless);
 
-	private final CANPIDController levelPIDController = new CANPIDController(levelMotor);
-	private final CANEncoder levelEncoder = new CANEncoder(levelMotor);
+	private final CANPIDController levelPIDController = levelMotor.getPIDController();
+	// new CANPIDController(levelMotor);
+	private final CANEncoder levelEncoder = levelMotor.getEncoder();
+	// new CANEncoder(levelMotor);
 
 	private double levelSetPoint;
 
@@ -137,7 +141,7 @@ public class Climber extends SubsystemBase {
 		levelMotor.set(speed);
 	}
 
-	// public boolean isLevel() {//TODO Unlevel navx
+	// public boolean isLevel() {	//TODO Unlevel navx
 	// return Robot.Subsystems.Chassis.getPitch() < 5;
 	// }
 

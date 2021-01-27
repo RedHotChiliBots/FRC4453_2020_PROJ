@@ -37,8 +37,10 @@ public class Collector extends SubsystemBase {
 
 	private final CANSparkMax collectArmMotor = new CANSparkMax(CANidConstants.kCollectArmMotor, MotorType.kBrushless);
 
-	private final CANPIDController collectArmPIDController = new CANPIDController(collectArmMotor);
-	private final CANEncoder collectArmEncoder = new CANEncoder(collectArmMotor);
+	private final CANPIDController collectArmPIDController = collectArmMotor.getPIDController();
+	// new CANPIDController(collectArmMotor);
+	private final CANEncoder collectArmEncoder = collectArmMotor.getEncoder();
+	// new CANEncoder(collectArmMotor);
 
 	private final TalonSRX collectorMotor = new TalonSRX(CANidConstants.kCollectorMotor);
 

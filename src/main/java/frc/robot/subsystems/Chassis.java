@@ -193,8 +193,10 @@ public class Chassis extends SubsystemBase {
 
 		// ==============================================================
 		// Identify encoders and PID controllers
-		m_leftEncoder = new CANEncoder(leftMaster);
-		m_rightEncoder = new CANEncoder(rightMaster);
+		m_leftEncoder = leftMaster.getEncoder();
+		// new CANEncoder(leftMaster);
+		m_rightEncoder = rightMaster.getEncoder();
+		// new CANEncoder(rightMaster);
 
 		// Identify left and right PID controllers
 		// private final CANPIDController m_leftPIDController = new

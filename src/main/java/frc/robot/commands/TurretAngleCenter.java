@@ -28,10 +28,10 @@ public class TurretAngleCenter extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    turret.moveAngleLeft(YawConstants.kAngleCenterSpeed);
+    turret.moveYawLeft(YawConstants.kYawCenterSpeed);
     movingLeft = true;
-    thisFound = turret.getAngleCenterPos();
-    lastFound = turret.getAngleCenterPos();
+    thisFound = turret.getYawCenterPos();
+    lastFound = turret.getYawCenterPos();
     leftPos = 0;
     rightPos = 0;
   }
@@ -40,14 +40,14 @@ public class TurretAngleCenter extends CommandBase {
   @Override
   public void execute() {
     // capture current Center position
-    thisFound = turret.getAngleCenterPos();
+    thisFound = turret.getYawCenterPos();
 
     // if transition from not seeing Center to seeing Center, capture angle
     if (thisFound && (thisFound != lastFound)) {
       if (movingLeft) {
-        leftPos = turret.getAnglePosition();
+        leftPos = turret.getYawPosition();
       } else {
-        rightPos = turret.getAnglePosition();
+        rightPos = turret.getYawPosition();
       }
     }
 
@@ -55,10 +55,10 @@ public class TurretAngleCenter extends CommandBase {
     if (!thisFound && (thisFound != lastFound)) {
       if (movingLeft) {
         movingLeft = false;
-        turret.moveAngleRight(YawConstants.kAngleCenterSpeed);
+        turret.moveYawRight(YawConstants.kYawCenterSpeed);
       } else if (!movingLeft) {
         movingLeft = true;
-        turret.moveAngleLeft(YawConstants.kAngleCenterSpeed);
+        turret.moveYawLeft(YawConstants.kYawCenterSpeed);
       }
     }
 
@@ -83,7 +83,7 @@ public class TurretAngleCenter extends CommandBase {
   public void end(boolean interrupted) {
     double centerPos = (leftPos + rightPos) / 2.0;
     turret.sbCenterPos.setDouble(centerPos);
-    turret.setAngleTarget(centerPos);
-    turret.setAngleZeroPos();
+    turret.setYawTarget(centerPos);
+    turret.setYawZeroPos();
   }
 }

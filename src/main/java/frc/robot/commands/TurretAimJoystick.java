@@ -54,7 +54,7 @@ public class TurretAimJoystick extends CommandBase {
 
 		// Calculate new target as Curr Target + Increment 
 		tiltNew = turret.getTiltTarget() + (tiltCmd * TiltConstants.kRateDpS);
-		yawNew = turret.getAngleTarget() + (yawCmd * YawConstants.kRateDpS);
+		yawNew = turret.getYawTarget() + (yawCmd * YawConstants.kRateDpS);
 
 		// Clamp new targets to min and max values
 		tiltNew = lib.Clip(tiltNew, TiltConstants.kMaxDeg, TiltConstants.kMinDeg);
@@ -62,7 +62,7 @@ public class TurretAimJoystick extends CommandBase {
 
 		// Update motor controllers with new targets
 		turret.setTiltTarget(tiltNew);
-		turret.setAngleTarget(yawNew);
+		turret.setYawTarget(yawNew);
 	}
 
 	// Called once the command ends or is interrupted.

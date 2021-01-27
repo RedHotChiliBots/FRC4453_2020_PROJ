@@ -28,7 +28,7 @@ public class TurretAimStop extends CommandBase {
   @Override
   public void execute() {
     turret.stopTilt();
-    turret.stopAngle();
+    turret.stopYaw();
   }
 
   // Make this return true when this Command no longer needs to run execute()

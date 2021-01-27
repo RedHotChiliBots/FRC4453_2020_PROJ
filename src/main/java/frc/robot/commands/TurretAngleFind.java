@@ -24,27 +24,27 @@ public class TurretAngleFind extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    turret.moveAngleLeft(YawConstants.kAngleFindSpeed);
+    turret.moveYawLeft(YawConstants.kYawFindSpeed);
     movingLeft = true;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    if (!turret.getAngleCenterPos()) {
-      if (movingLeft && turret.getAngleLeftLimit()) {
+    if (!turret.getYawCenterPos()) {
+      if (movingLeft && turret.getYawLeftLimit()) {
         movingLeft = false;
-        turret.moveAngleRight(YawConstants.kAngleFindSpeed);
-      } else if (!movingLeft && turret.getAngleRightLimit()) {
+        turret.moveYawRight(YawConstants.kYawFindSpeed);
+      } else if (!movingLeft && turret.getYawRightLimit()) {
         movingLeft = true;
-        turret.moveAngleLeft(YawConstants.kAngleFindSpeed);
+        turret.moveYawLeft(YawConstants.kYawFindSpeed);
       }
     }
   }
 
   @Override
   public boolean isFinished() {
-    return turret.getAngleCenterPos();
+    return turret.getYawCenterPos();
   }
 
   // Called once after isFinished returns true

@@ -178,11 +178,18 @@ public class RobotContainer {
 
 		// =============================================================
 		// Define Operator controls, buttons, bumpers, etc.
+
+		// Tank Drive
 		new JoystickButton(m_driver, Button.kA.value)
 				.whenPressed(new DriveTank(() -> getDriverLY(), () -> getDriverRY(), chassis));
-				
+		
+		// Arcade Drive Left Stick
 		new JoystickButton(m_driver, Button.kB.value)
 				.whenPressed(new DriveArcade(() -> getDriverLY(), () -> getDriverLX(), chassis));
+
+		// Arcade Drive Right Stick
+		new JoystickButton(m_driver, Button.kX.value)
+				.whenPressed(new DriveArcade(() -> getDriverRY(), () -> getDriverRX(), chassis));
 
 		// new JoystickButton(m_driver,
 		// Button.kX.value).whenPressed(autonDriveJoystick);

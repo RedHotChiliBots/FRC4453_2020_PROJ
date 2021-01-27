@@ -31,8 +31,10 @@ public class Shooter extends SubsystemBase {
 
   private final CANSparkMax shootMotor = new CANSparkMax(CANidConstants.kShooterMotor, MotorType.kBrushless);
 
-  private final CANPIDController shootPIDController = new CANPIDController(shootMotor);
-  private final CANEncoder shootEncoder = new CANEncoder(shootMotor);
+  private final CANPIDController shootPIDController = shootMotor.getPIDController();
+  // new CANPIDController(shootMotor);
+  private final CANEncoder shootEncoder = shootMotor.getEncoder();
+  // new CANEncoder(shootMotor);
 
   private double shootSetPoint = 0.0;
 

@@ -48,12 +48,16 @@ public class Hopper extends SubsystemBase {
 	// SpeedControllerGroup(m_topMaster, m_bottomFollower);
 
 	// Identify top encoder
-	public final CANEncoder m_topEncoder = new CANEncoder(topMaster);
-	public final CANEncoder m_bottomEncoder = new CANEncoder(bottomFollower);
+	public final CANEncoder m_topEncoder = topMaster.getEncoder();
+	// new CANEncoder(topMaster);
+	public final CANEncoder m_bottomEncoder = bottomFollower.getEncoder();
+	// new CANEncoder(bottomFollower);
 
 	// Identify top PID controller
-	private final CANPIDController m_topPIDController = new CANPIDController(topMaster);
-	private final CANPIDController m_bottomPIDController = new CANPIDController(bottomFollower);
+	private final CANPIDController m_topPIDController = topMaster.getPIDController();
+	// new CANPIDController(topMaster);
+	private final CANPIDController m_bottomPIDController = bottomFollower.getPIDController();
+	// new CANPIDController(bottomFollower);
 
 	// Define the Ejector motors, master and follower
 	private final TalonSRX leftEjector = new TalonSRX(CANidConstants.kLeftEjectorMotor);

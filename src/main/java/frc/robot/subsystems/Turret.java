@@ -35,10 +35,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Turret extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private final TalonSRX angleMotor = new TalonSRX(CANidConstants.kAngleMotor);
+  private final TalonSRX yawMotor = new TalonSRX(CANidConstants.kYawMotor);
   private final TalonSRX tiltMotor = new TalonSRX(CANidConstants.kTiltMotor);
 
-  private final DigitalInput angleCenterPos = new DigitalInput(DigitalIOConstants.kCenterDigital);
+  private final DigitalInput yawCenterPos = new DigitalInput(DigitalIOConstants.kCenterDigital);
 
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry tx = table.getEntry("tx");
@@ -61,12 +61,12 @@ public class Turret extends SubsystemBase {
   private NetworkTableEntry sbTiltPos = turretTab.addPersistent("Tilt Position", 0).getEntry();
   private NetworkTableEntry sbTiltVelocity = turretTab.addPersistent("Tilt Velocity", 0).getEntry();
   private NetworkTableEntry sbTiltSetPoint = turretTab.addPersistent("Tilt SetPoint", 0).getEntry();
-  private NetworkTableEntry sbAnglePos = turretTab.addPersistent("Angle Position", 0).getEntry();
-  private NetworkTableEntry sbAngleVelocity = turretTab.addPersistent("Angle Velocity", 0).getEntry();
-  private NetworkTableEntry sbAngleSetPoint = turretTab.addPersistent("Angle SetPoint", 0).getEntry();
-  public NetworkTableEntry sbLeftPos = turretTab.addPersistent("Angle Center Left Pos", 0).getEntry();
-  public NetworkTableEntry sbRightPos = turretTab.addPersistent("Angle Center Right Pos", 0).getEntry();
-  public NetworkTableEntry sbCenterPos = turretTab.addPersistent("Angle Center Center Pos", 0).getEntry();
+  private NetworkTableEntry sbYawPos = turretTab.addPersistent("Yaw Position", 0).getEntry();
+  private NetworkTableEntry sbYawVelocity = turretTab.addPersistent("Yaw Velocity", 0).getEntry();
+  private NetworkTableEntry sbYawSetPoint = turretTab.addPersistent("Yaw SetPoint", 0).getEntry();
+  public NetworkTableEntry sbLeftPos = turretTab.addPersistent("Yaw Center Left Pos", 0).getEntry();
+  public NetworkTableEntry sbRightPos = turretTab.addPersistent("Yaw Center Right Pos", 0).getEntry();
+  public NetworkTableEntry sbCenterPos = turretTab.addPersistent("Yaw Center Center Pos", 0).getEntry();
 
   private NetworkTableEntry sbLLValid = turretTab.addPersistent("LL Valid", 0).getEntry();
   private NetworkTableEntry sbLLX = turretTab.addPersistent("LL X", 0).getEntry();
@@ -90,32 +90,32 @@ public class Turret extends SubsystemBase {
     this.chassis = chassis;
 
     // Configure Motor
-    angleMotor.configFactoryDefault();
-    angleMotor.clearStickyFaults();
-    angleMotor.setNeutralMode(NeutralMode.Brake);
-    angleMotor.setInverted(false);
-    // angleMotor.setSensorPhase(false);
+    yawMotor.configFactoryDefault();
+    yawMotor.clearStickyFaults();
+    yawMotor.setNeutralMode(NeutralMode.Brake);
+    yawMotor.setInverted(false);
+    // yawMotor.setSensorPhase(false);
 
     /* Config sensor used for Primary PID [Velocity] */
-    angleMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, CANidConstants.kPIDLoopIdx,
+    yawMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, CANidConstants.kPIDLoopIdx,
         CANidConstants.kTimeoutMs);
 
-    angleMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
-    angleMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+    yawMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+    yawMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
 
     /* Config the peak and nominal outputs */
-    angleMotor.configNominalOutputForward(0, CANidConstants.kTimeoutMs);
-    angleMotor.configNominalOutputReverse(0, CANidConstants.kTimeoutMs);
-    angleMotor.configPeakOutputForward(1, CANidConstants.kTimeoutMs);
-    angleMotor.configPeakOutputReverse(-1, CANidConstants.kTimeoutMs);
+    yawMotor.configNominalOutputForward(0, CANidConstants.kTimeoutMs);
+    yawMotor.configNominalOutputReverse(0, CANidConstants.kTimeoutMs);
+    yawMotor.configPeakOutputForward(1, CANidConstants.kTimeoutMs);
+    yawMotor.configPeakOutputReverse(-1, CANidConstants.kTimeoutMs);
 
     /* Config the PID values */
-    angleMotor.config_kF(CANidConstants.kPIDLoopIdx, YawConstants.kFF, CANidConstants.kTimeoutMs);
-    angleMotor.config_kP(CANidConstants.kPIDLoopIdx, YawConstants.kP, CANidConstants.kTimeoutMs);
-    angleMotor.config_kI(CANidConstants.kPIDLoopIdx, YawConstants.kI, CANidConstants.kTimeoutMs);
-    angleMotor.config_kD(CANidConstants.kPIDLoopIdx, YawConstants.kD, CANidConstants.kTimeoutMs);
+    yawMotor.config_kF(CANidConstants.kPIDLoopIdx, YawConstants.kFF, CANidConstants.kTimeoutMs);
+    yawMotor.config_kP(CANidConstants.kPIDLoopIdx, YawConstants.kP, CANidConstants.kTimeoutMs);
+    yawMotor.config_kI(CANidConstants.kPIDLoopIdx, YawConstants.kI, CANidConstants.kTimeoutMs);
+    yawMotor.config_kD(CANidConstants.kPIDLoopIdx, YawConstants.kD, CANidConstants.kTimeoutMs);
 
-    angleMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
+    yawMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
 
     // Configure Motor
     tiltMotor.configFactoryDefault();
@@ -142,8 +142,8 @@ public class Turret extends SubsystemBase {
 
     tiltMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
 
-    stopTilt();
-    stopAngle();
+    initTilt();
+    initYaw();
 
     System.out.println("----- Vision Constructor finished ...");
   }
@@ -154,13 +154,13 @@ public class Turret extends SubsystemBase {
     sbTiltPos.setDouble(getTiltPosition());
     sbTiltVelocity.setDouble(getTiltVelocity());
 
-    sbAngleSetPoint.setDouble(getAngleTarget());
-    sbAnglePos.setDouble(getAnglePosition());
-    sbAngleVelocity.setDouble(getAngleVelocity());
+    sbYawSetPoint.setDouble(getYawTarget());
+    sbYawPos.setDouble(getYawPosition());
+    sbYawVelocity.setDouble(getYawVelocity());
 
-    SmartDashboard.putBoolean("Left Limit Switch", getAngleLeftLimit());
-    SmartDashboard.putBoolean("Right Limit Switch", getAngleRightLimit());
-    SmartDashboard.putBoolean("Center Limit Switch", getAngleCenterPos());
+    SmartDashboard.putBoolean("Left Limit Switch", getYawLeftLimit());
+    SmartDashboard.putBoolean("Right Limit Switch", getYawRightLimit());
+    SmartDashboard.putBoolean("Center Limit Switch", getYawCenterPos());
 
     x = tx.getDouble(0.0); // +-29.8.0 degrees from crosshair to target
     y = ty.getDouble(0.0); // +-24.85 degrees from crosshair to target
@@ -188,53 +188,161 @@ public class Turret extends SubsystemBase {
     sbTracking.setBoolean(isTracking());
   }
 
-  public void stopAngle() {
-    angleMotor.set(ControlMode.PercentOutput, 0.0);
+  public void stopYaw() {
+    yawMotor.set(ControlMode.PercentOutput, 0.0);
   }
 
   public void stopTilt() {
     tiltMotor.set(ControlMode.PercentOutput, 0.0);
   }
 
-  public double getAngleVelocity() {
-    return angleMotor.getSelectedSensorVelocity() / YawConstants.kTicsPerDegree;
+  public void initTilt() {
+    int state = 0;
+    switch (state) {
+      case 0: // initialize
+        // nothing
+        state++;
+        break;
+      case 1: // execute
+        // command tilt motor down
+        moveTiltDown(TiltConstants.kATiltFindSpeed);
+        break;
+      case 2: // finished & end
+        // stop tilt motor when amp draw indicates jammed
+        if (Math.abs(getTiltAmps()) > TiltConstants.kTiltAmps) {
+          stopTilt();
+        }
+        break;
+        
+      default:
+    }
   }
 
-  public double getAnglePosition() {
-    return angleMotor.getSelectedSensorPosition() / YawConstants.kTicsPerDegree;
+  public void initYaw() {
+    int state = 0;
+    boolean movingLeft = true;
+    boolean thisFound = false;
+    boolean lastFound = false;
+    double leftPos = 0;
+    double rightPos = 0;
+
+    switch (state) {
+      case 0: // initialize
+        moveYawLeft(YawConstants.kYawFindSpeed);
+        movingLeft = true;
+        state++;
+        break;
+
+      case 1: // execute / finished
+        if (!getYawCenterPos()) {
+          if (movingLeft && getYawLeftLimit()) {
+            movingLeft = false;
+            moveYawRight(YawConstants.kYawFindSpeed);
+          } else if (!movingLeft && getYawRightLimit()) {
+            movingLeft = true;
+            moveYawLeft(YawConstants.kYawFindSpeed);
+          }
+        }
+
+        if (getYawCenterPos()) {
+          state++;
+        }
+        break;
+
+      case 2: // initialize
+        moveYawLeft(YawConstants.kYawCenterSpeed);
+        movingLeft = true;
+        thisFound = getYawCenterPos();
+        lastFound = getYawCenterPos();
+        leftPos = 0;
+        rightPos = 0;
+        state++;
+        break;
+
+      case 3: // execute
+        thisFound = getYawCenterPos();
+
+        // if transition from not seeing Center to seeing Center, capture angle
+        if (thisFound && (thisFound != lastFound)) {
+          if (movingLeft) {
+            leftPos = getYawPosition();
+          } else {
+            rightPos = getYawPosition();
+          }
+        }
+
+        // if transition off Center position, switch direction
+        if (!thisFound && (thisFound != lastFound)) {
+          if (movingLeft) {
+            movingLeft = false;
+            moveYawRight(YawConstants.kYawCenterSpeed);
+          } else if (!movingLeft) {
+            movingLeft = true;
+            moveYawLeft(YawConstants.kYawCenterSpeed);
+          }
+        }
+
+        // reset last found
+        lastFound = thisFound;
+
+        sbLeftPos.setDouble(leftPos);
+        sbRightPos.setDouble(rightPos);
+
+        if (leftPos != 0 && rightPos != 0) {
+          state++;
+        }
+        break;
+
+      case 4: // end
+        double centerPos = (leftPos + rightPos) / 2.0;
+        sbCenterPos.setDouble(centerPos);
+        setYawTarget(centerPos);
+        setYawZeroPos();
+        break;
+ 
+      default:
+    }
   }
 
-  public void setAngleTarget(double deg) {
-    angleMotor.set(ControlMode.Position, deg * YawConstants.kTicsPerDegree);
+  public double getYawVelocity() {
+    return yawMotor.getSelectedSensorVelocity() / YawConstants.kTicsPerDegree;
   }
 
-  public double getAngleTarget() {
-    return angleMotor.getClosedLoopTarget() / YawConstants.kTicsPerDegree;
+  public double getYawPosition() {
+    return yawMotor.getSelectedSensorPosition() / YawConstants.kTicsPerDegree;
   }
 
-  public void moveAngleLeft(double spd) {
-    angleMotor.set(ControlMode.PercentOutput, -spd);
+  public void setYawTarget(double deg) {
+    yawMotor.set(ControlMode.Position, deg * YawConstants.kTicsPerDegree);
   }
 
-  public void moveAngleRight(double spd) {
-    angleMotor.set(ControlMode.PercentOutput, spd);
+  public double getYawTarget() {
+    return yawMotor.getClosedLoopTarget() / YawConstants.kTicsPerDegree;
   }
 
-  public boolean getAngleRightLimit() {
-    return angleMotor.getSensorCollection().isFwdLimitSwitchClosed();
+  public void moveYawLeft(double spd) {
+    yawMotor.set(ControlMode.PercentOutput, -spd);
   }
 
-  public boolean getAngleCenterPos() {
-    return !angleCenterPos.get();
+  public void moveYawRight(double spd) {
+    yawMotor.set(ControlMode.PercentOutput, spd);
   }
 
-  public boolean getAngleLeftLimit() {
-    return angleMotor.getSensorCollection().isRevLimitSwitchClosed();
+  public boolean getYawRightLimit() {
+    return yawMotor.getSensorCollection().isFwdLimitSwitchClosed();
   }
 
-  public void setAngleZeroPos() {
-    angleMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
-    setAngleTarget(0.0);
+  public boolean getYawCenterPos() {
+    return !yawCenterPos.get();
+  }
+
+  public boolean getYawLeftLimit() {
+    return yawMotor.getSensorCollection().isRevLimitSwitchClosed();
+  }
+
+  public void setYawZeroPos() {
+    yawMotor.getSensorCollection().setQuadraturePosition(0, CANidConstants.kTimeoutMs);
+    setYawTarget(0.0);
   }
 
   public double getTiltVelocity() {
@@ -254,7 +362,7 @@ public class Turret extends SubsystemBase {
   }
 
   public void setTiltZeroPos() {
-    // tilt angle at initialization is not Zero. Set to kMinDeg
+    // tilt yaw at initialization is not Zero. Set to kMinDeg
     int tics = (int) Math.round(TiltConstants.kMinDeg * TiltConstants.kTicsPerDegree);
     tiltMotor.getSensorCollection().setQuadraturePosition(tics, CANidConstants.kTimeoutMs);
     setTiltTarget(TiltConstants.kMinDeg);
@@ -302,7 +410,7 @@ public class Turret extends SubsystemBase {
   }
 
   public boolean isTgtValid() {
-    return (isLLTgtValid() && (Math.abs(180.0 - getAnglePosition() + chassis.getYaw()) < 10.0));
+    return (isLLTgtValid() && (Math.abs(180.0 - getYawPosition() + chassis.getYaw()) < 10.0));
   }
 
   public boolean isTiltOnTarget() {
@@ -310,7 +418,7 @@ public class Turret extends SubsystemBase {
   }
 
   public boolean isYawOnTarget() {
-    return (Math.abs(angleMotor.getClosedLoopError() / YawConstants.kTicsPerDegree)) < YawConstants.kOnTgtDegree;
+    return (Math.abs(yawMotor.getClosedLoopError() / YawConstants.kTicsPerDegree)) < YawConstants.kOnTgtDegree;
   }
 
   public boolean isTracking() {
